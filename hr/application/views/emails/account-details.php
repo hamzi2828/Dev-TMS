@@ -50,7 +50,7 @@
                 <tr>
                     <td style="width: 48%;float: left;">
                         <a href="<?php echo base_url() ?>" class="xs-logo">
-                            <img src="<?php echo base_url() ?>/assets/img/logo.png">
+                            <img src="<?php echo base_url() ?>/assets/img/tms_logo.png">
                         </a>
                     </td>
                     <td style="width: 24%;float: right;line-height: 22px;text-align: right;">

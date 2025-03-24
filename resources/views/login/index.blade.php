@@ -2,7 +2,7 @@
     <!-- Content -->
     <div class="container-xxl">
         <div class="authentication-wrapper authentication-cover">
-            <div class="authentication-inner row m-0">
+            <div class="authentication-inner row m-0 ">
                 <!-- /Left Text -->
                 <div class="d-none d-xl-flex col-xl-8 p-0">
                     <div class="auth-cover-bg d-flex justify-content-center align-items-center">
@@ -23,12 +23,12 @@
                 <!-- /Left Text -->
                 <!-- Login -->
                 <div class="d-flex col-12 col-xl-4 align-items-center authentication-bg p-sm-12 p-6 bg-white">
-                <div class="w-px-400 mx-auto mt-12 pt-5">
-                    <h4 class="mb-1">Welcome to {{ config('app.name') }}! 👋</h4>
-                    <p class="mb-6">Please sign-in to your account and start the adventure</p>
+                    <div class="w-px-400 mx-auto mt-12 pt-5">
+                        <h4 class="mb-1">Welcome to {{ config('app.name') }}! 👋</h4>
+                        <p class="mb-6">Please sign-in to your account and start the adventure</p>
 
-                    @include('_partials.errors.validation-errors')
-                    <form id="formAuthentication" class="mb-3" action="{{ route ('authenticate') }}" method="post">
+                        @include('_partials.errors.validation-errors')
+                        <form id="formAuthentication" class="mb-3" action="{{ route ('authenticate') }}" method="post">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
@@ -59,9 +59,6 @@
                     </form>
                 </div>
             </div>
-            <!-- /Register -->
-            </div>
-        </div>
         </div>
     </div>
     <!-- / Content -->
