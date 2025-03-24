@@ -17,7 +17,6 @@
 
     <ul class="menu-inner py-1">
         @include('_partials.menus.dashboard')
-        @include('_partials.menus.data-banks')
         @include('_partials.menus.accounts')
         @include('_partials.menus.accounts-settings')
         @include('_partials.menus.accounts-reporting')
