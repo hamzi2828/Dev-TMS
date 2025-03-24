@@ -1,7 +1,7 @@
 <?php
-    
+
     namespace App\Http\Controllers;
-    
+
     use App\Models\Candidate;
     use App\Models\CandidateDocumentReady;
     use App\Models\CandidateInterview;
@@ -13,25 +13,21 @@
     use App\Services\AnalyticsService;
     use App\Services\ReportingService;
     use Illuminate\Contracts\View\View;
-    
+
     class DashboardController extends Controller {
-        
+
         public function index (): View {
             $this -> authorize ( 'dashboard', User::class );
             $data[ 'title' ]                         = 'Dashboard';
-            $data[ 'candidates' ]                    = Candidate ::count ();
             $data[ 'banks_balances' ]                = ( new AnalyticsService() ) -> banks_balances ();
             $data[ 'daily_cash_balances' ]           = ( new AnalyticsService() ) -> daily_cash_balances ();
             $data[ 'general_admin_expenses' ]        = ( new ReportingService() ) -> get_ledgers_by_account_head ( config ( 'constants.expenses' ) );
-            $candidate[ 'total_interviews' ]         = CandidateInterview ::count ();
-            $candidate[ 'total_medicals' ]           = CandidateMedical ::count ();
-            $candidate[ 'total_documents_ready' ]    = CandidateDocumentReady ::count ();
-            $candidate[ 'total_documents_uploaded' ] = CandidateVisa ::whereNotNull ( 'tgid' ) -> count ();
-            $candidate[ 'total_tickets' ]            = CandidateTicket ::count ();
-            $candidate[ 'total_protectors' ]         = CandidateProtector ::count ();
-            $candidate[ 'total_visas' ]              = CandidateVisa ::count ();
-            asort ( $candidate );
-            $data[ 'statuses' ]               = $candidate;
+            $data[ 'total_medicals' ]           = CandidateMedical ::count ();
+            $data[ 'total_documents_ready' ]    = CandidateDocumentReady ::count ();
+            $data[ 'total_documents_uploaded' ] = CandidateVisa ::whereNotNull ( 'tgid' ) -> count ();
+            $data[ 'total_tickets' ]            = CandidateTicket ::count ();
+            $data[ 'total_protectors' ]         = CandidateProtector ::count ();
+            $data[ 'total_visas' ]              = CandidateVisa ::count ();
             $data[ 'selected_interviews' ]    = ( new ReportingService() ) -> count_interviews ( 'selected' );
             $data[ 'rejected_interviews' ]    = ( new ReportingService() ) -> count_interviews ( 'rejected' );
             $data[ 'fit_medicals' ]           = ( new ReportingService() ) -> count_medicals ( 'fit' );
@@ -49,10 +45,10 @@
             $data[ 'profit' ]                 = ( new ReportingService() ) -> profit ();
             return view ( 'dashboard.index', $data );
         }
-        
+
         public function home (): View {
             $data[ 'title' ] = 'Home';
             return view ( 'dashboard.home', $data );
         }
-        
+
     }

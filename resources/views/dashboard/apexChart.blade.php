@@ -4,7 +4,7 @@
             {
                 name: "",
                 data: [
-                    @if(count ($statuses) > 0)
+                    @if(isset($statuses) && count ($statuses) > 0)
                         @foreach($statuses as $key => $status)
                             {{ $status }}
                             {{ $loop -> last ? '' : ',' }}
@@ -51,7 +51,7 @@
         },
         xaxis      : {
             categories: [
-                @if(count ($statuses) > 0)
+                @if(isset($statuses) && count ($statuses) > 0)
                     @foreach($statuses as $key => $status)
                         '{{ str () -> title (str_replace ('_', ' ', str_replace ('total_', '', $key))) }}'
                         {{ $loop -> last ? '' : ',' }}
@@ -63,7 +63,7 @@
             show: true,
         },
     };
-    
+
     let pyramidChart = new ApexCharts ( document.querySelector ( "#status-statistics" ), pyramidOptions );
     pyramidChart.render ();
 </script>

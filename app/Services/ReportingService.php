@@ -1,7 +1,7 @@
 <?php
-    
+
     namespace App\Services;
-    
+
     use App\Models\Candidate;
     use App\Models\CandidateBackOut;
     use App\Models\CandidateDocumentReady;
@@ -16,13 +16,13 @@
     use App\Models\User;
     use Illuminate\Database\Eloquent\Collection;
     use Illuminate\Support\Facades\DB;
-    
+
     class ReportingService {
-        
+
         public bool $search = false;
-        
+
         public function filter_sales () {
-            
+
             $search = false;
             $query  = SaleProducts ::query () -> select ( 'sale_id' ) -> whereIn ( 'sale_id', function ( $model ) {
                 $model -> select ( 'id' ) -> from ( 'sales' ) -> where ( [
@@ -30,19 +30,19 @@
                                                                              'refunded'    => '0'
                                                                          ] ) -> whereNull ( 'deleted_at' );
             } );
-            
+
             if ( request () -> filled ( 'product-id' ) ) {
                 $query -> where ( [ 'product_id' => request () -> input ( 'product-id' ) ] );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'customer-id' ) ) {
                 $query -> whereIn ( 'sale_id', function ( $model ) {
                     $model -> select ( 'id' ) -> from ( 'sales' ) -> where ( [ 'customer_id' => request ( 'customer-id' ), ] );
                 } );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'attribute-id' ) ) {
                 $query -> whereIn ( 'product_id', function ( $query ) {
                     $query -> select ( 'product_id' ) -> from ( 'product_terms' ) -> whereIn ( 'term_id', function ( $query ) {
@@ -51,14 +51,14 @@
                 } );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'user-id' ) ) {
                 $query -> whereIn ( 'sale_id', function ( $query ) {
                     $query -> select ( 'id' ) -> from ( 'sales' ) -> where ( [ 'user_id' => request ( 'user-id' ) ] );
                 } );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'branch-id' ) ) {
                 $query -> whereIn ( 'sale_id', function ( $query ) {
                     $query -> select ( 'id' ) -> from ( 'sales' ) -> whereIn ( 'user_id', function ( $query ) {
@@ -67,17 +67,17 @@
                 } );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request () -> input ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request () -> input ( 'end-date' ) ) );
-                
+
                 $query -> whereIn ( 'sale_id', function ( $model ) use ( $start_date, $end_date ) {
                     $model -> select ( 'id' ) -> from ( 'sales' ) -> whereRaw ( "DATE(created_at) BETWEEN '$start_date' AND '$end_date'" );
                 } );
                 $search = true;
             }
-            
+
             if ( $search )
                 return $query -> groupBy ( 'sale_id' ) -> with ( [
                                                                      'sale.customer'
@@ -85,7 +85,7 @@
             else
                 return [];
         }
-        
+
         /**
          * --------------
          * @return array|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
@@ -93,9 +93,9 @@
          * apply filters
          * --------------
          */
-        
+
         public function profit_report () {
-            
+
             $search = false;
             $query  = SaleProducts ::query () -> select ( 'sale_id' ) -> selectRaw ( 'GROUP_CONCAT(product_id) as products, GROUP_CONCAT(stock_id) as stocks, GROUP_CONCAT(quantity) as quantities' ) -> whereIn ( 'sale_id', function ( $model ) {
                 $model -> select ( 'id' ) -> from ( 'sales' ) -> where ( [
@@ -104,19 +104,19 @@
                                                                              'sale_closed' => '1'
                                                                          ] );
             } );
-            
+
             if ( request () -> filled ( 'customer-id' ) ) {
                 $query -> whereIn ( 'sale_id', function ( $model ) {
                     $model -> select ( 'id' ) -> from ( 'sales' ) -> where ( [ 'customer_id' => request ( 'customer-id' ), ] );
                 } );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'product-id' ) ) {
                 $query -> where ( [ 'product_id' => request () -> input ( 'product-id' ) ] );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'attribute-id' ) ) {
                 $query -> whereIn ( 'product_id', function ( $query ) {
                     $query -> select ( 'product_id' ) -> from ( 'product_terms' ) -> whereIn ( 'term_id', function ( $query ) {
@@ -125,14 +125,14 @@
                 } );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'user-id' ) ) {
                 $query -> whereIn ( 'sale_id', function ( $query ) {
                     $query -> select ( 'id' ) -> from ( 'sales' ) -> where ( [ 'user_id' => request ( 'user-id' ) ] );
                 } );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'branch-id' ) ) {
                 $query -> whereIn ( 'sale_id', function ( $query ) {
                     $query -> select ( 'id' ) -> from ( 'sales' ) -> whereIn ( 'user_id', function ( $query ) {
@@ -141,15 +141,15 @@
                 } );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request () -> input ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request () -> input ( 'end-date' ) ) );
-                
+
                 $query -> whereRaw ( "DATE(created_at) BETWEEN '$start_date' AND '$end_date'" );
                 $search = true;
             }
-            
+
             if ( $search )
                 return $query -> groupBy ( 'sale_id' ) -> with ( [
                                                                      'sale.customer'
@@ -157,7 +157,7 @@
             else
                 return [];
         }
-        
+
         /**
          * --------------
          * @return array|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
@@ -165,9 +165,9 @@
          * apply filters
          * --------------
          */
-        
+
         public function refund_report () {
-            
+
             $search = false;
             $query  = SaleProducts ::query () -> select ( 'sale_id' ) -> selectRaw ( 'GROUP_CONCAT(product_id) as products, GROUP_CONCAT(stock_id) as stocks' ) -> whereIn ( 'sale_id', function ( $model ) {
                 $model -> select ( 'id' ) -> from ( 'sales' ) -> where ( [
@@ -175,12 +175,12 @@
                                                                              'refunded'   => '1'
                                                                          ] );
             } );
-            
+
             if ( request () -> filled ( 'product-id' ) ) {
                 $query -> where ( [ 'product_id' => request () -> input ( 'product-id' ) ] );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'attribute-id' ) ) {
                 $query -> whereIn ( 'product_id', function ( $query ) {
                     $query -> select ( 'product_id' ) -> from ( 'product_terms' ) -> whereIn ( 'term_id', function ( $query ) {
@@ -189,14 +189,14 @@
                 } );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'user-id' ) ) {
                 $query -> whereIn ( 'sale_id', function ( $query ) {
                     $query -> select ( 'id' ) -> from ( 'sales' ) -> where ( [ 'user_id' => request ( 'user-id' ) ] );
                 } );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'branch-id' ) ) {
                 $query -> whereIn ( 'sale_id', function ( $query ) {
                     $query -> select ( 'id' ) -> from ( 'sales' ) -> whereIn ( 'user_id', function ( $query ) {
@@ -205,15 +205,15 @@
                 } );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request () -> input ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request () -> input ( 'end-date' ) ) );
-                
+
                 $query -> whereRaw ( "DATE(created_at) BETWEEN '$start_date' AND '$end_date'" );
                 $search = true;
             }
-            
+
             if ( $search )
                 return $query -> groupBy ( 'sale_id' ) -> with ( [
                                                                      'sale.customer'
@@ -221,14 +221,14 @@
             else
                 return [];
         }
-        
+
         /**
          * --------------
          * @return array
          * search transactions
          * --------------
          */
-        
+
         public function search_transactions () {
             if ( request () -> has ( 'voucher-no' ) && request () -> filled ( 'voucher-no' ) ) {
                 $voucher_no = request () -> input ( 'voucher-no' );
@@ -239,22 +239,22 @@
             }
             return [];
         }
-        
+
         /**
          * --------------
          * @return array
          * stock valuation report
          * --------------
          */
-        
+
         public function stock_valuation_report () {
             $products = Product ::withWhereHas ( 'all_stocks', function ( $query ) {
-                
+
                 if ( request () -> filled ( 'branch-id' ) ) {
                     $query -> where ( 'branch_id', '=', request ( 'branch-id' ) );
                     $this -> search = true;
                 }
-                
+
                 if ( request () -> filled ( 'attribute-id' ) ) {
                     $query -> whereIn ( 'product_id', function ( $query ) {
                         $query -> select ( 'product_id' ) -> from ( 'product_terms' ) -> whereIn ( 'term_id', function ( $query ) {
@@ -264,13 +264,13 @@
                     $this -> search = true;
                 }
             } ) -> get ();
-            
+
             if ( $this -> search )
                 return $products;
             else
                 return [];
         }
-        
+
         /**
          * --------------
          * @return array|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
@@ -278,65 +278,65 @@
          * apply filters
          * --------------
          */
-        
+
         public function filter_sales_attributes_wise ( $limit = 0 ) {
             config () -> set ( 'database.connections.mysql.strict', false );
             DB ::reconnect ();
-            
+
             $search = false;
-            
+
             $sql = "SELECT ims_attributes.id AS attribute_id, ims_attributes.title, COALESCE(SUM(ims_sale_products.quantity), 0) as quantity, SUM(ims_sale_products.net_price) AS net, COALESCE(SUM(ims_sale_products.discount), 0) as discount FROM ims_sales JOIN ims_sale_products ON ims_sales.id=ims_sale_products.sale_id AND ims_sales.sale_closed='1' AND ims_sales.refunded='0'AND ims_sales.deleted_at IS NULL AND ims_sale_products.deleted_at IS NULL JOIN ims_product_terms ON ims_sale_products.product_id=ims_product_terms.product_id JOIN ims_terms ON ims_product_terms.term_id=ims_terms.id JOIN ims_attributes ON ims_terms.attribute_id=ims_attributes.id WHERE 1";
-            
+
             if ( request () -> has ( 'customer-id' ) && request () -> filled ( 'customer-id' ) && request ( 'customer-id' ) > 0 ) {
                 $customer_id = request ( 'customer-id' );
                 $sql         .= " AND ims_sales.customer_id=$customer_id";
                 $search      = true;
             }
-            
+
             if ( request () -> has ( 'user-id' ) && request () -> filled ( 'user-id' ) && request ( 'user-id' ) > 0 ) {
                 $user_id = request ( 'user-id' );
                 $sql     .= " AND ims_sales.user_id=$user_id";
                 $search  = true;
             }
-            
+
             if ( request () -> has ( 'attribute-id' ) && count ( request ( 'attribute-id' ) ) > 0 ) {
                 $attribute_id = implode ( ',', request ( 'attribute-id' ) );
                 $sql          .= " AND attribute_id IN ($attribute_id)";
                 $search       = true;
             }
-            
+
             if ( request () -> has ( 'branch-id' ) && request () -> filled ( 'branch-id' ) && request ( 'branch-id' ) > 0 ) {
                 $branch_id = request ( 'branch-id' );
                 $users     = User ::where ( [ 'branch_id' => $branch_id ] ) -> pluck ( 'id' ) -> toArray ();
-                
+
                 if ( count ( $users ) > 0 ) {
                     $user_ids = implode ( ',', $users );
                     $sql      .= " AND ims_sales.user_id IN ($user_ids)";
                 }
-                
+
                 $search = true;
             }
-            
+
             if ( request () -> has ( 'start-date' ) && request () -> filled ( 'start-date' ) && request () -> has ( 'end-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                
+
                 $sql .= " AND DATE(ims_sales.created_at) BETWEEN '$start_date' AND '$end_date'";
-                
+
                 $search = true;
             }
-            
+
             $sql .= " GROUP BY ims_attributes.id ORDER BY quantity DESC";
-            
+
             if ( $limit > 0 )
                 $sql .= " limit $limit";
-            
+
             if ( $search || $limit > 0 )
                 return DB ::select ( $sql );
             else
                 return [];
         }
-        
+
         public function filter_sales_products_wise () {
             $search = false;
             $query  = SaleProducts ::query ();
@@ -345,48 +345,48 @@
             $query -> join ( 'sales', function ( $model ) {
                 $model -> on ( 'sales.id', '=', 'sale_products.sale_id' );
             } );
-            
+
             if ( request () -> has ( 'customer-id' ) && request () -> filled ( 'customer-id' ) && request ( 'customer-id' ) > 0 ) {
                 $customer_id = request ( 'customer-id' );
                 $query -> where ( [ 'sales.customer_id' => $customer_id ] );
                 $search = true;
             }
-            
+
             if ( request () -> has ( 'user-id' ) && request () -> filled ( 'user-id' ) && request ( 'user-id' ) > 0 ) {
                 $user_id = request ( 'user-id' );
                 $query -> where ( [ 'sales.user_id' => $user_id ] );
                 $search = true;
             }
-            
+
             if ( request () -> has ( 'product-id' ) && count ( request ( 'product-id' ) ) > 0 ) {
                 $product_id = request ( 'product-id' );
                 $query -> whereIn ( 'product_id', $product_id );
                 $search = true;
             }
-            
+
             if ( request () -> has ( 'branch-id' ) && request () -> filled ( 'branch-id' ) && request ( 'branch-id' ) > 0 ) {
                 $branch_id = request ( 'branch-id' );
                 $users     = User ::where ( [ 'branch_id' => $branch_id ] ) -> pluck ( 'id' ) -> toArray ();
-                
+
                 if ( count ( $users ) > 0 ) {
                     $query -> whereIn ( 'sales.user_id', $users );
                 }
-                
+
                 $search = true;
             }
-            
+
             if ( request () -> has ( 'start-date' ) && request () -> filled ( 'start-date' ) && request () -> has ( 'end-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                
+
                 $query -> whereBetween ( 'sales.created_at', [
                     $start_date,
                     $end_date
                 ] );
-                
+
                 $search = true;
             }
-            
+
             $query -> where ( [
                                   'sales.sale_closed' => '1',
                                   'sales.refunded'    => '0',
@@ -395,7 +395,7 @@
             $query -> whereNull ( 'sale_products.deleted_at' );
             $query -> groupBy ( 'product_id' ) -> orderBy ( 'quantity', 'DESC' );
             $query -> with ( 'product' );
-            
+
             if ( $search )
                 return $query -> get ();
             else
@@ -414,35 +414,35 @@
 //            }
 //            return null;
 //        }
-        
+
         public function attribute_wise_quantity_report () {
-            
+
             $search    = false;
             $attribute = Attribute :: select ( [ 'id', 'title' ] ) -> with ( [ 'terms' => function ( $query ) {
                 $query -> orderBy ( 'terms.title', 'ASC' );
             } ] ) -> has ( 'terms.product_terms.product' );
-            
+
             if ( request () -> has ( 'attribute-id' ) && request () -> input ( 'attribute-id' ) > 0 ) {
                 $search = true;
                 $attribute -> where ( [ 'id' => request ( 'attribute-id' ) ] );
             }
-            
+
             if ( request () -> has ( 'attribute-id' ) )
                 $search = true;;
-            
+
             if ( $search )
                 return $attribute -> groupBy ( 'attributes.id', 'attributes.title' ) -> get ();
             else
                 return [];
         }
-        
+
         public function filter_sales_total () {
             $search = false;
             $sales  = Sale ::where ( [
                                          'refunded'    => '0',
                                          'sale_closed' => '1'
                                      ] );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $search     = true;
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
@@ -452,18 +452,18 @@
                     $end_date
                 ] );
             }
-            
+
             return $search ? $sales -> sum ( 'total' ) : 0;
-            
+
         }
-        
+
         public function filter_sales_refund_total () {
             $search = false;
             $sales  = Sale ::where ( [
                                          'refunded'    => '1',
                                          'sale_closed' => '1'
                                      ] );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $search     = true;
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
@@ -473,17 +473,17 @@
                     $end_date
                 ] );
             }
-            
+
             return $search ? $sales -> sum ( 'net' ) : 0;
-            
+
         }
-        
+
         public function filter_sales_return_total () {
             $search = false;
             $return = Stock ::where ( [
                                           'stock_type' => 'customer-return',
                                       ] ) -> whereNotNull ( 'customer_id' );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $search     = true;
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
@@ -493,18 +493,18 @@
                     $end_date
                 ] );
             }
-            
+
             return $search ? $return -> sum ( 'return_net' ) : 0;
-            
+
         }
-        
+
         public function sale_discounts () {
             $search = false;
             $sales  = Sale ::selectRaw ( 'SUM(total) as total, SUM(net) as net' ) -> where ( [
                                                                                                  'refunded'    => '0',
                                                                                                  'sale_closed' => '1'
                                                                                              ] );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $search     = true;
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
@@ -514,31 +514,31 @@
                     $end_date
                 ] );
             }
-            
+
             return $search ? $sales -> first () : 0;
-            
+
         }
-        
+
         public function get_ledgers_by_account_head ( $id ) {
             $accountHead             = Account ::where ( [ 'id' => $id ] ) -> with ( 'running_balance' ) -> first ();
             $accountHead -> children = $this -> getChildrenAccounts ( $id );
             return $this -> convertToTr ( $accountHead );
         }
-        
+
         public function getChildrenAccounts ( $id ) {
             $children = DB ::table ( 'account_heads' ) -> where ( 'account_head_id', $id ) -> get ();
-            
+
             foreach ( $children as $child ) {
                 $child -> children = $this -> getChildrenAccounts ( $child -> id );
             }
-            
+
             return $children;
         }
-        
+
         public function convertToTr ( $account_heads, $children = false, $padding = 50 ) {
             $item = '';
             $net  = 0;
-            
+
             if ( !$children ) {
                 $running_balance = ( new AccountService() ) -> get_account_head_running_balance ( $account_heads -> id );
                 $item            .= '<tr>';
@@ -565,17 +565,17 @@
                     $item .= '</tr>';
                 }
             }
-            
+
             return [
                 'items' => $item,
                 'net'   => $net
             ];
         }
-        
+
         public function customer_returns () {
             $search = false;
             $stocks = Stock ::ByBranch () -> with ( [ 'customer' ] ) -> where ( [ 'stock_type' => 'customer-return' ] );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $search     = true;
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
@@ -585,25 +585,25 @@
                     $end_date
                 ] );
             }
-            
+
             if ( request () -> filled ( 'customer-id' ) ) {
                 $search = true;
                 $stocks -> where ( [ 'customer_id' => request ( 'customer-id' ) ] );
             }
-            
+
             if ( $search )
                 return $stocks -> get ();
             else
                 return [];
         }
-        
+
         public function vendor_returns () {
             $search  = false;
             $returns = StockReturn ::with ( [ 'products.product' ] );
-            
+
             if ( count ( array_intersect ( config ( 'constants.system_access' ), auth () -> user () -> user_roles () ) ) < 1 )
                 $returns -> where ( [ 'user_id' => auth () -> user () -> id ] );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $search     = true;
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
@@ -613,18 +613,18 @@
                     $end_date
                 ] );
             }
-            
+
             if ( request () -> filled ( 'vendor-id' ) ) {
                 $search = true;
                 $returns -> where ( [ 'vendor_id' => request ( 'vendor-id' ) ] );
             }
-            
+
             if ( $search )
                 return $returns -> get ();
             else
                 return [];
         }
-        
+
         public function filter_stocks () {
             $search = false;
             $stocks = Stock ::ByBranch () -> with ( [ 'vendor', 'products.product', 'products' => function ( $query ) use ( $search ) {
@@ -633,7 +633,7 @@
                     $query -> where ( [ 'product_id' => request ( 'product-id' ) ] );
                 }
             } ] ) -> where ( [ 'stock_type' => 'vendor' ] );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $search     = true;
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
@@ -643,28 +643,28 @@
                     $end_date
                 ] );
             }
-            
+
             if ( request () -> filled ( 'vendor-id' ) ) {
                 $search = true;
                 $stocks -> where ( [ 'vendor_id' => request ( 'vendor-id' ) ] );
             }
-            
+
             if ( $search )
                 return $stocks -> get ();
             else
                 return [];
         }
-        
+
         public function calculate_sales_ledger ( $id, $column = '' ): array {
             $accountHead             = Account ::where ( [ 'id' => $id ] ) -> with ( 'running_balance' ) -> first ();
             $accountHead -> children = $this -> getChildrenAccounts ( $id );
             return $this -> convertToTrCustomized ( $accountHead, false, 50, $column );
         }
-        
+
         public function convertToTrCustomized ( $account_heads, $children = false, $padding = 50, $column = '' ): array {
             $item = '';
             $net  = 0;
-            
+
             if ( !$children ) {
                 $running_balance = ( new AccountService() ) -> get_sales_running_balance ( $account_heads -> id, $column );
                 $item            .= '<tr>';
@@ -696,22 +696,22 @@
                 'net'   => $net
             ];
         }
-        
+
         public function filter_balance_sheet ( $account_head_id ): array {
             if ( !request () -> filled ( 'start-date' ) )
                 return [
                     'html' => '',
                     'net'  => 0
                 ];
-            
+
             $accounts = Account ::where ( [ 'account_head_id' => $account_head_id ] ) -> get ();
             return $this -> createTableRows ( $accounts );
         }
-        
+
         public function createTableRows ( $account_heads, $padding = 50 ): array {
             $item = '';
             $net  = 0;
-            
+
             if ( count ( $account_heads ) > 0 ) {
                 foreach ( $account_heads as $account_head ) {
                     $item            .= '<tr>';
@@ -727,7 +727,7 @@
                 'net'  => $net
             ];
         }
-        
+
         public function profit () {
             $sales                  = ( new ReportingService() ) -> get_ledgers_by_account_head ( config ( 'constants.cash_sale.sales' ) );
             $sales_refund           = ( new ReportingService() ) -> calculate_sales_ledger ( config ( 'constants.cash_sale.sales' ), 'debit' );
@@ -759,117 +759,110 @@
             $j                      += $taxes[ 'net' ];
             return ( $i > 0 ? $i - $j : $i + $j );
         }
-        
+
         public function count_interviews ( $status ) {
-            $candidates = CandidateInterview ::where ( [ 'status' => $status ] );
-            
-            if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
-                $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
-                $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
-            }
-            
-            return $candidates -> count ();
+
+            return 0;
         }
-        
+
         public function count_medicals ( $status ) {
             $candidates = CandidateMedical ::where ( [ 'status' => $status ] );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
                 $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
             }
-            
+
             return $candidates -> count ();
         }
-        
+
         public function count_documents_ready ( $status ) {
             $candidates = CandidateDocumentReady ::where ( [ 'status' => $status ] );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
                 $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
             }
-            
+
             return $candidates -> count ();
         }
-        
+
         public function count_documents_uploaded ( $status ) {
             if ( $status == 'yes' )
                 $candidates = CandidateVisa ::whereNotNull ( 'tgid' );
             else
                 $candidates = CandidateVisa ::whereNull ( 'tgid' );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
                 $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
             }
-            
+
             return $candidates -> count ();
         }
-        
+
         public function count_visas ( $status ) {
             $candidates = CandidateVisa ::where ( [ 'status' => $status ] );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
                 $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
             }
-            
+
             return $candidates -> count ();
         }
-        
+
         public function count_protector ( $status ) {
             $candidates = CandidateProtector ::where ( [ 'status' => $status ] );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
                 $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
             }
-            
+
             return $candidates -> count ();
         }
-        
+
         public function count_tickets ( $status ) {
             $candidates = CandidateTicket ::where ( [ 'status' => $status ] );
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
                 $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
             }
-            
+
             return $candidates -> count ();
         }
-        
+
         public function count_back_out (): int {
             $candidates = CandidateBackOut ::query ();
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
                 $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
             }
-            
+
             return $candidates -> count ();
         }
-        
+
         public function follow_up_report (): Collection | array {
             $search     = false;
             $candidates = Candidate ::query ();
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
                 $candidates -> whereBetween ( DB ::raw ( 'DATE(created_at)' ), [ $start_date, $end_date ] );
                 $search = true;
             }
-            
+
             if ( request () -> filled ( 'follow-up' ) ) {
                 if ( request ( 'follow-up' ) == 'payment' ) {
                     $candidates -> whereIn ( 'id', function ( $query ) {
@@ -903,21 +896,21 @@
                 }
                 $search = true;
             }
-            
+
             return $search ? $candidates -> get () : [];
         }
-        
+
         public function missing_docs_report (): Collection | array {
             $search     = false;
             $candidates = Candidate ::query ();
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
                 $candidates -> whereBetween ( DB ::raw ( 'DATE(created_at)' ), [ $start_date, $end_date ] );
                 $search = true;
             }
-            
+
             $candidates -> whereNotIn ( 'id', function ( $query ) {
                 $query -> select ( 'candidate_id' ) -> from ( 'candidate_documents' );
             } )
@@ -934,52 +927,52 @@
                         -> orWhereNull ( 'nok_1' )
                         -> orWhereNull ( 'nok_2' );
                 } );
-            
+
             return $search ? $candidates -> get () : [];
         }
-        
+
         public function cheque_details_report ( $request ): Collection | array {
             $search  = false;
             $ledgers = GeneralLedger ::query ();
-            
+
             if ( $request -> filled ( 'start-date' ) && $request -> filled ( 'end-date' ) ) {
                 $start_date = date ( 'Y-m-d', strtotime ( $request -> input ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( $request -> input ( 'end-date' ) ) );
                 $ledgers -> whereBetween ( DB ::raw ( 'DATE(transaction_date)' ), [ $start_date, $end_date ] );
                 $search = true;
             }
-            
+
             if ( $request -> filled ( 'account-head-id' ) && $request -> input ( 'account-head-id' ) > 0 ) {
                 $ledgers -> where ( [ 'account_head_id' => $request -> input ( 'account-head-id' ) ] );
                 $search = true;
             }
-            
+
             $ledgers -> where ( [ 'payment_mode' => 'cheque' ] );
-            
+
             return $search ? $ledgers -> get () : [];
         }
-        
+
         public function gross_profit_report ( $request ): Collection | array {
             $search     = false;
             $candidates = Candidate ::query ();
-            
+
             if ( $request -> filled ( 'start-date' ) && $request -> filled ( 'end-date' ) ) {
                 $search     = true;
                 $start_date = date ( 'Y-m-d', strtotime ( $request -> input ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( $request -> input ( 'end-date' ) ) );
                 $candidates -> whereBetween ( DB ::raw ( 'DATE(created_at)' ), [ $start_date, $end_date ] );
             }
-            
+
             if ( $request -> filled ( 'job-id' ) ) {
                 $candidates -> where ( [ 'job_id' => $request -> input ( 'job-id' ) ] );
                 $search = true;
             }
-            
+
             if ( $request -> filled ( 'referral-id' ) ) {
                 $candidates -> where ( [ 'referral_id' => $request -> input ( 'referral-id' ) ] );
                 $search = true;
             }
-            
+
             if ( $request -> filled ( 'principal-id' ) ) {
                 $candidates -> whereIn ( 'id', function ( $query ) {
                     $query
@@ -996,31 +989,31 @@
             }
             return $search ? $candidates -> get () : [];
         }
-        
+
         public function get_qj_vendor_candidates (): Collection | array {
             $search     = false;
             $candidates = Candidate ::query ();
-            
+
             if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
                 $search     = true;
                 $start_date = date ( 'Y-m-d', strtotime ( request () -> input ( 'start-date' ) ) );
                 $end_date   = date ( 'Y-m-d', strtotime ( request () -> input ( 'end-date' ) ) );
                 $candidates -> whereBetween ( DB ::raw ( 'DATE(created_at)' ), [ $start_date, $end_date ] );
             }
-            
+
             if ( request () -> filled ( 'filter' ) ) {
                 $search = true;
                 $filter = request () -> input ( 'filter' );
                 $candidates -> where ( [ 'arrived' => $filter ] );
             }
-            
+
             $candidates -> whereIn ( 'id', function ( $query ) {
                 $query
                     -> select ( 'candidate_id' )
                     -> from ( 'candidate_medicals' )
                     -> where ( [ 'vendor_id' => '6' ] );
             } );
-            
+
             return $search ? $candidates -> orderBy ( 'id', 'DESC' ) -> get () : [];
         }
     }

@@ -75,7 +75,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-xl-4 col-12">
                 <div class="row">
                     <div class="col-xl-12 mb-4 col-lg-12 col-12">
@@ -91,8 +91,8 @@
                                                 : {{ implode (',', auth () -> user () -> get_user_roles()) }}
                                             @endif
                                         </p>
-                                        <h4 class="text-primary mb-1">{{ number_format ($candidates) }}</h4>
-                                        <a href="{{ route ('candidates.index') }}" class="btn btn-primary btn-sm">
+                                        <h4 class="text-primary mb-1">0</h4>
+                                        <a href="#" class="btn btn-primary btn-sm">
                                             View Candidates
                                         </a>
                                     </div>
@@ -107,7 +107,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-xl-6 mb-4 col-md-3 col-6">
                         <div class="card">
                             <div class="card-header">
@@ -124,7 +124,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-xl-6 mb-4 col-md-3 col-6">
                         <div class="card">
                             <div class="card-header">
@@ -141,7 +141,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-xl-12 mb-4 col-md-6">
                         <div class="card">
                             <div class="card-body">
@@ -171,7 +171,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-12 col-xl-8 mb-4">
                 <div class="card">
                     <div class="card-header header-elements">
@@ -217,7 +217,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header p-0">
@@ -251,7 +251,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header p-0">
@@ -287,7 +287,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header p-0">
@@ -323,7 +323,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header p-0">
@@ -357,7 +357,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header p-0">
@@ -391,7 +391,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header p-0">
