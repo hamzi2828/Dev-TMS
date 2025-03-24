@@ -9,7 +9,6 @@
     use App\Http\Controllers\AnalyticsController;
     use App\Http\Controllers\BankController;
     use App\Http\Controllers\CandidateBackOutController;
-    use App\Http\Controllers\CandidateCompanyRequisitionJobController;
     use App\Http\Controllers\CandidateController;
     use App\Http\Controllers\CandidateDocumentReadyController;
     use App\Http\Controllers\CandidateInterviewController;
@@ -25,7 +24,7 @@
     use App\Http\Controllers\CompanyRequisitionController;
     use App\Http\Controllers\CountryController;
     use App\Http\Controllers\DashboardController;
-    use App\Http\Controllers\DataBankController;
+    
     use App\Http\Controllers\DistrictController;
     use App\Http\Controllers\FeeController;
     use App\Http\Controllers\InvoiceController;
@@ -120,23 +119,17 @@
         Route ::get ( 'candidates/{candidate}/status', [ CandidateController::class, 'status_change' ] ) -> name ( 'candidates.status' );
         Route ::post ( 'candidates/{candidate}/arrived', [ CandidateController::class, 'arrived' ] ) -> name ( 'candidates.arrived' );
         
-        Route ::resource ( 'data-banks', DataBankController::class ) -> except ( [ 'show' ] );
         Route ::resource ( 'candidates', CandidateController::class );
         Route ::resource ( 'candidates.interviews', CandidateInterviewController::class ) -> except ( [ 'show' ] );
         Route ::resource ( 'candidates.medicals', CandidateMedicalController::class ) -> except ( [ 'show' ] );
         Route ::resource ( 'candidates.visas', CandidateVisaController::class ) -> except ( [ 'show' ] );
         Route ::resource ( 'candidates.tickets', CandidateTicketController::class ) -> except ( [ 'show' ] );
         Route ::resource ( 'candidates.protectors', CandidateProtectorController::class ) -> except ( [ 'show' ] );
-        Route ::resource ( 'candidates.requisitions', CandidateCompanyRequisitionJobController::class ) -> except ( [ 'show' ] );
         Route ::resource ( 'candidates.document-ready', CandidateDocumentReadyController::class ) -> except ( [ 'show' ] );
         Route ::resource ( 'candidates.back-out', CandidateBackOutController::class ) -> except ( [ 'show' ] );
         Route ::resource ( 'candidates.payment-follow-up', CandidatePaymentFollowUpController::class ) -> except ( [ 'show' ] );
         Route ::resource ( 'candidates.visa-follow-up', CandidateVisaFollowUpController::class ) -> except ( [ 'show' ] );
         Route ::resource ( 'candidates.ticket-follow-up', CandidateTicketFollowUpController::class ) -> except ( [ 'show' ] );
-        
-        Route ::get ( 'company-requisitions/add-more', [ CompanyRequisitionController::class, 'add_more' ] ) -> name ( 'company-requisitions.add-more' );
-        Route ::get ( 'load-company-requisitions', [ CompanyRequisitionController::class, 'load_company_requisitions' ] ) -> name ( 'load-company-requisitions' );
-        Route ::resource ( 'company-requisitions', CompanyRequisitionController::class ) -> except ( [ 'show' ] );
         
         Route ::prefix ( 'accounts' ) -> group ( function () {
             Route ::get ( 'chart-of-accounts', [ AccountController::class, 'chart_of_accounts' ] ) -> name ( 'accounts.chart-of-accounts' );
