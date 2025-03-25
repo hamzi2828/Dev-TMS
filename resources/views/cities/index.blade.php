@@ -24,7 +24,7 @@
                         @foreach($cities as $city)
                             <tr>
                                 <td>{{ $loop -> iteration }}</td>
-                                <td>{{ $city -> id }}</td>
+                                <td>{{ $city->code  }}</td>
                                 <td>{{ $city -> country ?-> title }}</td>
                                 <td>{{ $city -> title }}</td>
                                 <td>{{ $city -> createdAt() }}</td>

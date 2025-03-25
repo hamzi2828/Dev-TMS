@@ -30,6 +30,7 @@
                                         'user_id'    => auth () -> user () -> id,
                                         'country_id' => $request -> input ( 'country-id' ),
                                         'title'      => $request -> input ( 'title' ),
+                                        'code'       => $request -> input ( 'code' ), //'code'
                                         'slug'       => str ( $request -> input ( 'title' ) ) -> slug ( '-' )
                                     ] );
             ( new LogService() ) -> log ( 'city-added', $city );
@@ -40,6 +41,7 @@
             $city -> user_id    = auth () -> user () -> id;
             $city -> country_id = $request -> input ( 'country-id' );
             $city -> title      = $request -> input ( 'title' );
+            $city -> code       = $request -> input ( 'code' ); //'code'
             $city -> update ();
             ( new LogService() ) -> log ( 'city-updated', $city );
         }

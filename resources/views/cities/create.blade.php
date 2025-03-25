@@ -25,7 +25,14 @@
                                     </select>
                                 </div>
                                 
-                                <div class="col-8 mb-3">
+                                <div class="col-3 mb-3">
+                                    <label class="form-label" for="code">Code</label>
+                                    <input type="text" required="required" class="form-control"
+                                           value="{{ old('code') }}"
+                                           id="code" name="code" />
+                                </div>
+                                
+                                <div class="col-5 mb-3">
                                     <label class="form-label" for="title">Title</label>
                                     <input type="text" required="required" autofocus="autofocus" class="form-control"
                                            value="{{ old ('title') }}"

@@ -12,6 +12,7 @@
                     <thead class="border-top">
                     <tr>
                         <th>Sr.No</th>
+                        <th>Code</th>
                         <th>Title</th>
                         <th>Date Added</th>
                         <th>Actions</th>
@@ -22,6 +23,7 @@
                         @foreach($airlines as $airline)
                             <tr>
                                 <td>{{ $loop -> iteration }}</td>
+                                <td>{{ $airline -> code }}</td>
                                 <td>{{ $airline -> title }}</td>
                                 <td>{{ $airline -> createdAt() }}</td>
                                 <td>

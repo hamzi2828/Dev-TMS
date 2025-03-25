@@ -53,6 +53,22 @@
                                                    value="{{ old ('mobile', $user -> mobile) }}" />
                                         </div>
                                         
+                                        
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="company">Company</label>
+                                            <select id="company" name="company_id" class="form-control select2" required="required"
+                                                    data-placeholder="Select a company">
+                                                <option></option>
+                                                @if(count($companies) > 0)
+                                                    @foreach($companies as $company)
+                                                        <option value="{{ $company->id }}" @selected(old('company_id', $user->company_id) == $company->id)>
+                                                            {{ $company->title }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                        
                                         <div class="col-md-4 mb-3">
                                             <label class="form-label" for="roles">Role(s)</label>
                                             <select id="roles" name="roles[]" multiple="multiple"

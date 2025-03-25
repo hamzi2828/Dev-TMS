@@ -9,7 +9,13 @@
                         @csrf
                         <div class="card-body pt-1 pb-1">
                             <div class="row">
-                                <div class="col-12 mb-3">
+                                <div class="col-4 mb-3">
+                                    <label class="form-label" for="code">Code</label>
+                                    <input type="text" required="required" class="form-control"
+                                           value="{{ old('code') }}"
+                                           id="code" name="code" />
+                                </div>
+                                <div class="col-8 mb-3">
                                     <label class="form-label" for="title">Title</label>
                                     <input type="text" required="required" autofocus="autofocus" class="form-control"
                                            value="{{ old ('title') }}"

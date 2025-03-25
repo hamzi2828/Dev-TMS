@@ -9,7 +9,7 @@
     use App\Services\UserRoleService;
     use App\Services\UserService;
     use Illuminate\Contracts\View\View;
-    use Illuminate\Database\QueryException;
+    use Illuminate\Database\QueryException; 
     use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\DB;
@@ -55,7 +55,9 @@
             $this -> authorize ( 'edit', $user );
             $title = 'Edit User';
             $roles = ( new RoleService() ) -> roles ();
-            return view ( 'users.update', compact ( 'title', 'user', 'roles' ) );
+            $companies = ( new CompanyService() ) -> companies ();
+
+            return view ( 'users.update', compact ( 'title', 'user', 'roles', 'companies' ) );
         }
         
         public function update ( UserFormRequest $request, User $user ): RedirectResponse {

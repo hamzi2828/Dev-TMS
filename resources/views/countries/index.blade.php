@@ -12,6 +12,7 @@
                     <thead class="border-top">
                     <tr>
                         <th>Sr.No</th>
+                        <th>Code</th>
                         <th>Title</th>
                         <th>Date Added</th>
                         <th>Actions</th>
@@ -22,6 +23,7 @@
                         @foreach($countries as $country)
                             <tr>
                                 <td>{{ $loop -> iteration }}</td>
+                                <td>{{ $country -> code }}</td>
                                 <td>{{ $country -> title }}</td>
                                 <td>{{ $country -> createdAt() }}</td>
                                 <td>

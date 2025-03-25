@@ -21,7 +21,7 @@
             $data[ 'cities' ] = ( new CityService() ) -> all ();
             return view ( 'cities.index', $data );
         }
-        
+         
         public function create (): View {
             $this -> authorize ( 'create', City::class );
             $data[ 'title' ]     = 'Add Cities';

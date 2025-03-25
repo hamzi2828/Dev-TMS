@@ -34,7 +34,7 @@
         }
         
         public function update ( $request, $user ): void {
-            $user -> company_id = $request -> input ( 'company-id' );
+            $user -> company_id = $request -> input ( 'company_id' );
             $user -> name       = $request -> input ( 'name' );
             $user -> email      = $request -> input ( 'email' );
             $user -> cnic       = $request -> input ( 'cnic' );

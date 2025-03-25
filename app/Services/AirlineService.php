@@ -15,6 +15,7 @@
             $airline = Airline ::create ( [
                                               'user_id' => auth () -> user () -> id,
                                               'title'   => $request -> input ( 'title' ),
+                                              'code' => $request->input('code'),
                                               'slug'    => str ( $request -> input ( 'title' ) ) -> slug ( '-' )
                                           ] );
             ( new LogService() ) -> log ( 'airline-created', $airline );
@@ -24,6 +25,7 @@
         public function edit ( $request, $airline ): void {
             $airline -> user_id = auth () -> user () -> id;
             $airline -> title   = $request -> input ( 'title' );
+            $airline -> code = $request->input('code');
             $airline -> update ();
             ( new LogService() ) -> log ( 'airline-updated', $airline );
         }
