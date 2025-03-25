@@ -4,10 +4,10 @@
     </li>
 @endcan
 
-@include('_partials.menus.users')
+{{-- @include('_partials.menus.users') --}}
 
 @can('settings', \App\Models\User::class)
-    <li class="menu-item {{ (str_replace ('/', '', request () -> route () -> getPrefix ()) == 'settings') ? 'active open' : '' }}">
+    <li class="menu-item {{ request()->is('settings*') || request()->is('users*') ? 'active open' : '' }}">
         <a class="menu-link menu-toggle" href="javascript:void(0)">
             <i class="menu-icon tf-icons ti ti-settings"></i>
             <div data-i18n="Settings">Settings</div>
@@ -173,23 +173,23 @@
             @endcan
 
             @can('mainMenu', \App\Models\Country::class)
-                <li class="menu-item {{ request () -> routeIs ('countries.*') ? 'active open' : '' }}">
+                <li class="menu-item {{ request()->routeIs('countries.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons ti ti-building-estate"></i>
                         <div data-i18n="Countries">Countries</div>
                     </a>
                     <ul class="menu-sub">
                         @can('all', \App\Models\Country::class)
-                            <li class="menu-item {{ request () -> routeIs ('countries.index') ? 'active' : '' }}">
-                                <a href="{{ route ('countries.index') }}" class="menu-link">
+                            <li class="menu-item {{ request()->routeIs('countries.index') ? 'active' : '' }}">
+                                <a href="{{ route('countries.index') }}" class="menu-link">
                                     <div data-i18n="All Countries">All Countries</div>
                                 </a>
                             </li>
                         @endcan
 
                         @can('create', \App\Models\Country::class)
-                            <li class="menu-item {{ request () -> routeIs ('countries.create') ? 'active' : '' }}">
-                                <a href="{{ route ('countries.create') }}" class="menu-link">
+                            <li class="menu-item {{ request()->routeIs('countries.create') ? 'active' : '' }}">
+                                <a href="{{ route('countries.create') }}" class="menu-link">
                                     <div data-i18n="Add Country">Add Country</div>
                                 </a>
                             </li>
@@ -224,6 +224,31 @@
                 </li>
             @endcan
 
+            @can('mainMenu', \App\Models\User::class)
+                <li class="menu-item {{ request () -> routeIs ('users.*') ? 'active open' : '' }}">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons ti ti-users"></i>
+                        <div data-i18n="Users">Users</div>
+                    </a>
+                    <ul class="menu-sub">
+                        @can('all', \App\Models\User::class)
+                            <li class="menu-item {{ request () -> routeIs ('users.index') ? 'active' : '' }}">
+                                <a href="{{ route ('users.index') }}" class="menu-link">
+                                    <div data-i18n="All Users">All Users</div>
+                                </a>
+                            </li>
+                        @endcan
+                        
+                        @can('create', \App\Models\User::class)
+                            <li class="menu-item {{ request () -> routeIs ('users.create') ? 'active' : '' }}">
+                                <a href="{{ route ('users.create') }}" class="menu-link">
+                                    <div data-i18n="Add User">Add User</div>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
 
             @can('mainMenu', \App\Models\Role::class)
                 <li class="menu-item {{ request () -> routeIs ('roles.*') ? 'active open' : '' }}">
