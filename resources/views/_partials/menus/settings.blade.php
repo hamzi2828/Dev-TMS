@@ -13,58 +13,7 @@
             <div data-i18n="Settings">Settings</div>
         </a>
         <ul class="menu-sub">
-            @can('mainMenu', \App\Models\Job::class)
-                <li class="menu-item {{ request () -> routeIs ('jobs.*') ? 'active open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-building-estate"></i>
-                        <div data-i18n="Professions">Professions</div>
-                    </a>
-                    <ul class="menu-sub">
-                        @can('all', \App\Models\Job::class)
-                            <li class="menu-item {{ request () -> routeIs ('jobs.index') ? 'active' : '' }}">
-                                <a href="{{ route ('jobs.index') }}" class="menu-link">
-                                    <div data-i18n="All Professions">All Professions</div>
-                                </a>
-                            </li>
-                        @endcan
-                        
-                        @can('create', \App\Models\Job::class)
-                            <li class="menu-item {{ request () -> routeIs ('jobs.create') ? 'active' : '' }}">
-                                <a href="{{ route ('jobs.create') }}" class="menu-link">
-                                    <div data-i18n="Add Profession">Add Profession</div>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
-            
-            @can('mainMenu', \App\Models\Qualification::class)
-                <li class="menu-item {{ request () -> routeIs ('qualifications.*') ? 'active open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-building-estate"></i>
-                        <div data-i18n="Qualifications">Qualifications</div>
-                    </a>
-                    <ul class="menu-sub">
-                        @can('all', \App\Models\Qualification::class)
-                            <li class="menu-item {{ request () -> routeIs ('qualifications.index') ? 'active' : '' }}">
-                                <a href="{{ route ('qualifications.index') }}" class="menu-link">
-                                    <div data-i18n="All Qualifications">All Qualifications</div>
-                                </a>
-                            </li>
-                        @endcan
-                        
-                        @can('create', \App\Models\Qualification::class)
-                            <li class="menu-item {{ request () -> routeIs ('qualifications.create') ? 'active' : '' }}">
-                                <a href="{{ route ('qualifications.create') }}" class="menu-link">
-                                    <div data-i18n="Add Qualification">Add Qualification</div>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
-            
+
             @can('mainMenu', \App\Models\Bank::class)
                 <li class="menu-item {{ request () -> routeIs ('banks.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -79,7 +28,7 @@
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('create', \App\Models\Bank::class)
                             <li class="menu-item {{ request () -> routeIs ('banks.create') ? 'active' : '' }}">
                                 <a href="{{ route ('banks.create') }}" class="menu-link">
@@ -90,7 +39,7 @@
                     </ul>
                 </li>
             @endcan
-            
+
             @can('mainMenu', \App\Models\PaymentMethod::class)
                 <li class="menu-item {{ request () -> routeIs ('payment-methods.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -105,7 +54,7 @@
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('create', \App\Models\PaymentMethod::class)
                             <li class="menu-item {{ request () -> routeIs ('payment-methods.create') ? 'active' : '' }}">
                                 <a href="{{ route ('payment-methods.create') }}" class="menu-link">
@@ -116,33 +65,9 @@
                     </ul>
                 </li>
             @endcan
-            
-            @can('mainMenu', \App\Models\Vendor::class)
-                <li class="menu-item {{ request () -> routeIs ('vendors.*') ? 'active open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-building-estate"></i>
-                        <div data-i18n="Medical Vendors">Medical Vendors</div>
-                    </a>
-                    <ul class="menu-sub">
-                        @can('all', \App\Models\Vendor::class)
-                            <li class="menu-item {{ request () -> routeIs ('vendors.index') ? 'active' : '' }}">
-                                <a href="{{ route ('vendors.index') }}" class="menu-link">
-                                    <div data-i18n="All Medical Vendors">All Medical Vendors</div>
-                                </a>
-                            </li>
-                        @endcan
-                        
-                        @can('create', \App\Models\Vendor::class)
-                            <li class="menu-item {{ request () -> routeIs ('vendors.create') ? 'active' : '' }}">
-                                <a href="{{ route ('vendors.create') }}" class="menu-link">
-                                    <div data-i18n="Add Medical Vendor">Add Medical Vendor</div>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
-            
+
+
+
             @can('mainMenu', \App\Models\Agent::class)
                 <li class="menu-item {{ request () -> routeIs ('agents.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -157,7 +82,7 @@
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('create', \App\Models\Agent::class)
                             <li class="menu-item {{ request () -> routeIs ('agents.create') ? 'active' : '' }}">
                                 <a href="{{ route ('agents.create') }}" class="menu-link">
@@ -168,33 +93,7 @@
                     </ul>
                 </li>
             @endcan
-            
-            @can('mainMenu', \App\Models\Principal::class)
-                <li class="menu-item {{ request () -> routeIs ('principals.*') ? 'active open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-building-estate"></i>
-                        <div data-i18n="Principals">Principals</div>
-                    </a>
-                    <ul class="menu-sub">
-                        @can('all', \App\Models\Principal::class)
-                            <li class="menu-item {{ request () -> routeIs ('principals.index') ? 'active' : '' }}">
-                                <a href="{{ route ('principals.index') }}" class="menu-link">
-                                    <div data-i18n="All Principals">All Principals</div>
-                                </a>
-                            </li>
-                        @endcan
-                        
-                        @can('create', \App\Models\Principal::class)
-                            <li class="menu-item {{ request () -> routeIs ('principals.create') ? 'active' : '' }}">
-                                <a href="{{ route ('principals.create') }}" class="menu-link">
-                                    <div data-i18n="Add Principal">Add Principal</div>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
-            
+
             @can('mainMenu', \App\Models\Referral::class)
                 <li class="menu-item {{ request () -> routeIs ('referrals.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -209,7 +108,7 @@
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('create', \App\Models\Principal::class)
                             <li class="menu-item {{ request () -> routeIs ('referrals.create') ? 'active' : '' }}">
                                 <a href="{{ route ('referrals.create') }}" class="menu-link">
@@ -220,7 +119,7 @@
                     </ul>
                 </li>
             @endcan
-            
+
             @can('mainMenu', \App\Models\Company::class)
                 <li class="menu-item {{ request () -> routeIs ('companies.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -235,7 +134,7 @@
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('create', \App\Models\Company::class)
                             <li class="menu-item {{ request () -> routeIs ('companies.create') ? 'active' : '' }}">
                                 <a href="{{ route ('companies.create') }}" class="menu-link">
@@ -246,33 +145,7 @@
                     </ul>
                 </li>
             @endcan
-            
-            @can('mainMenu', \App\Models\Fee::class)
-                <li class="menu-item {{ request () -> routeIs ('fees.*') ? 'active open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-building-estate"></i>
-                        <div data-i18n="Fees">Fees</div>
-                    </a>
-                    <ul class="menu-sub">
-                        @can('all', \App\Models\Fee::class)
-                            <li class="menu-item {{ request () -> routeIs ('fees.index') ? 'active' : '' }}">
-                                <a href="{{ route ('fees.index') }}" class="menu-link">
-                                    <div data-i18n="All Fees">All Fees</div>
-                                </a>
-                            </li>
-                        @endcan
-                        
-                        @can('create', \App\Models\Fee::class)
-                            <li class="menu-item {{ request () -> routeIs ('fees.create') ? 'active' : '' }}">
-                                <a href="{{ route ('fees.create') }}" class="menu-link">
-                                    <div data-i18n="Add Fee">Add Fee</div>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
-            
+
             @can('mainMenu', \App\Models\Airline::class)
                 <li class="menu-item {{ request () -> routeIs ('airlines.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -287,7 +160,7 @@
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('create', \App\Models\Airline::class)
                             <li class="menu-item {{ request () -> routeIs ('airlines.create') ? 'active' : '' }}">
                                 <a href="{{ route ('airlines.create') }}" class="menu-link">
@@ -298,7 +171,7 @@
                     </ul>
                 </li>
             @endcan
-            
+
             @can('mainMenu', \App\Models\Country::class)
                 <li class="menu-item {{ request () -> routeIs ('countries.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -313,7 +186,7 @@
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('create', \App\Models\Country::class)
                             <li class="menu-item {{ request () -> routeIs ('countries.create') ? 'active' : '' }}">
                                 <a href="{{ route ('countries.create') }}" class="menu-link">
@@ -324,7 +197,7 @@
                     </ul>
                 </li>
             @endcan
-            
+
             @can('mainMenu', \App\Models\City::class)
                 <li class="menu-item {{ request () -> routeIs ('cities.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -339,7 +212,7 @@
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('create', \App\Models\City::class)
                             <li class="menu-item {{ request () -> routeIs ('cities.create') ? 'active' : '' }}">
                                 <a href="{{ route ('cities.create') }}" class="menu-link">
@@ -350,59 +223,8 @@
                     </ul>
                 </li>
             @endcan
-            
-            @can('mainMenu', \App\Models\Province::class)
-                <li class="menu-item {{ request () -> routeIs ('provinces.*') ? 'active open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-building-estate"></i>
-                        <div data-i18n="Provinces">Provinces</div>
-                    </a>
-                    <ul class="menu-sub">
-                        @can('all', \App\Models\Province::class)
-                            <li class="menu-item {{ request () -> routeIs ('provinces.index') ? 'active' : '' }}">
-                                <a href="{{ route ('provinces.index') }}" class="menu-link">
-                                    <div data-i18n="All Provinces">All Provinces</div>
-                                </a>
-                            </li>
-                        @endcan
-                        
-                        @can('create', \App\Models\Province::class)
-                            <li class="menu-item {{ request () -> routeIs ('provinces.create') ? 'active' : '' }}">
-                                <a href="{{ route ('provinces.create') }}" class="menu-link">
-                                    <div data-i18n="Add Province">Add Province</div>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
-            
-            @can('mainMenu', \App\Models\District::class)
-                <li class="menu-item {{ request () -> routeIs ('districts.*') ? 'active open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-building-estate"></i>
-                        <div data-i18n="Districts">Districts</div>
-                    </a>
-                    <ul class="menu-sub">
-                        @can('all', \App\Models\District::class)
-                            <li class="menu-item {{ request () -> routeIs ('districts.index') ? 'active' : '' }}">
-                                <a href="{{ route ('districts.index') }}" class="menu-link">
-                                    <div data-i18n="All Districts">All Districts</div>
-                                </a>
-                            </li>
-                        @endcan
-                        
-                        @can('create', \App\Models\District::class)
-                            <li class="menu-item {{ request () -> routeIs ('districts.create') ? 'active' : '' }}">
-                                <a href="{{ route ('districts.create') }}" class="menu-link">
-                                    <div data-i18n="Add District">Add District</div>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
-            
+
+
             @can('mainMenu', \App\Models\Role::class)
                 <li class="menu-item {{ request () -> routeIs ('roles.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -417,7 +239,7 @@
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('create', \App\Models\Role::class)
                             <li class="menu-item {{ request () -> routeIs ('roles.create') ? 'active' : '' }}">
                                 <a href="{{ route ('roles.create') }}" class="menu-link">

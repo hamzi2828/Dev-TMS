@@ -766,169 +766,45 @@
         }
 
         public function count_medicals ( $status ) {
-            $candidates = CandidateMedical ::where ( [ 'status' => $status ] );
 
-            if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
-                $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
-                $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
-            }
 
-            return $candidates -> count ();
+            return 0;
         }
 
         public function count_documents_ready ( $status ) {
-            $candidates = CandidateDocumentReady ::where ( [ 'status' => $status ] );
-
-            if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
-                $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
-                $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
-            }
-
-            return $candidates -> count ();
+            return 0;
         }
 
         public function count_documents_uploaded ( $status ) {
-            if ( $status == 'yes' )
-                $candidates = CandidateVisa ::whereNotNull ( 'tgid' );
-            else
-                $candidates = CandidateVisa ::whereNull ( 'tgid' );
 
-            if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
-                $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
-                $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
-            }
 
-            return $candidates -> count ();
+            return 0;
         }
 
         public function count_visas ( $status ) {
-            $candidates = CandidateVisa ::where ( [ 'status' => $status ] );
-
-            if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
-                $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
-                $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
-            }
-
-            return $candidates -> count ();
+            return 0;
         }
 
         public function count_protector ( $status ) {
-            $candidates = CandidateProtector ::where ( [ 'status' => $status ] );
 
-            if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
-                $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
-                $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
-            }
-
-            return $candidates -> count ();
+            return 0;
         }
 
         public function count_tickets ( $status ) {
-            $candidates = CandidateTicket ::where ( [ 'status' => $status ] );
 
-            if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
-                $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
-                $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
-            }
-
-            return $candidates -> count ();
+            return 0;
         }
 
         public function count_back_out (): int {
-            $candidates = CandidateBackOut ::query ();
-
-            if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
-                $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
-                $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                $candidates -> whereBetween ( DB ::raw ( 'DATE(updated_at)' ), [ $start_date, $end_date ] );
-            }
-
-            return $candidates -> count ();
+            return 0;
         }
 
         public function follow_up_report (): Collection | array {
-            $search     = false;
-            $candidates = Candidate ::query ();
-
-            if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
-                $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
-                $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                $candidates -> whereBetween ( DB ::raw ( 'DATE(created_at)' ), [ $start_date, $end_date ] );
-                $search = true;
-            }
-
-            if ( request () -> filled ( 'follow-up' ) ) {
-                if ( request ( 'follow-up' ) == 'payment' ) {
-                    $candidates -> whereIn ( 'id', function ( $query ) {
-                        $query -> select ( 'candidate_id' ) -> from ( 'candidate_payment_follow_ups' );
-                    } );
-                    if ( request () -> filled ( 'status' ) ) {
-                        $candidates -> whereIn ( 'id', function ( $query ) {
-                            $query -> select ( 'candidate_id' ) -> from ( 'candidate_payment_follow_ups' ) -> where ( [ 'status' => request ( 'status' ) ] );
-                        } );
-                    }
-                }
-                if ( request ( 'follow-up' ) == 'visa' ) {
-                    $candidates -> whereIn ( 'id', function ( $query ) {
-                        $query -> select ( 'candidate_id' ) -> from ( 'candidate_visa_follow_ups' );
-                    } );
-                    if ( request () -> filled ( 'status' ) ) {
-                        $candidates -> whereIn ( 'id', function ( $query ) {
-                            $query -> select ( 'candidate_id' ) -> from ( 'candidate_visa_follow_ups' ) -> where ( [ 'status' => request ( 'status' ) ] );
-                        } );
-                    }
-                }
-                if ( request ( 'follow-up' ) == 'ticket' ) {
-                    $candidates -> whereIn ( 'id', function ( $query ) {
-                        $query -> select ( 'candidate_id' ) -> from ( 'candidate_ticket_follow_ups' );
-                    } );
-                    if ( request () -> filled ( 'status' ) ) {
-                        $candidates -> whereIn ( 'id', function ( $query ) {
-                            $query -> select ( 'candidate_id' ) -> from ( 'candidate_ticket_follow_ups' ) -> where ( [ 'status' => request ( 'status' ) ] );
-                        } );
-                    }
-                }
-                $search = true;
-            }
-
-            return $search ? $candidates -> get () : [];
+            return [];
         }
 
         public function missing_docs_report (): Collection | array {
-            $search     = false;
-            $candidates = Candidate ::query ();
-
-            if ( request () -> filled ( 'start-date' ) && request () -> filled ( 'end-date' ) ) {
-                $start_date = date ( 'Y-m-d', strtotime ( request ( 'start-date' ) ) );
-                $end_date   = date ( 'Y-m-d', strtotime ( request ( 'end-date' ) ) );
-                $candidates -> whereBetween ( DB ::raw ( 'DATE(created_at)' ), [ $start_date, $end_date ] );
-                $search = true;
-            }
-
-            $candidates -> whereNotIn ( 'id', function ( $query ) {
-                $query -> select ( 'candidate_id' ) -> from ( 'candidate_documents' );
-            } )
-                -> orWhereIn ( 'id', function ( $query ) {
-                    $query
-                        -> select ( 'candidate_id' )
-                        -> from ( 'candidate_documents' )
-                        -> whereNull ( 'picture' )
-                        -> orWhereNull ( 'passport' )
-                        -> orWhereNull ( 'cnic_front' )
-                        -> orWhereNull ( 'cnic_back' )
-                        -> orWhereNull ( 'nicop_front' )
-                        -> orWhereNull ( 'nicop_back' )
-                        -> orWhereNull ( 'nok_1' )
-                        -> orWhereNull ( 'nok_2' );
-                } );
-
-            return $search ? $candidates -> get () : [];
+            return [];
         }
 
         public function cheque_details_report ( $request ): Collection | array {

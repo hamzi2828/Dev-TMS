@@ -20,9 +20,7 @@
         @include('_partials.menus.accounts')
         @include('_partials.menus.accounts-settings')
         @include('_partials.menus.accounts-reporting')
-        @include('_partials.menus.reporting')
         @include('_partials.menus.settings')
-        @include('_partials.menus.templates')
         @include('_partials.menus.site-settings')
     </ul>
 </aside>

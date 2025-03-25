@@ -12,7 +12,7 @@
                     </a>
                 </li>
             @endcan
-            
+
             @can('profit_and_loss', \App\Models\GeneralLedger::class)
                 <li class="menu-item {{ request () -> routeIs ('accounts-reporting.profit-and-loss-report') ? 'active' : '' }}">
                     <a href="{{ route ('accounts-reporting.profit-and-loss-report') }}" class="menu-link">
@@ -20,7 +20,7 @@
                     </a>
                 </li>
             @endcan
-            
+
             @can('balance_sheet', \App\Models\GeneralLedger::class)
                 <li class="menu-item {{ request () -> routeIs ('accounts-reporting.balance-sheet') ? 'active' : '' }}">
                     <a href="{{ route ('accounts-reporting.balance-sheet') }}" class="menu-link">
@@ -28,7 +28,7 @@
                     </a>
                 </li>
             @endcan
-            
+
             @can('customer_receivable', \App\Models\GeneralLedger::class)
                 <li class="menu-item {{ request () -> routeIs ('accounts-reporting.customer-receivable-report') ? 'active' : '' }}">
                     <a href="{{ route ('accounts-reporting.customer-receivable-report') }}" class="menu-link">
@@ -36,7 +36,7 @@
                     </a>
                 </li>
             @endcan
-            
+
             @can('vendor_payable', \App\Models\GeneralLedger::class)
                 <li class="menu-item {{ request () -> routeIs ('accounts-reporting.vendor-payable-report') ? 'active' : '' }}">
                     <a href="{{ route ('accounts-reporting.vendor-payable-report') }}" class="menu-link">
@@ -44,14 +44,7 @@
                     </a>
                 </li>
             @endcan
-            
-            @can('cheque_details_report', \App\Models\User::class)
-                <li class="menu-item {{ request () -> routeIs ('accounts-reporting.cheque-details-report') ? 'active' : '' }}">
-                    <a href="{{ route ('accounts-reporting.cheque-details-report') }}" class="menu-link">
-                        <div data-i18n="Cheque Details Report">Cheque Details Report</div>
-                    </a>
-                </li>
-            @endcan
+
         </ul>
     </li>
 @endcan

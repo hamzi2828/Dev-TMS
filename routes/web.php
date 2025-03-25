@@ -4,31 +4,20 @@
     use App\Http\Controllers\AccountReporting;
     use App\Http\Controllers\AccountTypeController;
     use App\Http\Controllers\AgentController;
-    use App\Http\Controllers\AgreementController;
     use App\Http\Controllers\AirlineController;
     use App\Http\Controllers\AnalyticsController;
     use App\Http\Controllers\BankController;
     use App\Http\Controllers\CityController;
     use App\Http\Controllers\CompanyController;
-    use App\Http\Controllers\CompanyRequisitionController;
     use App\Http\Controllers\CountryController;
     use App\Http\Controllers\DashboardController;
-    use App\Http\Controllers\DistrictController;
-    use App\Http\Controllers\FeeController;
     use App\Http\Controllers\InvoiceController;
-    use App\Http\Controllers\JobController;
-    use App\Http\Controllers\LeadSourceController;
     use App\Http\Controllers\LoginController;
     use App\Http\Controllers\PaymentMethodController;
-    use App\Http\Controllers\PrincipalController;
-    use App\Http\Controllers\ProvinceController;
-    use App\Http\Controllers\QualificationController;
     use App\Http\Controllers\ReferralController;
-    use App\Http\Controllers\ReportingController;
     use App\Http\Controllers\RoleController;
     use App\Http\Controllers\SiteSettingController;
     use App\Http\Controllers\UserController;
-    use App\Http\Controllers\VendorController;
     use Illuminate\Support\Facades\Route;
 
     Route ::middleware ( [ 'guest', 'throttle:10', 'web' ] ) -> group ( function () {
@@ -62,20 +51,13 @@
             Route ::get ( 'countries/load-cities-by-country', [ CountryController::class, 'cities' ] ) -> name ( 'countries.cities' );
             Route ::resource ( 'countries', CountryController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'cities', CityController::class ) -> except ( [ 'show' ] );
-            Route ::resource ( 'jobs', JobController::class ) -> except ( [ 'show' ] );
-            Route ::resource ( 'qualifications', QualificationController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'banks', BankController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'payment-methods', PaymentMethodController::class ) -> except ( [ 'show' ] );
-            Route ::resource ( 'fees', FeeController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'airlines', AirlineController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'roles', RoleController::class ) -> except ( [ 'show' ] );
-            Route ::resource ( 'vendors', VendorController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'agents', AgentController::class ) -> except ( [ 'show' ] );
-            Route ::resource ( 'principals', PrincipalController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'referrals', ReferralController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'companies', CompanyController::class ) -> except ( [ 'show' ] );
-            Route ::resource ( 'provinces', ProvinceController::class ) -> except ( [ 'show' ] );
-            Route ::resource ( 'districts', DistrictController::class ) -> except ( [ 'show' ] );
         } );
 
         Route ::prefix ( 'accounts' ) -> group ( function () {
@@ -107,9 +89,7 @@
             Route ::resource ( 'account-types', AccountTypeController::class ) -> except ( [ 'show' ] );
         } );
 
-        Route ::prefix ( 'templates' ) -> group ( function () {
-            Route ::resource ( 'agreements', AgreementController::class ) -> except ( [ 'show' ] );
-        } );
+
 
         Route ::resource ( 'site-settings', SiteSettingController::class ) -> except ( [ 'show' ] );
 
@@ -119,17 +99,9 @@
             Route ::get ( '/balance-sheet', [ AccountReporting::class, 'balance_sheet' ] ) -> name ( 'balance-sheet' );
             Route ::get ( '/customer-receivable-report', [ AccountReporting::class, 'customer_receivable_report' ] ) -> name ( 'customer-receivable-report' );
             Route ::get ( '/vendor-payable-report', [ AccountReporting::class, 'vendor_payable_report' ] ) -> name ( 'vendor-payable-report' );
-            Route ::get ( '/cheque-details-report', [ ReportingController::class, 'cheque_details_report' ] ) -> name ( 'cheque-details-report' );
         } );
 
-        Route ::prefix ( 'reporting' ) -> name ( 'reporting.' ) -> group ( function () {
-            Route ::get ( '/status-check', [ ReportingController::class, 'status_check' ] ) -> name ( 'status-check' );
-            Route ::get ( '/summary-report', [ ReportingController::class, 'summary_report' ] ) -> name ( 'summary-report' );
-            Route ::get ( '/follow-up-report', [ ReportingController::class, 'follow_up_report' ] ) -> name ( 'follow-up-report' );
-            Route ::get ( '/missing-docs-report', [ ReportingController::class, 'missing_docs_report' ] ) -> name ( 'missing-docs-report' );
-            Route ::get ( '/gross-profit-report', [ ReportingController::class, 'gross_profit_report' ] ) -> name ( 'gross-profit-report' );
-            Route ::get ( '/qj-medical-report', [ ReportingController::class, 'qj_medical_report' ] ) -> name ( 'qj-medical-report' );
-        } );
+
 
         Route ::prefix ( 'invoices' ) -> name ( 'invoices.' ) -> group ( function () {
             Route ::get ( '/trial-balance-sheet', [ InvoiceController::class, 'trial_balance_sheet' ] ) -> name ( 'trial-balance-sheet' );

@@ -9,13 +9,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=AR+One+Sans:wght@500&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300&display=swap');
-        
+
         @page {
             size   : auto;
             header : myheader;
             footer : myfooter;
         }
-        
+
         body, h1, h2, td strong, p, th, span, td {
             font-family : 'AR One Sans', sans-serif;
         }
@@ -53,12 +53,12 @@
     </tr>
     </thead>
     <tbody>
-    
+
     {!! $sales['items'] !!}
     @php
         $a += $sales['net'];
     @endphp
-    
+
     <tr>
         <td>
             Sales Refund
@@ -75,7 +75,7 @@
         $c += $sale_discounts['net'];
         $e = ($a - $b - $c);
     @endphp
-    
+
     <tr>
         <td class="text-danger font-medium-3 fw-bolder">
             <strong>Net Sale</strong>
@@ -84,7 +84,7 @@
             {{ number_format ($e, 2) }}
         </td>
     </tr>
-    
+
     {!! $direct_costs['items'] !!}
     @php
         $f += $direct_costs['net'];
@@ -98,7 +98,7 @@
             {{ number_format ($g, 2) }}
         </td>
     </tr>
-    
+
     {!! $general_admin_expenses['items'] !!}
     @php
         $h += $general_admin_expenses['net'];
@@ -112,9 +112,9 @@
             {{ number_format ($h, 2) }}
         </td>
     </tr>
-    
+
     {!! $income['items'] !!}
-    
+
     <tr>
         <td class="text-danger font-medium-3 fw-bolder">
             <strong>Net Profit/Loss (Without Tax)</strong>
@@ -124,13 +124,13 @@
             {{ number_format ($i, 2) }}
         </td>
     </tr>
-    
+
     {!! $taxes['items'] !!}
     @php
         $j += $taxes['net'];
         $k = $i > 0 ? $i - $j : $i + $j;
     @endphp
-    
+
     <tr>
         <td class="text-danger font-medium-3 fw-bolder">
             <strong>Net Profit/Loss (With Tax)</strong>
@@ -139,7 +139,7 @@
             {{ number_format ($k, 2) }}
         </td>
     </tr>
-    
+
     </tbody>
 </table>
 </body>

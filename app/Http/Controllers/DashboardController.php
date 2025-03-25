@@ -2,13 +2,6 @@
 
     namespace App\Http\Controllers;
 
-    use App\Models\Candidate;
-    use App\Models\CandidateDocumentReady;
-    use App\Models\CandidateInterview;
-    use App\Models\CandidateMedical;
-    use App\Models\CandidateProtector;
-    use App\Models\CandidateTicket;
-    use App\Models\CandidateVisa;
     use App\Models\User;
     use App\Services\AnalyticsService;
     use App\Services\ReportingService;
@@ -22,12 +15,7 @@
             $data[ 'banks_balances' ]                = ( new AnalyticsService() ) -> banks_balances ();
             $data[ 'daily_cash_balances' ]           = ( new AnalyticsService() ) -> daily_cash_balances ();
             $data[ 'general_admin_expenses' ]        = ( new ReportingService() ) -> get_ledgers_by_account_head ( config ( 'constants.expenses' ) );
-            $data[ 'total_medicals' ]           = CandidateMedical ::count ();
-            $data[ 'total_documents_ready' ]    = CandidateDocumentReady ::count ();
-            $data[ 'total_documents_uploaded' ] = CandidateVisa ::whereNotNull ( 'tgid' ) -> count ();
-            $data[ 'total_tickets' ]            = CandidateTicket ::count ();
-            $data[ 'total_protectors' ]         = CandidateProtector ::count ();
-            $data[ 'total_visas' ]              = CandidateVisa ::count ();
+
             $data[ 'selected_interviews' ]    = ( new ReportingService() ) -> count_interviews ( 'selected' );
             $data[ 'rejected_interviews' ]    = ( new ReportingService() ) -> count_interviews ( 'rejected' );
             $data[ 'fit_medicals' ]           = ( new ReportingService() ) -> count_medicals ( 'fit' );
