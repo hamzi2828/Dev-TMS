@@ -1,6 +1,5 @@
 <x-login :title="$title">
     <!-- Content -->
-
     <div class="authentication-wrapper authentication-cover">
       <!-- Logo -->
       <a href="index.html" class="app-brand auth-cover-brand">
@@ -95,6 +94,5 @@
         <!-- /Login -->
       </div>
     </div>
-
     <!-- / Content -->
 </x-login>
