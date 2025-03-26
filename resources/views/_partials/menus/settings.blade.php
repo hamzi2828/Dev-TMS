@@ -124,7 +124,7 @@
                 <li class="menu-item {{ request () -> routeIs ('companies.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons ti ti-building-estate"></i>
-                        <div data-i18n="Companies">Companies</div>
+                        <div data-i18n="Companies">Airline GP Supplier</div>
                     </a>
                     <ul class="menu-sub">
                         @can('all', \App\Models\Company::class)

@@ -55,14 +55,29 @@
                                         
                                         
                                         <div class="col-md-4 mb-3">
-                                            <label class="form-label" for="company">Company</label>
+                                            <label class="form-label" for="company">Airline GP Supplier</label>
                                             <select id="company" name="company_id" class="form-control select2" required="required"
-                                                    data-placeholder="Select a company">
+                                                    data-placeholder="Select a Travel Airline GP Supplier">
                                                 <option></option>
                                                 @if(count($companies) > 0)
                                                     @foreach($companies as $company)
                                                         <option value="{{ $company->id }}" @selected(old('company_id', $user->company_id) == $company->id)>
                                                             {{ $company->title }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label" for="agent">Travel Agents</label>
+                                            <select id="agent" name="agent_id" class="form-control select2" required="required"
+                                                    data-placeholder="Select an Agent">
+                                                <option></option>
+                                                @if(count($agents) > 0)
+                                                    @foreach($agents as $agent)
+                                                        <option value="{{ $agent->id }}" @selected(old('agent_id', $user->agent_id) == $agent->id)>
+                                                            {{ $agent->name }}
                                                         </option>
                                                     @endforeach
                                                 @endif

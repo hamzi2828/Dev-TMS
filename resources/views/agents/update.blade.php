@@ -30,7 +30,7 @@
                                     <div class="d-flex justify-content-between">
                                         <label class="form-label" for="logo">Logo</label>
                                         @if(!empty(trim ($agent -> file)))
-                                            <div>
+                                            <div> 
                                                 <a href="{{ $agent -> file }}"
                                                    download="{{ $agent -> file }}"
                                                    target="_blank">

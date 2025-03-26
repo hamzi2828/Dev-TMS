@@ -5,6 +5,7 @@
     use App\Http\Requests\UserFormRequest;
     use App\Models\User;
     use App\Services\CompanyService;
+    use App\Services\AgentService;
     use App\Services\RoleService;
     use App\Services\UserRoleService;
     use App\Services\UserService;
@@ -24,11 +25,15 @@
             return view ( 'users.index', compact ( 'title', 'users' ) );
         }
         
+
         public function create (): View {
             $this -> authorize ( 'create', User::class );
             $title = 'Add User';
             $roles = ( new RoleService() ) -> roles ();
-            return view ( 'users.create', compact ( 'title', 'roles' ) );
+            $companies = ( new CompanyService() ) -> companies ();
+            $agents    = ( new AgentService() ) -> all ();
+            
+            return view ( 'users.create', compact ( 'title', 'roles', 'companies', 'agents' ) );
         }
         
         public function store ( UserFormRequest $request ): RedirectResponse {
@@ -56,8 +61,8 @@
             $title = 'Edit User';
             $roles = ( new RoleService() ) -> roles ();
             $companies = ( new CompanyService() ) -> companies ();
-
-            return view ( 'users.update', compact ( 'title', 'user', 'roles', 'companies' ) );
+            $agents    = ( new AgentService() ) -> all ();
+            return view ( 'users.update', compact ( 'title', 'user', 'roles', 'companies', 'agents' ) );
         }
         
         public function update ( UserFormRequest $request, User $user ): RedirectResponse {

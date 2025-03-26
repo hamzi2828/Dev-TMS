@@ -17,29 +17,32 @@
             return User ::onlyTrashed () -> get ();
         }
         
-        public function add ( $request ) {
-            $user = User ::create ( [
-                                        'user_id'    => auth () -> user () -> id,
-                                        'company_id' => $request -> input ( 'company-id' ),
-                                        'name'       => $request -> input ( 'name' ),
-                                        'email'      => $request -> input ( 'email' ),
-                                        'cnic'       => $request -> input ( 'cnic' ),
-                                        'mobile'     => $request -> input ( 'mobile' ),
-                                        'address'    => $request -> input ( 'address' ),
-                                        'password'   => Hash ::make ( $request -> input ( 'password' ) ),
-                                        'image'      => $request -> hasFile ( 'file' ) ? $this -> upload_image ( $request ) : null,
-                                    ] );
+        public function add($request) {
+            $user = User::create([
+                'user_id'    => auth()->user()->id,
+                'company_id' => $request->input('company_id'),
+                'agent_id'   => $request->input('agent_id'), // Add this line
+                'name'       => $request->input('name'),
+                'email'      => $request->input('email'),
+                'cnic'       => $request->input('cnic'),
+                'mobile'     => $request->input('mobile'),
+                'address'    => $request->input('address'),
+                'password'   => Hash::make($request->input('password')),
+                'image'      => $request->hasFile('file') ? $this->upload_image($request) : null,
+            ]);
             ( new LogService() ) -> log ( 'user-added', $user );
             return $user;
         }
         
-        public function update ( $request, $user ): void {
-            $user -> company_id = $request -> input ( 'company_id' );
+        public function update($request, $user): void {
+            $user->company_id = $request->input('company_id');
+            $user->agent_id   = $request->input('agent_id'); // Ensure this line is present
             $user -> name       = $request -> input ( 'name' );
             $user -> email      = $request -> input ( 'email' );
             $user -> cnic       = $request -> input ( 'cnic' );
             $user -> mobile     = $request -> input ( 'mobile' );
             $user -> address    = $request -> input ( 'address' );
+            $user-> agent_id     = $request-> input('agent_id');
             
             if ( $request -> has ( 'password' ) && $request -> filled ( 'password' ) )
                 $user -> password = Hash ::make ( $request -> input ( 'password' ) );

@@ -5,7 +5,7 @@
             <div class="col-md-12">
                 <div class="card mb-4">
                     <h5 class="card-header border-bottom pt-3 pb-2 mb-3">{{ $title }}</h5>
-                    <form class="pt-0" method="post" action="{{ route ('airlines.store') }}">
+                    <form class="pt-0" method="POST" action="{{ route('airlines.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="card-body pt-1 pb-1">
                             <div class="row">
@@ -15,7 +15,15 @@
                                            value="{{ old('code') }}"
                                            id="code" name="code" />
                                 </div>
-                                <div class="col-8 mb-3">
+
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="logo">Logo</label>
+                                    <input type="file" class="form-control" id="logo" name="logo" accept="image/*" />
+
+                                </div>
+                                
+
+                                <div class="col-5 mb-3">
                                     <label class="form-label" for="title">Title</label>
                                     <input type="text" required="required" autofocus="autofocus" class="form-control"
                                            value="{{ old ('title') }}"

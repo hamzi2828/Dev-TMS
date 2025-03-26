@@ -33,6 +33,10 @@
             return $this -> belongsTo ( Company::class );
         }
         
+        public function agent(): BelongsTo { 
+            return $this->belongsTo(Agent::class); 
+        }
+        
         public function createdAt (): string {
             return ( new GeneralService() ) -> date_formatter ( $this -> created_at );
         }

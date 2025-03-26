@@ -21,23 +21,19 @@
     use Illuminate\Support\Facades\Route;
 
     Route ::middleware ( [ 'guest', 'throttle:10', 'web' ] ) -> group ( function () {
-
         Route ::get ( '/', [ LoginController::class, 'index' ] ) -> name ( 'login' );
         Route ::post ( '/', [ LoginController::class, 'authenticate' ] ) -> name ( 'authenticate' );
-
     } );
 
     Route ::middleware ( [ 'auth', 'web' ] ) -> group ( function () {
 
         Route ::get ( 'home', [ DashboardController::class, 'home' ] ) -> name ( 'home' );
         Route ::get ( 'dashboard', [ DashboardController::class, 'index' ] ) -> name ( 'dashboard' );
-
         Route ::get ( 'payable-count', [ AnalyticsController::class, 'payable_count' ] ) -> name ( 'analytics.payable' );
         Route ::get ( 'receivable-count', [ AnalyticsController::class, 'receivable_count' ] ) -> name ( 'analytics.receivable' );
         Route ::get ( 'income-from-test', [ AnalyticsController::class, 'income_from_test' ] ) -> name ( 'analytics.income-from-test' );
         Route ::get ( 'income-from-medical', [ AnalyticsController::class, 'income_from_medical' ] ) -> name ( 'analytics.income-from-medical' );
         Route ::get ( 'income-from-candidate', [ AnalyticsController::class, 'income_from_candidate' ] ) -> name ( 'analytics.income-from-candidate' );
-
         Route ::get ( 'logout', [ LoginController::class, 'logout' ] ) -> name ( 'logout' ) -> withoutMiddleware ( 'guest' );
         Route ::get ( 'users/trashed', [ UserController::class, 'trashed' ] ) -> name ( 'users.trashed' );
         Route ::get ( 'users/{user_id}/restore', [ UserController::class, 'restore' ] ) -> name ( 'users.restore' );
