@@ -18,6 +18,7 @@
     use App\Http\Controllers\RoleController;
     use App\Http\Controllers\SiteSettingController;
     use App\Http\Controllers\UserController;
+    use App\Http\Controllers\SectionController;
     use Illuminate\Support\Facades\Route;
 
     Route ::middleware ( [ 'guest', 'throttle:10', 'web' ] ) -> group ( function () {
@@ -54,6 +55,7 @@
             Route ::resource ( 'agents', AgentController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'referrals', ReferralController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'companies', CompanyController::class ) -> except ( [ 'show' ] );
+            Route ::resource ( 'sections', SectionController::class ) -> except ( [ 'show' ] );
         } );
 
         Route ::prefix ( 'accounts' ) -> group ( function () {
