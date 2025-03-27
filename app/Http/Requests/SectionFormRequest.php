@@ -14,7 +14,6 @@ class SectionFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'airline_id' => 'required|exists:airlines,id',
             'origin_city_id' => 'required|exists:cities,id',
             'destination_city_id' => 'required|exists:cities,id|different:origin_city_id',
             'trip_type' => 'nullable|in:oneway,roundtrip',

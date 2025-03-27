@@ -12,7 +12,9 @@
                     <thead class="border-top">
                     <tr>
                         <th>Sr.No</th>
+                        <th>Title</th>
                         <th>Trip Type</th>
+                        <th>Trip Route</th>
                         <th>Origin</th>
                         <th>Destination</th>
                         <th>Date Added</th>
@@ -24,11 +26,13 @@
                         @foreach($sections as $section)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <th>{{ $section->title }}   </th>
                                 <td>
                                     <span class="badge bg-label-primary">
                                         {{ ucfirst($section->trip_type) }}
                                     </span>
                                 </td>
+                                <td>{{ $section->route_type ?? '' }}</td>
                                 <td>{{ $section->originCity->title ?? '' }}</td>
                                 <td>{{ $section->destinationCity->title ?? '' }}</td>
                                 <td>{{ $section->created_at->format('d M, Y') }}</td>

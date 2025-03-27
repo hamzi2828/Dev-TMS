@@ -25,7 +25,7 @@ class SectionController extends Controller
     public function create(): View
     {
         // $this->authorize('create', Section::class);
-        $data['title'] = 'Add Section';
+        $data['title'] = 'Add Sector';
         $data[ 'airlines' ] = ( new AirlineService() ) -> all ();
         $data[ 'cities' ] = ( new CityService() ) -> all ();
         return view('sections.create', $data);

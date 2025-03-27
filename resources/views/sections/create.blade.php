@@ -10,6 +10,13 @@
                         @csrf
                         <div class="card-body pt-1 pb-1">
                             <div class="row">
+
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label" for="title">Title</label>
+                                    <input type="text" required="required" autofocus="autofocus" class="form-control"
+                                           value="{{ old('title') }}"
+                                           id="title" name="title" />
+                                </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="trip_type">Trip Type</label>
                                     <select class="form-select select2" id="trip_type" name="trip_type" required>
@@ -18,14 +25,12 @@
                                         <option value="roundtrip">Round Trip</option>
                                     </select>
                                 </div>
-
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="airline_id">Airline</label>
-                                    <select class="form-select" id="airline_id" name="airline_id" required>
-                                        <option value="">Select Airline</option>
-                                        @foreach($airlines as $airline)
-                                            <option value="{{ $airline->id }}">{{ $airline->title }}</option>
-                                        @endforeach
+                                    <label class="form-label" for="route_type">Trip Route</label>
+                                    <select class="form-select select2" id="route_type" name="route_type" required>
+                                        <option value="">Select Trip Route</option>
+                                        <option value="direct">Direct</option>
+                                        <option value="via">Via</option>
                                     </select>
                                 </div>
 

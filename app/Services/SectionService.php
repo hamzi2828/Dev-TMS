@@ -17,9 +17,11 @@ class SectionService
 
     public function save($request)
     {
+       ;
         $section = Section::create([
             'user_id' => auth()->user()->id,
-            'airline_id' => $request->input('airline_id'),
+            'route_type' => $request->input('route_type'),
+            'title' => $request->input('title'),
             'origin_city_id' => $request->input('origin_city_id'),
             'destination_city_id' => $request->input('destination_city_id'),
             'trip_type' => $request->input('trip_type'),
@@ -33,7 +35,8 @@ class SectionService
     public function edit($request, $section): void
     {
         $section->status = $request->boolean('status', true);
-        $section->airline_id = $request->input('airline_id');
+        $section->route_type = $request->input('route_type');
+        $section->title = $request->input('title');
         $section->origin_city_id = $request->input('origin_city_id');
         $section->destination_city_id = $request->input('destination_city_id');
         $section->trip_type = $request->input('trip_type');

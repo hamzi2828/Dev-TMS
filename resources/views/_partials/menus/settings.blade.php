@@ -280,13 +280,13 @@
                 <li class="menu-item {{ request()->routeIs('sections.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons ti ti-section"></i>
-                        <div data-i18n="Sections">Sections</div>
+                        <div data-i18n="Sections">Sector</div>
                     </a>
                     <ul class="menu-sub">
                         {{-- @can('all', \App\Models\Section::class) --}}
                             <li class="menu-item {{ request()->routeIs('sections.index') ? 'active' : '' }}">
                                 <a href="{{ route('sections.index') }}" class="menu-link">
-                                    <div data-i18n="All Sections">All Sections</div>
+                                    <div data-i18n="All Sections">All Sector</div>
                                 </a>
                             </li>
                         {{-- @endcan --}}
@@ -294,7 +294,7 @@
                         {{-- @can('create', \App\Models\Section::class) --}}
                             <li class="menu-item {{ request()->routeIs('sections.create') ? 'active' : '' }}">
                                 <a href="{{ route('sections.create') }}" class="menu-link">
-                                    <div data-i18n="Add Section">Add Section</div>
+                                    <div data-i18n="Add Section">Add Sector</div>
                                 </a>
                             </li>
                         {{-- @endcan --}}

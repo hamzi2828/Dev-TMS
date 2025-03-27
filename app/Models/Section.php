@@ -12,6 +12,8 @@ class Section extends Model
 
     protected $fillable = [
         'user_id',
+        'route_type',
+        'title',
         'airline_id',
         'origin_city_id',
         'destination_city_id',

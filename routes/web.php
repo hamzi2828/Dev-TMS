@@ -19,6 +19,7 @@
     use App\Http\Controllers\SiteSettingController;
     use App\Http\Controllers\UserController;
     use App\Http\Controllers\SectionController;
+    use App\Http\Controllers\AirlineGroupController;
     use Illuminate\Support\Facades\Route;
 
     Route ::middleware ( [ 'guest', 'throttle:10', 'web' ] ) -> group ( function () {
@@ -56,8 +57,11 @@
             Route ::resource ( 'referrals', ReferralController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'companies', CompanyController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'sections', SectionController::class ) -> except ( [ 'show' ] );
+            
         } );
 
+        Route ::resource ( 'airlineGroups', AirlineGroupController::class );
+        
         Route ::prefix ( 'accounts' ) -> group ( function () {
             Route ::get ( 'chart-of-accounts', [ AccountController::class, 'chart_of_accounts' ] ) -> name ( 'accounts.chart-of-accounts' );
             Route ::get ( 'status/{account}', [ AccountController::class, 'status' ] ) -> name ( 'accounts.status' );
