@@ -14,7 +14,12 @@
 
                         <div class="card-body pt-1 pb-1">
                             <div class="row">
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="title">Airline Group Title</label>
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ $airlineGroup->title }}" required>
+                                </div>
+                        
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label" for="airline_id">Select Airline</label>
                                     <select class="form-select select2" id="airline_id" name="airline_id" required>
                                         <option value="">Select Airline</option>
@@ -25,8 +30,8 @@
                                         @endforeach
                                     </select>
                                 </div>
-
-                                <div class="col-md-6 mb-3">
+                        
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label" for="sector_id">Select Sector</label>
                                     <select class="form-select select2" id="sector_id" name="sector_id" required>
                                         <option value="">Select Sector</option>
@@ -36,6 +41,56 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="cost_per_adult">Cost Per Adult</label>
+                                    <input type="number" step="0.01" class="form-control" name="cost_per_adult" value="{{ $airlineGroup->cost_per_adult }}" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="sale_per_adult">Sale Per Adult</label>
+                                    <input type="number" step="0.01" class="form-control" name="sale_per_adult" value="{{ $airlineGroup->sale_per_adult }}" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="cost_per_child">Cost Per Child</label>
+                                    <input type="number" step="0.01" class="form-control" name="cost_per_child" value="{{ $airlineGroup->cost_per_child }}" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="sale_per_child">Sale Per Child</label>
+                                    <input type="number" step="0.01" class="form-control" name="sale_per_child" value="{{ $airlineGroup->sale_per_child }}" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="cost_per_infant">Cost Per Infant</label>
+                                    <input type="number" step="0.01" class="form-control" name="cost_per_infant" value="{{ $airlineGroup->cost_per_infant }}" required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="sale_per_infant">Sale Per Infant</label>
+                                    <input type="number" step="0.01" class="form-control" name="sale_per_infant" value="{{ $airlineGroup->sale_per_infant }}" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="total_seats">No. of Seats</label>
+                                    <input type="number" class="form-control" name="total_seats" value="{{ $airlineGroup->total_seats }}" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="admin_seats">Seats Allocation for Admin</label>
+                                    <input type="number" class="form-control" name="admin_seats" value="{{ $airlineGroup->admin_seats }}" required>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="travel_agent_id">Select Travel Agent</label>
+                                    <select class="form-select select2" name="travel_agent_id">
+                                        <option value="">Select Travel Agent</option>
+                                        @foreach($agents as $agent)
+                                            <option value="{{ $agent->id }}" {{ $airlineGroup->travel_agent_id == $agent->id ? 'selected' : '' }}>
+                                                {{ $agent->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="travel_agent_seats">No. of Seats</label>
+                                    <input type="number" class="form-control" name="travel_agent_seats" value="{{ $airlineGroup->travel_agent_seats }}">
                                 </div>
                             </div>
 
@@ -103,7 +158,7 @@
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Meal</label>
-                                                <select class="form-select" name="segments[{{ $index }}][meal]" required>
+                                                <select class="form-select select2" name="segments[{{ $index }}][meal]" required>
                                                     <option value="">Select</option>
                                                     <option value="yes" {{ $segment->meal == 'yes' ? 'selected' : '' }}>Yes</option>
                                                     <option value="no" {{ $segment->meal == 'no' ? 'selected' : '' }}>No</option>
@@ -180,11 +235,11 @@
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Departure Time</label>
-                                    <input type="time" class="form-control" name="segments[${segmentIndex}][departure_time]" required>
+                                    <input type="time" class="form-control" name="segments[${segmentIndex}][departure_time]" required step="60">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Arrival Time</label>
-                                    <input type="time" class="form-control" name="segments[${segmentIndex}][arrival_time]" required>
+                                    <input type="time" class="form-control" name="segments[${segmentIndex}][arrival_time]" required step="60">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Baggage</label>
@@ -192,7 +247,7 @@
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Meal</label>
-                                    <select class="form-select" name="segments[${segmentIndex}][meal]" required>
+                                    <select class="form-select select2" name="segments[${segmentIndex}][meal]" required>
                                         ${mealOptions}
                                     </select>
                                 </div>

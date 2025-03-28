@@ -5,7 +5,9 @@ use App\Http\Requests\AirlineGroupFormRequest;
 use App\Services\AirlineGroupService;
 use App\Services\AirlineService;
 use App\Services\SectionService;
+use App\Services\AgentService;
 use App\Services\CityService;
+use App\Models\Segment;
 use App\Models\AirlineGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,36 +31,60 @@ class AirlineGroupController extends Controller
         $data['title'] = 'Add Airline Group';
         $data['airlines'] = (new AirlineService())->all();
         $data['cities'] = (new CityService())->all();
-        $data['sectors'] = (new SectionService())->all(); // 
+        $data['sectors'] = (new SectionService())->all();
+        $data[ 'agents' ] = ( new AgentService() ) -> all ();
         return view('airline-groups.create', $data);
     }
     
-
     public function store(Request $request)
     {
 
         try {
             $validated = $request->validate([
+                'title' => 'required|string|max:255',
                 'airline_id' => 'required|exists:airlines,id',
                 'sector_id' => 'required|exists:sections,id',
-                'segments' => 'required|array',
+    
+                'cost_per_adult' => 'nullable|numeric',
+                'sale_per_adult' => 'nullable|numeric',
+                'cost_per_child' => 'nullable|numeric',
+                'sale_per_child' => 'nullable|numeric',
+                'cost_per_infant' => 'nullable|numeric',
+                'sale_per_infant' => 'nullable|numeric',
+    
+                'total_seats' => 'required|integer',
+                'admin_seats' => 'nullable|integer',
+                'travel_agent_id' => 'nullable|exists:agents,id',
+                'travel_agent_seats' => 'nullable|integer',
+    
+                'segments' => 'required|array|min:1',
                 'segments.*.departure_date' => 'required|date',
-                'segments.*.airline_id' => 'required|integer|exists:airlines,id',
+                'segments.*.airline_id' => 'required|exists:airlines,id',
                 'segments.*.flight_number' => 'required|string|max:255',
                 'segments.*.origin' => 'required|string|max:255',
                 'segments.*.destination' => 'required|string|max:255',
                 'segments.*.departure_time' => 'required|date_format:H:i',
                 'segments.*.arrival_time' => 'required|date_format:H:i',
                 'segments.*.baggage' => 'nullable|string|max:255',
-                'segments.*.meal' => 'nullable|string|max:255',
+                'segments.*.meal' => 'nullable|in:yes,no',
             ]);
     
             DB::beginTransaction();
     
-    
             $airlineGroup = AirlineGroup::create([
+                'title' => $validated['title'],
                 'airline_id' => $validated['airline_id'],
                 'sector_id' => $validated['sector_id'],
+                'cost_per_adult' => $request->cost_per_adult,
+                'sale_per_adult' => $request->sale_per_adult,
+                'cost_per_child' => $request->cost_per_child,
+                'sale_per_child' => $request->sale_per_child,
+                'cost_per_infant' => $request->cost_per_infant,
+                'sale_per_infant' => $request->sale_per_infant,
+                'total_seats' => $request->total_seats,
+                'admin_seats' => $request->admin_seats,
+                'travel_agent_id' => $request->travel_agent_id,
+                'travel_agent_seats' => $request->travel_agent_seats,
             ]);
     
             foreach ($validated['segments'] as $segment) {
@@ -88,7 +114,8 @@ class AirlineGroupController extends Controller
         $data['airlineGroup'] = $airlineGroup;
         $data['airlines'] = (new AirlineService())->all();
         $data['cities'] = (new CityService())->all();
-        $data['sectors'] = (new SectionService())->all(); // 
+        $data['sectors'] = (new SectionService())->all();
+        $data[ 'agents' ] = ( new AgentService() ) -> all ();
         return view('airline-groups.edit', $data);
     }
 
@@ -104,8 +131,8 @@ class AirlineGroupController extends Controller
                 'segments.*.flight_number' => 'required|string|max:255',
                 'segments.*.origin' => 'required|string|max:255',
                 'segments.*.destination' => 'required|string|max:255',
-                'segments.*.departure_time' => 'required|date_format:H:i:s',
-                'segments.*.arrival_time' => 'required|date_format:H:i:s',
+                'segments.*.departure_time' => 'required|string|max:255',
+                'segments.*.arrival_time' => 'required|string|max:255',
                 'segments.*.baggage' => 'nullable|string|max:255',
                 'segments.*.meal' => 'nullable|string|max:255',
                 'segments.*.id' => 'nullable|integer|exists:segments,id'
@@ -117,6 +144,14 @@ class AirlineGroupController extends Controller
             $airlineGroup->update([
                 'airline_id' => $validated['airline_id'],
                 'sector_id' => $validated['sector_id'],
+                'cost_per_adult' => $request->cost_per_adult,
+                'sale_per_adult' => $request->sale_per_adult,
+                'cost_per_child' => $request->cost_per_child,
+                'sale_per_child' => $request->sale_per_child,
+                'cost_per_infant' => $request->cost_per_infant,
+                'sale_per_infant' => $request->sale_per_infant,
+                'total_seats' => $request->total_seats,
+                'admin_seats' => $request->admin_seats,
             ]);
     
             $existingSegmentIds = $airlineGroup->segments()->pluck('id')->toArray();
