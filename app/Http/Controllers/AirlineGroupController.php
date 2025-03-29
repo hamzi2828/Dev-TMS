@@ -6,6 +6,7 @@ use App\Services\AirlineGroupService;
 use App\Services\AirlineService;
 use App\Services\SectionService;
 use App\Services\AgentService;
+use App\Services\CompanyService;
 use App\Services\CityService;
 use App\Models\Segment;
 use App\Models\AirlineGroup;
@@ -33,6 +34,7 @@ class AirlineGroupController extends Controller
         $data['cities'] = (new CityService())->all();
         $data['sectors'] = (new SectionService())->all();
         $data[ 'agents' ] = ( new AgentService() ) -> all ();
+        $data['companies'] = ( new CompanyService() ) -> companies ();
         return view('airline-groups.create', $data);
     }
     
@@ -44,6 +46,7 @@ class AirlineGroupController extends Controller
                 'title' => 'required|string|max:255',
                 'airline_id' => 'required|exists:airlines,id',
                 'sector_id' => 'required|exists:sections,id',
+                'company_id' => 'required|exists:companies,id',
     
                 'cost_per_adult' => 'nullable|numeric',
                 'sale_per_adult' => 'nullable|numeric',
@@ -75,6 +78,7 @@ class AirlineGroupController extends Controller
                 'title' => $validated['title'],
                 'airline_id' => $validated['airline_id'],
                 'sector_id' => $validated['sector_id'],
+                'company_id' => $validated['company_id'],
                 'cost_per_adult' => $request->cost_per_adult,
                 'sale_per_adult' => $request->sale_per_adult,
                 'cost_per_child' => $request->cost_per_child,
@@ -116,6 +120,7 @@ class AirlineGroupController extends Controller
         $data['cities'] = (new CityService())->all();
         $data['sectors'] = (new SectionService())->all();
         $data[ 'agents' ] = ( new AgentService() ) -> all ();
+        $data['companies'] = ( new CompanyService() ) -> companies ();
         return view('airline-groups.edit', $data);
     }
 
@@ -144,6 +149,7 @@ class AirlineGroupController extends Controller
             $airlineGroup->update([
                 'airline_id' => $validated['airline_id'],
                 'sector_id' => $validated['sector_id'],
+                'company_id' => $request->company_id,
                 'cost_per_adult' => $request->cost_per_adult,
                 'sale_per_adult' => $request->sale_per_adult,
                 'cost_per_child' => $request->cost_per_child,

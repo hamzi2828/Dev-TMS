@@ -18,6 +18,7 @@ class AirlineGroup extends Model
         'description',
         'airline_id',
         'sector_id',
+        'company_id',
         'cost_per_adult',
         'sale_per_adult',
         'cost_per_child',

@@ -14,12 +14,12 @@
 
                         <div class="card-body pt-1 pb-1">
                             <div class="row">
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label" for="title">Airline Group Title</label>
                                     <input type="text" class="form-control" id="title" name="title" value="{{ $airlineGroup->title }}" required>
                                 </div>
                         
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label" for="airline_id">Select Airline</label>
                                     <select class="form-select select2" id="airline_id" name="airline_id" required>
                                         <option value="">Select Airline</option>
@@ -31,13 +31,26 @@
                                     </select>
                                 </div>
                         
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label" for="sector_id">Select Sector</label>
                                     <select class="form-select select2" id="sector_id" name="sector_id" required>
                                         <option value="">Select Sector</option>
                                         @foreach($sectors as $sector)
                                             <option value="{{ $sector->id }}" {{ $airlineGroup->sector_id == $sector->id ? 'selected' : '' }}>
                                                 {{ $sector->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                    
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="company_id">Company</label>
+                                    <select class="form-select select2" id="company_id" name="company_id" required>
+                                        <option value=""> </option>
+                                        @foreach($companies as $company)
+                                            <option value="{{ $company->id }}" {{ $airlineGroup->company_id == $company->id ? 'selected' : '' }}>
+                                                {{ $company->title }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -53,6 +66,9 @@
                                     <label class="form-label" for="sale_per_adult">Sale Per Adult</label>
                                     <input type="number" step="0.01" class="form-control" name="sale_per_adult" value="{{ $airlineGroup->sale_per_adult }}" required>
                                 </div>
+                            </div>
+                        
+                            <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="cost_per_child">Cost Per Child</label>
                                     <input type="number" step="0.01" class="form-control" name="cost_per_child" value="{{ $airlineGroup->cost_per_child }}" required>
@@ -61,6 +77,9 @@
                                     <label class="form-label" for="sale_per_child">Sale Per Child</label>
                                     <input type="number" step="0.01" class="form-control" name="sale_per_child" value="{{ $airlineGroup->sale_per_child }}" required>
                                 </div>
+                            </div>
+                        
+                            <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="cost_per_infant">Cost Per Infant</label>
                                     <input type="number" step="0.01" class="form-control" name="cost_per_infant" value="{{ $airlineGroup->cost_per_infant }}" required>
@@ -69,29 +88,19 @@
                                     <label class="form-label" for="sale_per_infant">Sale Per Infant</label>
                                     <input type="number" step="0.01" class="form-control" name="sale_per_infant" value="{{ $airlineGroup->sale_per_infant }}" required>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label" for="total_seats">No. of Seats</label>
                                     <input type="number" class="form-control" name="total_seats" value="{{ $airlineGroup->total_seats }}" required>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label" for="admin_seats">Seats Allocation for Admin</label>
                                     <input type="number" class="form-control" name="admin_seats" value="{{ $airlineGroup->admin_seats }}" required>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="travel_agent_id">Select Travel Agent</label>
-                                    <select class="form-select select2" name="travel_agent_id">
-                                        <option value="">Select Travel Agent</option>
-                                        @foreach($agents as $agent)
-                                            <option value="{{ $agent->id }}" {{ $airlineGroup->travel_agent_id == $agent->id ? 'selected' : '' }}>
-                                                {{ $agent->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="travel_agent_seats">No. of Seats</label>
-                                    <input type="number" class="form-control" name="travel_agent_seats" value="{{ $airlineGroup->travel_agent_seats }}">
-                                </div>
+                            </div>
+                        
                             </div>
 
                             <div id="segments-container">

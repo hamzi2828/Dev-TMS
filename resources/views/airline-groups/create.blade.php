@@ -33,7 +33,15 @@
                                         @endforeach
                                     </select>
                                 </div>
-
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="company_id">Company</label>
+                                    <select class="form-select select2" id="company_id" name="company_id" required>
+                                        <option value=""> </option>
+                                        @foreach($companies as $company)
+                                            <option value="{{ $company->id }}">{{ $company->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                             <div class="row">
 
@@ -76,20 +84,6 @@
                                     <input type="number" class="form-control" id="admin_seats" name="admin_seats" required>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="travel_agent_id">Travel Agent</label>
-                                    <select class="form-select select2" name="travel_agent_id">
-                                        <option value=""></option>
-                                        @foreach($agents ?? [] as $agent)
-                                            <option value="{{ $agent->id }}">{{ $agent->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>  
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="travel_agent_seats">No. of Seats</label>
-                                    <input type="number" class="form-control" id="travel_agent_seats" name="travel_agent_seats" placeholder="">
-                                </div>
                             </div>
                             
                             <!-- End of Travel Agent Section -->
@@ -233,7 +227,7 @@
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Origin</label>
                                     <select class="form-control select2" name="segments[${segmentIndex}][origin]" required>
-                                        <option value=""></option>
+                                        <option value="">Select Origin City</option>
                                         @foreach($cities as $city)
                                             <option value="{{ $city->id }}">{{ $city->title }}</option>
                                         @endforeach
@@ -242,7 +236,7 @@
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Destination</label>
                                     <select class="form-select select2" name="segments[${segmentIndex}][destination]" required>
-                                        <option value=""></option>
+                                        <option value="">Select Destination City</option>
                                         @foreach($cities as $city)
                                             <option value="{{ $city->id }}">{{ $city->title }}</option>
                                         @endforeach
@@ -268,8 +262,7 @@
                                 </div>
                             </div>
                         </div>
-                    `;
-                    $('#segments-container').append(segmentHtml);
+                    `;                    $('#segments-container').append(segmentHtml);
                     $('.select2').select2();
                     segmentIndex++;
                 });
