@@ -56,6 +56,7 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th style="min-width: 100px">Dep. Date</th>
+                            <th style="min-width: 70px">Logo #</th>
                             <th>Airline</th>
                             <th style="min-width: 70px">Flight #</th>
                             <th>Origin</th>
@@ -64,6 +65,7 @@
                             <th>Arrival Time</th>
                             <th>Baggage</th>
                             <th>Meal</th>
+                            <th>Total Seats</th>
                             <th>Price Adult</th>
                             <th>Price Child</th>
                             <th>Price Infant</th>
@@ -78,6 +80,13 @@
                                     @foreach($group->segments as $segment)
                                         <div>{{ \Carbon\Carbon::parse($segment->departure_date)->format('d M Y') }}</div>
                                     @endforeach
+                                </td>
+                                <td>
+                                    @if(!empty(trim ($group->airline->file)))
+                                        <img src="{{ $group->airline->file }}" alt="Airline Logo" width="50" height="50">
+                                    @else
+                                        N/A
+                                    @endif
                                 </td>
                                 <td>{{ $group->airline->title ?? 'N/A' }}</td>
                                 <td>
@@ -115,6 +124,7 @@
                                         <div>{{ ucfirst($segment->meal) }}</div>
                                     @endforeach
                                 </td>
+                                <td>{{ $group->total_seats }}</td>
                                 <td>{{ number_format($group->sale_per_adult, 2) }}</td>
                                 <td>{{ number_format($group->sale_per_child, 2) }}</td>
                                 <td>{{ number_format($group->sale_per_infant, 2) }}</td>
