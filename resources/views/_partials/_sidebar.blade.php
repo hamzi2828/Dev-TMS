@@ -18,9 +18,9 @@
     <ul class="menu-inner py-1">
         @include('_partials.menus.dashboard')
         @include('_partials.menus.accounts')
-        
+
         @include('_partials.menus.accounts-settings')
-        
+
         @include('_partials.menus.accounts-reporting')
 
                 {{-- @can('mainMenu', \App\Models\AirlineGroup::class) --}}
@@ -37,7 +37,7 @@
                                 </a>
                             </li>
                         {{-- @endcan --}}
-    
+
                         {{-- @can('create', \App\Models\AirlineGroup::class) --}}
                             <li class="menu-item {{ request()->routeIs('airlineGroups.create') ? 'active' : '' }}">
                                 <a href="{{ route('airlineGroups.create') }}" class="menu-link">
@@ -48,10 +48,31 @@
                     </ul>
                 </li>
             {{-- @endcan --}}
+
+            <li class="menu-item {{ request()->routeIs('myBookings.*') ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-ticket"></i>
+                    <div data-i18n="My Booking">My Booking</div>
+                </a>
+                <ul class="menu-sub">
+                    {{-- @can('all', \App\Models\AirlineGroup::class) --}}
+                        <li class="menu-item {{ request()->routeIs('myBookings.index') ? 'active' : '' }}">
+                            <a href="{{ route('myBookings.index') }}" class="menu-link">
+                                <div data-i18n="All Booking">All Booking</div>
+                            </a>
+                        </li>
+                    {{-- @endcan --}}
+
+                </ul>
+            </li>
         @include('_partials.menus.settings')
 
 
         @include('_partials.menus.site-settings')
+
+
+
+
     </ul>
 </aside>
 <!-- / Menu -->

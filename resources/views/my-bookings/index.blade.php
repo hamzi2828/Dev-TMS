@@ -4,7 +4,7 @@
         @include('_partials.errors.validation-errors')
 
         <!-- Filter Form -->
-        <form method="GET" action="{{ route('airlineGroups.index') }}" class="mb-3">
+        <form method="GET" action="{{ route('myBookings.index') }}" class="mb-3">
             <div class="row">
                 <div class="col-md-2">
                     <label for="departure_date">Departure Date</label>

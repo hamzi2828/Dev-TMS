@@ -16,16 +16,58 @@ use Exception;
 
 class AirlineGroupController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $airlineGroups = AirlineGroup::with(['segments', 'airline'])->get();
-        
+        // Start the query for AirlineGroup, eager load segments and airline
+        $query = AirlineGroup::with(['segments', 'airline']);
+
+        // Apply filter for departure_date
+        if ($request->has('departure_date') && $request->departure_date) {
+            $query->whereHas('segments', function ($query) use ($request) {
+                // Filter by exact departure date
+                $query->whereDate('departure_date', '=', $request->departure_date);
+            });
+        }
+
+        // Apply filter for airline
+        if ($request->has('airline') && $request->airline) {
+            $query->where('airline_id', $request->airline);
+        }
+
+        // Apply filter for origin city
+        if ($request->has('origin') && $request->origin) {
+            $query->whereHas('segments', function ($query) use ($request) {
+                $query->whereHas('originCity', function ($query) use ($request) {
+                    $query->where('title', 'like', '%' . $request->origin . '%');
+                });
+            });
+        }
+
+        // Apply filter for destination city
+        if ($request->has('destination') && $request->destination) {
+            $query->whereHas('segments', function ($query) use ($request) {
+                $query->whereHas('destinationCity', function ($query) use ($request) {
+                    $query->where('title', 'like', '%' . $request->destination . '%');
+                });
+            });
+        }
+
+        // Get the filtered AirlineGroups
+        $airlineGroups = $query->get();
+
+        // Fetch all airlines and cities for the filter dropdowns
+        $airlines = (new AirlineService())->all();
+        $cities = (new CityService())->all();
+
+        // Prepare the data for the view
         $data['title'] = 'Airline Groups';
         $data['airlineGroups'] = $airlineGroups;
-    
+        $data['airlines'] = $airlines;
+        $data['cities'] = $cities;
+
         return view('airline-groups.index', $data);
     }
-    
+
 
     public function create()
     {
@@ -37,7 +79,7 @@ class AirlineGroupController extends Controller
         $data['companies'] = ( new CompanyService() ) -> companies ();
         return view('airline-groups.create', $data);
     }
-    
+
     public function store(Request $request)
     {
 
@@ -47,19 +89,19 @@ class AirlineGroupController extends Controller
                 'airline_id' => 'required|exists:airlines,id',
                 'sector_id' => 'required|exists:sections,id',
                 'company_id' => 'required|exists:companies,id',
-    
+
                 'cost_per_adult' => 'nullable|numeric',
                 'sale_per_adult' => 'nullable|numeric',
                 'cost_per_child' => 'nullable|numeric',
                 'sale_per_child' => 'nullable|numeric',
                 'cost_per_infant' => 'nullable|numeric',
                 'sale_per_infant' => 'nullable|numeric',
-    
+
                 'total_seats' => 'required|integer',
                 'admin_seats' => 'nullable|integer',
                 'travel_agent_id' => 'nullable|exists:agents,id',
                 'travel_agent_seats' => 'nullable|integer',
-    
+
                 'segments' => 'required|array|min:1',
                 'segments.*.departure_date' => 'required|date',
                 'segments.*.airline_id' => 'required|exists:airlines,id',
@@ -71,9 +113,9 @@ class AirlineGroupController extends Controller
                 'segments.*.baggage' => 'nullable|string|max:255',
                 'segments.*.meal' => 'nullable|in:yes,no',
             ]);
-    
+
             DB::beginTransaction();
-    
+
             $airlineGroup = AirlineGroup::create([
                 'title' => $validated['title'],
                 'airline_id' => $validated['airline_id'],
@@ -90,21 +132,21 @@ class AirlineGroupController extends Controller
                 'travel_agent_id' => $request->travel_agent_id,
                 'travel_agent_seats' => $request->travel_agent_seats,
             ]);
-    
+
             foreach ($validated['segments'] as $segment) {
                 $airlineGroup->segments()->create($segment);
             }
-    
+
             DB::commit();
-    
+
             return redirect()->route('airlineGroups.index')->with('success', 'Airline Group created successfully.');
-    
+
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->withInput()->with('error', 'Error: ' . $e->getMessage());
         }
     }
-    
+
 
     public function show(AirlineGroup $airlineGroup)
     {
@@ -113,7 +155,7 @@ class AirlineGroupController extends Controller
 
     public function edit(AirlineGroup $airlineGroup)
     {
-     
+
         $data['title'] = 'Edit Airline Group';
         $data['airlineGroup'] = $airlineGroup;
         $data['airlines'] = (new AirlineService())->all();
@@ -142,9 +184,9 @@ class AirlineGroupController extends Controller
                 'segments.*.meal' => 'nullable|string|max:255',
                 'segments.*.id' => 'nullable|integer|exists:segments,id'
             ]);
-    
+
             DB::beginTransaction();
-    
+
             // Update Airline Group
             $airlineGroup->update([
                 'airline_id' => $validated['airline_id'],
@@ -159,10 +201,10 @@ class AirlineGroupController extends Controller
                 'total_seats' => $request->total_seats,
                 'admin_seats' => $request->admin_seats,
             ]);
-    
+
             $existingSegmentIds = $airlineGroup->segments()->pluck('id')->toArray();
             $submittedSegmentIds = [];
-    
+
             foreach ($validated['segments'] as $segmentData) {
                 $segmentFields = collect($segmentData)->only([
                     'departure_date',
@@ -175,7 +217,7 @@ class AirlineGroupController extends Controller
                     'baggage',
                     'meal',
                 ])->toArray();
-    
+
                 if (!empty($segmentData['id'])) {
                     // Update existing segment
                     $segment = $airlineGroup->segments()->where('id', $segmentData['id'])->first();
@@ -189,31 +231,31 @@ class AirlineGroupController extends Controller
                     $submittedSegmentIds[] = $newSegment->id;
                 }
             }
-    
+
             // If deleted_segments is present, handle them
             if ($request->has('deleted_segments')) {
                 $this->handleDeletedSegments($airlineGroup, $request->input('deleted_segments'));
             }
-    
+
             DB::commit();
-    
+
             return redirect()->route('airlineGroups.index')->with('success', 'Airline Group updated successfully.');
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->withInput()->with('error', 'Error: ' . $e->getMessage());
         }
     }
-    
+
 
     protected function handleDeletedSegments(AirlineGroup $airlineGroup, array $segmentIds)
         {
-       
+
             if (!empty($segmentIds)) {
                 $airlineGroup->segments()->whereIn('id', $segmentIds)->delete();
             }
         }
 
-    
+
     public function destroy(AirlineGroup $airlineGroup)
     {
         $airlineGroup->delete();
