@@ -4,7 +4,7 @@
         @include('_partials.errors.validation-errors')
 
         <!-- Filter Form -->
-        <form method="GET" action="{{ route('airlineGroups.index') }}" class="mb-3">
+         <form method="GET" action="{{ route('airlineGroups.index') }}" class="mb-3">
             <div class="row">
                 <div class="col-md-2">
                     <label for="departure_date">Departure Date</label>
@@ -130,13 +130,34 @@
                                 <td>{{ number_format($group->sale_per_infant, 2) }}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <a href="{{ route('myBookings.create', ['airlineGroup' => $group->id]) }}"
-                                           class="btn btn-primary btn-sm"
-                                           title="Book Now">
-                                            <i class="ti ti-ticket ti-sm me-2"></i> Book Now
+                                        <a href="{{ route('airlineGroups.edit', ['airlineGroup' => $group->id]) }}"
+                                           class="text-body"
+                                           data-bs-toggle="tooltip"
+                                           data-bs-placement="top"
+                                           data-bs-custom-class="tooltip-primary"
+                                           title="Edit">
+                                            <i class="ti ti-edit ti-sm me-2"></i>
                                         </a>
+
+                                        <form method="POST"
+                                              id="delete-record-form-{{ $group->id }}"
+                                              action="{{ route('airlineGroups.destroy', ['airlineGroup' => $group->id]) }}"
+                                              class="mb-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button"
+                                                    class="text-body delete-record bg-transparent border-0 p-0"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    data-bs-custom-class="tooltip-danger"
+                                                    title="Delete"
+                                                    onclick="delete_confirmation({{ $group->id }})">
+                                                <i class="ti ti-trash ti-sm mx-2"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
+
                             </tr>
                         @endforeach
                     </tbody>
@@ -148,7 +169,7 @@
 
     @push('scripts')
         <script type="text/javascript">
-            init_datatable('{{ route('myBookings.create') }}');
+            init_datatable('{{ route('airlineGroups.create') }}');
         </script>
     @endpush
 </x-dashboard>
