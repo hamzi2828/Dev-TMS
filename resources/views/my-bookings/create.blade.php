@@ -5,160 +5,115 @@
             <div class="col-md-12">
                 <div class="card mb-4">
                     <h5 class="card-header border-bottom pt-3 pb-2 mb-3">{{ $title }}</h5>
-                    <form class="pt-0" method="post" action="{{ route('airlineGroups.store') }}" enctype="multipart/form-data">
+                    <form class="pt-0" method="post" action="{{ route('myBookings.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="card-body pt-1 pb-1">
+                            <!-- Flight and Sector Information -->
                             <div class="row">
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="title">Airline Group Title</label>
-                                    <input type="text" class="form-control" id="title" name="title" placeholder="" required>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Airline Group Title</label>
+                                    <input type="text" class="form-control" name="title" value="{{ $airlineGroup->title ?? '' }}" readonly>
                                 </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Airline</label>
+                                    <input type="text" class="form-control" value="{{ $airlineGroup->airline->title ?? '' }}" readonly>
+                                    <input type="hidden" name="airline_id" value="{{ $airlineGroup->airline_id ?? '' }}">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Sector</label>
+                                    <input type="text" class="form-control" value="@php
+                                        $section = \App\Models\Section::find($airlineGroup->sector_id ?? 0);
+                                        echo $section ? $section->title : ($airlineGroup->sector_id ?? '');
+                                    @endphp" readonly>
+                                    <input type="hidden" name="sector_id" value="{{ $airlineGroup->sector_id ?? '' }}">
+                                </div>
+                            </div>
 
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="airline_id">Airline</label>
-                                    <select class="form-select select2" id="airline_id" name="airline_id" required>
-                                        <option value=""></option>
-                                        @foreach($airlines as $airline)
-                                            <option value="{{ $airline->id }}">{{ $airline->title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                           
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="sector_id">Sector</label>
-                                    <select class="form-select select2" id="sector_id" name="sector_id" required>
-                                        <option value=""> </option>
-                                        @foreach($sectors as $sector)
-                                            <option value="{{ $sector->id }}">{{ $sector->title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="company_id">Company</label>
-                                    <select class="form-select select2" id="company_id" name="company_id" required>
-                                        <option value=""> </option>
-                                        @foreach($companies as $company)
-                                            <option value="{{ $company->id }}">{{ $company->title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                            <!-- Flight Details Table -->
+                            <h6 class="mt-4">Flight Details</h6>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="min-width: 100px">Dep. Date</th>
+                                            <th>Airline</th>
+                                            <th style="min-width: 70px">Flight #</th>
+                                            <th>Origin</th>
+                                            <th>Destination</th>
+                                            <th>Dep. Time</th>
+                                            <th>Arrival Time</th>
+                                            <th>Baggage</th>
+                                            <th>Meal</th>
+                                            <th>Price Adult</th>
+                                            <th>Price Child</th>
+                                            <th>Price Infant</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if(isset($airlineGroup) && $airlineGroup->segments->count() > 0)
+                                            @foreach($airlineGroup->segments as $segment)
+                                            <tr>
+                                                <td>{{ $segment->departure_date }}</td>
+                                                <td>{{ $airlineGroup->airline->title ?? 'N/A' }}</td>
+                                                <td>{{ $segment->flight_number }}</td>
+                                                <td>
+                                                    @php
+                                                        $originCity = \App\Models\City::find($segment->origin);
+                                                        echo $originCity ? $originCity->title : $segment->origin;
+                                                    @endphp
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        $destinationCity = \App\Models\City::find($segment->destination);
+                                                        echo $destinationCity ? $destinationCity->title : $segment->destination;
+                                                    @endphp
+                                                </td>
+                                                <td>{{ $segment->departure_time }}</td>
+                                                <td>{{ $segment->arrival_time }}</td>
+                                                <td>{{ $segment->baggage }}</td>
+                                                <td>{{ $segment->meal }}</td>
+                                                <td>{{ $airlineGroup->sale_per_adult }}</td>
+                                                <td>{{ $airlineGroup->sale_per_child }}</td>
+                                                <td>{{ $airlineGroup->sale_per_infant }}</td>
+                                            </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="12" class="text-center">No flight details available</td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="row">
 
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="cost_per_adult">Cost Per Adult</label>
-                                    <input type="number" step="0.01" class="form-control" id="cost_per_adult" name="cost_per_adult" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="sale_per_adult">Sale Per Adult</label>
-                                    <input type="number" step="0.01" class="form-control" id="sale_per_adult" name="sale_per_adult" required>
-                                </div>
-                            </div>
+                            <!-- Passengers Section -->
+                            <h6 class="mt-4">Passengers</h6>
                             <div class="row">
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="cost_per_child">Cost Per Child</label>
-                                    <input type="number" step="0.01" class="form-control" id="cost_per_child" name="cost_per_child" required>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Adults</label>
+                                    <input type="number" id="adults" class="form-control" name="adults" value="0" required>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="sale_per_child">Sale Per Child</label>
-                                    <input type="number" step="0.01" class="form-control" id="sale_per_child" name="sale_per_child" required>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Children</label>
+                                    <input type="number" id="children" class="form-control" name="children" value="0" required>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="cost_per_infant">Cost Per Infant</label>
-                                    <input type="number" step="0.01" class="form-control" id="cost_per_infant" name="cost_per_infant" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="sale_per_infant">Sale Per Infant</label>
-                                    <input type="number" step="0.01" class="form-control" id="sale_per_infant" name="sale_per_infant" required>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Infants</label>
+                                    <input type="number" id="infants" class="form-control" name="infants" value="0" required>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="total_seats">No. of Seats</label>
-                                    <input type="number" class="form-control" id="total_seats" name="total_seats" required>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="admin_seats">Seats Allocation for Admin</label>
-                                    <input type="number" class="form-control" id="admin_seats" name="admin_seats" required>
-                                </div>
+
+                            <!-- Passenger Details Section (Dynamically Added) -->
+                            <h6 class="mt-4">Passenger Details</h6>
+                            <div id="passenger-details">
+                                <!-- Rows will be added dynamically based on inputs above -->
                             </div>
-                            </div>
-                            
-                            <!-- End of Travel Agent Section -->
-                              <div id="segments-container">
-                                  <!-- First Segment -->
-                                  <div class="segment-wrapper mb-3 border p-3 rounded">
-                                      <div class="d-flex justify-content-between align-items-center mb-2">
-                                          <h6 class="fw-bold mb-0">Segment 1</h6>
-                                      </div>
-                                      <div class="row segment-row">
-                                          <div class="col-md-3 mb-3">
-                                              <label class="form-label">Departure Date</label>
-                                              <input type="date" class="form-control" name="segments[0][departure_date]" required>
-                                          </div>
-                                          <div class="col-md-3 mb-3">
-                                              <label class="form-label">Airline</label>
-                                              <select class="form-select select2" name="segments[0][airline_id]" required>
-                                                  <option value=""></option>
-                                                  @foreach($airlines as $airline)
-                                                      <option value="{{ $airline->id }}">{{ $airline->title }}</option>
-                                                  @endforeach
-                                              </select>
-                                          </div>
-                                          <div class="col-md-3 mb-3">
-                                              <label class="form-label">Flight #</label>
-                                              <input type="text" class="form-control" name="segments[0][flight_number]" required>
-                                          </div>
-                                          <div class="col-md-3 mb-3">
-                                              <label class="form-label">Origin</label>
-                                              <select class="form-control select2" name="segments[0][origin]" required>
-                                                  <option value=""></option>
-                                                  @foreach($cities as $city)
-                                                      <option value="{{ $city->id }}">{{ $city->title }}</option>
-                                                  @endforeach
-                                              </select>
-                                          </div>
-                                          <div class="col-md-3 mb-3">
-                                              <label class="form-label">Destination</label>
-                                              <select class="form-control select2" name="segments[0][destination]" required>
-                                                  <option value=""></option>
-                                                  @foreach($cities as $city)
-                                                      <option value="{{ $city->id }}">{{ $city->title }}</option>
-                                                  @endforeach
-                                              </select>
-                                          </div>
-                                          <div class="col-md-3 mb-3">
-                                              <label class="form-label">Departure Time</label>
-                                              <input type="time" class="form-control" name="segments[0][departure_time]" required>
-                                          </div>
-                                          <div class="col-md-3 mb-3">
-                                              <label class="form-label">Arrival Time</label>
-                                              <input type="time" class="form-control" name="segments[0][arrival_time]" required>
-                                          </div>
-                                          <div class="col-md-3 mb-3">
-                                              <label class="form-label">Baggage</label>
-                                              <input type="text" class="form-control" name="segments[0][baggage]" required>
-                                          </div>
-                                          <div class="col-md-3 mb-3">
-                                              <label class="form-label">Meal</label>
-                                              <select class="form-select select2" name="segments[0][meal]" required>
-                                                  <option value=""></option>
-                                                  <option value="yes">Yes</option>
-                                                  <option value="no">No</option>
-                                              </select>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
+
+                            <!-- Confirm Button -->
                             <div class="text-end mb-3">
-                                <button type="button" id="add-segment" class="btn btn-outline-secondary">+ Add More</button>
+                                <input type="hidden" name="airline_group_id" value="{{ $airlineGroup->id ?? '' }}">
+                                <button type="submit" class="btn btn-primary">Confirm Booking</button>
                             </div>
-                        </div>
-
-                        <div class="card-footer border-top pt-4">
-                            <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Save</button>
                         </div>
                     </form>
                 </div>
@@ -166,111 +121,145 @@
         </div>
     </div>
 
-    @push('styles')
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        <style>
-            .select2-container--default .select2-selection--single {
-                height: 38px;
-                border: 1px solid #d9dee3;
-            }
-            .select2-container--default .select2-selection--single .select2-selection__rendered {
-                line-height: 38px;
-            }
-            .select2-container--default .select2-selection--single .select2-selection__arrow {
-                height: 36px;
-            }
-        </style>
-    @endpush
-
     @push('scripts')
         <script>
-            let segmentIndex = 1;
-
-            const airlineOptions = `
-                <option value=""></option>
-                @foreach($airlines as $airline)
-                    <option value="{{ $airline->id }}">{{ $airline->title }}</option>
-                @endforeach
-            `;
-
-            const mealOptions = `
-                <option value=""></option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-            `;
-
             $(document).ready(function () {
-                $('.select2').select2();
+                // Function to add passenger details rows
+                function addPassengerRows(adults, children, infants) {
+                    let rows = '';
+                    let passengerIndex = 1;
 
-                $('#add-segment').on('click', function () {
-                    const segmentHtml = `
-                        <div class="segment-wrapper mb-3 border p-3 rounded">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="fw-bold mb-0">Segment ${segmentIndex + 1}</h6>
-                                <button type="button" class="btn btn-sm btn-danger remove-segment">🗑</button>
-                            </div>
-                            <div class="row segment-row">
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Departure Date</label>
-                                    <input type="date" class="form-control" name="segments[${segmentIndex}][departure_date]" required>
+                    // Add Adult Passengers
+                    for (let i = 0; i < adults; i++) {
+                        rows += `<div class="row mb-3">
+                                    <div class="col-md-1">
+                                        <label class="form-label">Adult</label>
+                                        <input type="text" class="form-control" value=" ${passengerIndex}" readonly>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Title</label>
+                                        <input type="text" name="passenger[${passengerIndex}][title]" class="form-control" placeholder="Title" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Surname</label>
+                                        <input type="text" name="passenger[${passengerIndex}][surname]" class="form-control" placeholder="Surname" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Given Name</label>
+                                        <input type="text" name="passenger[${passengerIndex}][given_name]" class="form-control" placeholder="Given Name" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Passport No</label>
+                                        <input type="text" name="passenger[${passengerIndex}][passport]" class="form-control" placeholder="Passport No" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Date of Birth</label>
+                                        <input type="date" name="passenger[${passengerIndex}][dob]" class="form-control" placeholder="Date of Birth" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Passport Expiry</label>
+                                        <input type="date" name="passenger[${passengerIndex}][passport_expiry]" class="form-control" placeholder="Passport Expiry" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Nationality</label>
+                                        <input type="text" name="passenger[${passengerIndex}][nationality]" class="form-control" placeholder="Nationality" required>
+                                    </div>
+                                </div>`;
+                        passengerIndex++;
+                    }
+
+                    // Add Children Passengers
+                    for (let i = 0; i < children; i++) {
+                        rows += `<div class="row mb-3">
+                                <div class="col-md-1">
+                                    <label class="form-label">Child</label>
+                                    <input type="text" class="form-control" value=" ${passengerIndex}" readonly>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Airline</label>
-                                    <select class="form-select select2" name="segments[${segmentIndex}][airline_id]" required>
-                                        ${airlineOptions}
-                                    </select>
+                                <div class="col-md-2">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" name="passenger[${passengerIndex}][title]" class="form-control" placeholder="Title" required>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Flight #</label>
-                                    <input type="text" class="form-control" name="segments[${segmentIndex}][flight_number]" required>
+                                <div class="col-md-2">
+                                    <label class="form-label">Surname</label>
+                                    <input type="text" name="passenger[${passengerIndex}][surname]" class="form-control" placeholder="Surname" required>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Origin</label>
-                                    <select class="form-control select2" name="segments[${segmentIndex}][origin]" required>
-                                        <option value="">Select Origin City</option>
-                                        @foreach($cities as $city)
-                                            <option value="{{ $city->id }}">{{ $city->title }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="col-md-2">
+                                    <label class="form-label">Given Name</label>
+                                    <input type="text" name="passenger[${passengerIndex}][given_name]" class="form-control" placeholder="Given Name" required>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Destination</label>
-                                    <select class="form-select select2" name="segments[${segmentIndex}][destination]" required>
-                                        <option value="">Select Destination City</option>
-                                        @foreach($cities as $city)
-                                            <option value="{{ $city->id }}">{{ $city->title }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="col-md-2">
+                                    <label class="form-label">Passport No</label>
+                                    <input type="text" name="passenger[${passengerIndex}][passport]" class="form-control" placeholder="Passport No" required>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Departure Time</label>
-                                    <input type="time" class="form-control" name="segments[${segmentIndex}][departure_time]" required>
+                                <div class="col-md-2">
+                                    <label class="form-label">Date Of Birth</label>
+                                    <input type="date" name="passenger[${passengerIndex}][dob]" class="form-control" placeholder="Date Of Birth" required>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Arrival Time</label>
-                                    <input type="time" class="form-control" name="segments[${segmentIndex}][arrival_time]" required>
+                                <div class="col-md-2">
+                                    <label class="form-label">Passport Expiry</label>
+                                    <input type="date" name="passenger[${passengerIndex}][passport_expiry]" class="form-control" placeholder="Passport Expiry" required>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Baggage</label>
-                                    <input type="text" class="form-control" name="segments[${segmentIndex}][baggage]" required>
+                                <div class="col-md-2">
+                                    <label class="form-label">Nationality</label>
+                                    <input type="text" name="passenger[${passengerIndex}][nationality]" class="form-control" placeholder="Nationality" required>
+                                    </div>
+                                </div>`;
+                        passengerIndex++;
+                    }
+
+                    // Add Infant Passengers
+                    for (let i = 0; i < infants; i++) {
+                        rows += `<div class="row mb-3">
+                                <div class="col-md-1">
+                                    <label class="form-label">Infant</label>
+                                    <input type="text" class="form-control" value=" ${passengerIndex}" readonly>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Meal</label>
-                                    <select class="form-select select2" name="segments[${segmentIndex}][meal]" required>
-                                        ${mealOptions}
-                                    </select>
+                                <div class="col-md-2">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" name="passenger[${passengerIndex}][title]" class="form-control" placeholder="Title" required>
                                 </div>
-                            </div>
-                        </div>
-                    `;                    $('#segments-container').append(segmentHtml);
-                    $('.select2').select2();
-                    segmentIndex++;
+                                <div class="col-md-2">
+                                        <label class="form-label">Surname</label>
+                                        <input type="text" name="passenger[${passengerIndex}][surname]" class="form-control" placeholder="Surname" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Given Name</label>
+                                        <input type="text" name="passenger[${passengerIndex}][given_name]" class="form-control" placeholder="Given Name" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Passport No</label>
+                                        <input type="text" name="passenger[${passengerIndex}][passport]" class="form-control" placeholder="Passport No" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Date Of Birth</label>
+                                        <input type="date" name="passenger[${passengerIndex}][dob]" class="form-control" placeholder="Date Of Birth" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Passport Expiry</label>
+                                        <input type="date" name="passenger[${passengerIndex}][passport_expiry]" class="form-control" placeholder="Passport Expiry" required>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Nationality</label>
+                                        <input type="text" name="passenger[${passengerIndex}][nationality]" class="form-control" placeholder="Nationality" required>
+                                    </div>
+                                </div>`;
+                        passengerIndex++;
+                    }
+
+                    // Update passenger details container
+                    $('#passenger-details').html(rows);
+                }
+
+                // Listen for changes in the passenger input fields
+                $('#adults, #children, #infants').on('change', function () {
+                    const adults = $('#adults').val();
+                    const children = $('#children').val();
+                    const infants = $('#infants').val();
+                    addPassengerRows(adults, children, infants);
                 });
 
-                // Remove segment
-                $(document).on('click', '.remove-segment', function () {
-                    $(this).closest('.segment-wrapper').remove();
-                });
+                // Initial population
+                addPassengerRows($('#adults').val(), $('#children').val(), $('#infants').val());
             });
         </script>
     @endpush

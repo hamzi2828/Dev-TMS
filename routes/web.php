@@ -58,9 +58,8 @@
             Route ::resource ( 'referrals', ReferralController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'companies', CompanyController::class ) -> except ( [ 'show' ] );
             Route ::resource ( 'sections', SectionController::class ) -> except ( [ 'show' ] );
-            Route ::resource ( 'myBookings', MyBookingController::class ) -> except ( [ 'show' ] );
         } );
-
+        Route ::resource ( 'myBookings', MyBookingController::class );
         Route ::resource ( 'airlineGroups', AirlineGroupController::class );
 
         Route ::prefix ( 'accounts' ) -> group ( function () {

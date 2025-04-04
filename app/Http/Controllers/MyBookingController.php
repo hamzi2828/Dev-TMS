@@ -68,10 +68,31 @@ class MyBookingController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $data['title'] = 'Create My Booking';
+
+        // Check if 'airlineGroup' parameter exists in the URL
+        if ($request->has('airlineGroup')) {
+            // Retrieve the AirlineGroup by ID
+            $airlineGroupId = $request->query('airlineGroup');
+            $airlineGroup = AirlineGroup::with(['segments', 'airline'])
+            ->find($airlineGroupId);
+
+            // Check if the AirlineGroup exists
+            if ($airlineGroup) {
+                // Pass the AirlineGroup details to the view
+                $data['airlineGroup'] = $airlineGroup;
+            } else {
+                // If AirlineGroup is not found, you can handle this case
+                // For example, you can redirect with an error message
+                return redirect()->route('myBookings.index')->with('error', 'Airline Group not found');
+            }
+        }
+// dd(    $data['airlineGroup'] );
+        return view('my-bookings.create', $data);
     }
+
 
     /**
      * Store a newly created resource in storage.
