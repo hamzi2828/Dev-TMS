@@ -18,7 +18,7 @@
                                     <label class="form-label" for="title">Airline Group Title</label>
                                     <input type="text" class="form-control" id="title" name="title" value="{{ $airlineGroup->title }}" required>
                                 </div>
-                        
+
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="airline_id">Select Airline</label>
                                     <select class="form-select select2" id="airline_id" name="airline_id" required>
@@ -30,7 +30,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                        
+
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="sector_id">Select Sector</label>
                                     <select class="form-select select2" id="sector_id" name="sector_id" required>
@@ -43,7 +43,7 @@
                                     </select>
                                 </div>
 
-                    
+
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="company_id">Company</label>
                                     <select class="form-select select2" id="company_id" name="company_id" required>
@@ -56,7 +56,7 @@
                                     </select>
                                 </div>
                             </div>
-                        
+
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="cost_per_adult">Cost Per Adult</label>
@@ -67,7 +67,7 @@
                                     <input type="number" step="0.01" class="form-control" name="sale_per_adult" value="{{ $airlineGroup->sale_per_adult }}" required>
                                 </div>
                             </div>
-                        
+
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="cost_per_child">Cost Per Child</label>
@@ -78,7 +78,7 @@
                                     <input type="number" step="0.01" class="form-control" name="sale_per_child" value="{{ $airlineGroup->sale_per_child }}" required>
                                 </div>
                             </div>
-                        
+
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="cost_per_infant">Cost Per Infant</label>
@@ -89,7 +89,7 @@
                                     <input type="number" step="0.01" class="form-control" name="sale_per_infant" value="{{ $airlineGroup->sale_per_infant }}" required>
                                 </div>
                             </div>
-                        
+
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="total_seats">No. of Seats</label>
@@ -100,7 +100,7 @@
                                     <input type="number" class="form-control" name="admin_seats" value="{{ $airlineGroup->admin_seats }}" required>
                                 </div>
                             </div>
-                        
+
                             </div>
 
                             <div id="segments-container">
@@ -114,7 +114,7 @@
                                             <input type="hidden" name="segments[{{ $index }}][id]" value="{{ $segment->id }}">
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Departure Date</label>
-                                                <input type="date" class="form-control" name="segments[{{ $index }}][departure_date]" value="{{ $segment->departure_date }}" required>
+                                                <input type="date" class="form-control flatpickr-basic" name="segments[{{ $index }}][departure_date]" value="{{ $segment->departure_date }}" required>
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label class="form-label">Airline</label>
@@ -212,7 +212,7 @@
                             <div class="row segment-row">
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Departure Date</label>
-                                    <input type="date" class="form-control" name="segments[${segmentIndex}][departure_date]" required>
+                                    <input type="date" class="form-control flatpickr-basic" name="segments[${segmentIndex}][departure_date]" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Airline</label>

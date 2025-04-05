@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md-2">
                     <label for="departure_date">Departure Date</label>
-                    <input type="date" name="departure_date" id="departure_date" class="form-control" value="{{ request('departure_date') }}">
+                    <input type="date" name="departure_date" id="departure_date" class="form-control flatpickr-basic" value="{{ request('departure_date') }}">
                 </div>
                 <div class="col-md-2">
                     <label for="airline">Airline</label>
