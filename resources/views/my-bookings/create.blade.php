@@ -33,8 +33,11 @@
                             <h6 class="mt-4">Flight Details</h6>
                             <div class="table-responsive">
                                 <table class="table table-bordered">
-                                    <thead>
+
+
+                                    <thead class="border-top">
                                         <tr>
+
                                             <th style="min-width: 100px">Dep. Date</th>
                                             <th>Airline</th>
                                             <th style="min-width: 70px">Flight #</th>
@@ -47,42 +50,59 @@
                                             <th>Price Adult</th>
                                             <th>Price Child</th>
                                             <th>Price Infant</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if(isset($airlineGroup) && $airlineGroup->segments->count() > 0)
-                                            @foreach($airlineGroup->segments as $segment)
-                                            <tr>
-                                                <td>{{ $segment->departure_date }}</td>
-                                                <td>{{ $airlineGroup->airline->title ?? 'N/A' }}</td>
-                                                <td>{{ $segment->flight_number }}</td>
-                                                <td>
-                                                    @php
-                                                        $originCity = \App\Models\City::find($segment->origin);
-                                                        echo $originCity ? $originCity->title : $segment->origin;
-                                                    @endphp
-                                                </td>
-                                                <td>
-                                                    @php
-                                                        $destinationCity = \App\Models\City::find($segment->destination);
-                                                        echo $destinationCity ? $destinationCity->title : $segment->destination;
-                                                    @endphp
-                                                </td>
-                                                <td>{{ $segment->departure_time }}</td>
-                                                <td>{{ $segment->arrival_time }}</td>
-                                                <td>{{ $segment->baggage }}</td>
-                                                <td>{{ $segment->meal }}</td>
-                                                <td>{{ $airlineGroup->sale_per_adult }}</td>
-                                                <td>{{ $airlineGroup->sale_per_child }}</td>
-                                                <td>{{ $airlineGroup->sale_per_infant }}</td>
-                                            </tr>
-                                            @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="12" class="text-center">No flight details available</td>
-                                            </tr>
-                                        @endif
+                                        <tr>
+                                            <td>
+                                                @foreach($airlineGroup->segments as $segment)
+                                                    <div>{{ \Carbon\Carbon::parse($segment->departure_date)->format('d M Y') }}</div>
+                                                @endforeach
+                                            </td>
+                                            <td>{{ $airlineGroup->airline->title ?? 'N/A' }}</td>
+                                            <td>
+                                                @foreach($airlineGroup->segments as $segment)
+                                                    <div>{{ $segment->flight_number }}</div>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach($airlineGroup->segments as $segment)
+                                                    <div>{{ \App\Models\City::find($segment->origin)->title ?? 'N/A' }}</div>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach($airlineGroup->segments as $segment)
+                                                    <div>{{ \App\Models\City::find($segment->destination)->title ?? 'N/A' }}</div>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach($airlineGroup->segments as $segment)
+                                                    <div>{{ $segment->departure_time }}</div>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach($airlineGroup->segments as $segment)
+                                                    <div>{{ $segment->arrival_time }}</div>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach($airlineGroup->segments as $segment)
+                                                    <div>{{ $segment->baggage }}</div>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach($airlineGroup->segments as $segment)
+                                                    <div>{{ ucfirst($segment->meal) }}</div>
+                                                @endforeach
+                                            </td>
+                                            <td>{{ number_format($airlineGroup->sale_per_adult, 2) }}</td>
+                                            <td>{{ number_format($airlineGroup->sale_per_child, 2) }}</td>
+                                            <td>{{ number_format($airlineGroup->sale_per_infant, 2) }}</td>
+
+                                        </tr>
                                     </tbody>
+
                                 </table>
                             </div>
 
@@ -122,145 +142,95 @@
     </div>
 
     @push('scripts')
-        <script>
-            $(document).ready(function () {
-                // Function to add passenger details rows
-                function addPassengerRows(adults, children, infants) {
-                    let rows = '';
-                    let passengerIndex = 1;
+    <script>
+        $(document).ready(function () {
+            function createSectionHeader(label) {
+                return `<hr><h5 class="mt-4 mb-3 fw-bold">${label}</h5>`;
+            }
 
-                    // Add Adult Passengers
-                    for (let i = 0; i < adults; i++) {
-                        rows += `<div class="row mb-3">
-                                    <div class="col-md-1">
-                                        <label class="form-label">Adult</label>
-                                        <input type="text" class="form-control" value=" ${passengerIndex}" readonly>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Title</label>
-                                        <input type="text" name="passenger[${passengerIndex}][title]" class="form-control" placeholder="Title" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Surname</label>
-                                        <input type="text" name="passenger[${passengerIndex}][surname]" class="form-control" placeholder="Surname" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Given Name</label>
-                                        <input type="text" name="passenger[${passengerIndex}][given_name]" class="form-control" placeholder="Given Name" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Passport No</label>
-                                        <input type="text" name="passenger[${passengerIndex}][passport]" class="form-control" placeholder="Passport No" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Date of Birth</label>
-                                        <input type="date" name="passenger[${passengerIndex}][dob]" class="form-control" placeholder="Date of Birth" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Passport Expiry</label>
-                                        <input type="date" name="passenger[${passengerIndex}][passport_expiry]" class="form-control" placeholder="Passport Expiry" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Nationality</label>
-                                        <input type="text" name="passenger[${passengerIndex}][nationality]" class="form-control" placeholder="Nationality" required>
-                                    </div>
-                                </div>`;
-                        passengerIndex++;
+            function createPassengerRow(index, type) {
+                return `<div class="row mb-3">
+                            <div class="col-md-1">
+                                <label class="form-label">Sr #</label>
+                                <input type="text" class="form-control" value="${index}" readonly>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Title</label>
+                                <input type="text" name="passenger[${type}_${index}][title]" class="form-control" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Surname</label>
+                                <input type="text" name="passenger[${type}_${index}][surname]" class="form-control" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Given Name</label>
+                                <input type="text" name="passenger[${type}_${index}][given_name]" class="form-control" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Passport No</label>
+                                <input type="text" name="passenger[${type}_${index}][passport]" class="form-control" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" name="passenger[${type}_${index}][dob]" class="form-control" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Passport Expiry</label>
+                                <input type="date" name="passenger[${type}_${index}][passport_expiry]" class="form-control" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Nationality</label>
+                                <input type="text" name="passenger[${type}_${index}][nationality]" class="form-control" required>
+                            </div>
+                        </div>`;
+            }
+
+            function addPassengerRows(adults, children, infants) {
+                let rows = '';
+
+                // Adults Section
+                if (adults > 0) {
+                    rows += createSectionHeader("Adult Passengers");
+                    for (let i = 1; i <= adults; i++) {
+                        rows += createPassengerRow(i, 'adult');
                     }
-
-                    // Add Children Passengers
-                    for (let i = 0; i < children; i++) {
-                        rows += `<div class="row mb-3">
-                                <div class="col-md-1">
-                                    <label class="form-label">Child</label>
-                                    <input type="text" class="form-control" value=" ${passengerIndex}" readonly>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">Title</label>
-                                    <input type="text" name="passenger[${passengerIndex}][title]" class="form-control" placeholder="Title" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">Surname</label>
-                                    <input type="text" name="passenger[${passengerIndex}][surname]" class="form-control" placeholder="Surname" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">Given Name</label>
-                                    <input type="text" name="passenger[${passengerIndex}][given_name]" class="form-control" placeholder="Given Name" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">Passport No</label>
-                                    <input type="text" name="passenger[${passengerIndex}][passport]" class="form-control" placeholder="Passport No" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">Date Of Birth</label>
-                                    <input type="date" name="passenger[${passengerIndex}][dob]" class="form-control" placeholder="Date Of Birth" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">Passport Expiry</label>
-                                    <input type="date" name="passenger[${passengerIndex}][passport_expiry]" class="form-control" placeholder="Passport Expiry" required>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">Nationality</label>
-                                    <input type="text" name="passenger[${passengerIndex}][nationality]" class="form-control" placeholder="Nationality" required>
-                                    </div>
-                                </div>`;
-                        passengerIndex++;
-                    }
-
-                    // Add Infant Passengers
-                    for (let i = 0; i < infants; i++) {
-                        rows += `<div class="row mb-3">
-                                <div class="col-md-1">
-                                    <label class="form-label">Infant</label>
-                                    <input type="text" class="form-control" value=" ${passengerIndex}" readonly>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label">Title</label>
-                                    <input type="text" name="passenger[${passengerIndex}][title]" class="form-control" placeholder="Title" required>
-                                </div>
-                                <div class="col-md-2">
-                                        <label class="form-label">Surname</label>
-                                        <input type="text" name="passenger[${passengerIndex}][surname]" class="form-control" placeholder="Surname" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Given Name</label>
-                                        <input type="text" name="passenger[${passengerIndex}][given_name]" class="form-control" placeholder="Given Name" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Passport No</label>
-                                        <input type="text" name="passenger[${passengerIndex}][passport]" class="form-control" placeholder="Passport No" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Date Of Birth</label>
-                                        <input type="date" name="passenger[${passengerIndex}][dob]" class="form-control" placeholder="Date Of Birth" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Passport Expiry</label>
-                                        <input type="date" name="passenger[${passengerIndex}][passport_expiry]" class="form-control" placeholder="Passport Expiry" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label">Nationality</label>
-                                        <input type="text" name="passenger[${passengerIndex}][nationality]" class="form-control" placeholder="Nationality" required>
-                                    </div>
-                                </div>`;
-                        passengerIndex++;
-                    }
-
-                    // Update passenger details container
-                    $('#passenger-details').html(rows);
                 }
 
-                // Listen for changes in the passenger input fields
-                $('#adults, #children, #infants').on('change', function () {
-                    const adults = $('#adults').val();
-                    const children = $('#children').val();
-                    const infants = $('#infants').val();
-                    addPassengerRows(adults, children, infants);
-                });
+                // Children Section
+                if (children > 0) {
+                    rows += createSectionHeader("Child Passengers");
+                    for (let i = 1; i <= children; i++) {
+                        rows += createPassengerRow(i, 'child');
+                    }
+                }
 
-                // Initial population
-                addPassengerRows($('#adults').val(), $('#children').val(), $('#infants').val());
+                // Infants Section
+                if (infants > 0) {
+                    rows += createSectionHeader("Infant Passengers");
+                    for (let i = 1; i <= infants; i++) {
+                        rows += createPassengerRow(i, 'infant');
+                    }
+                }
+
+                $('#passenger-details').html(rows);
+            }
+
+            $('#adults, #children, #infants').on('change', function () {
+                const adults = parseInt($('#adults').val()) || 0;
+                const children = parseInt($('#children').val()) || 0;
+                const infants = parseInt($('#infants').val()) || 0;
+                addPassengerRows(adults, children, infants);
             });
-        </script>
-    @endpush
+
+            // Initial load
+            addPassengerRows(
+                parseInt($('#adults').val()) || 0,
+                parseInt($('#children').val()) || 0,
+                parseInt($('#infants').val()) || 0
+            );
+        });
+    </script>
+@endpush
+
+
 </x-dashboard>
