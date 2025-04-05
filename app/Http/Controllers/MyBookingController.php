@@ -49,7 +49,7 @@ class MyBookingController extends Controller
         }
 
         // Get the filtered airline groups with pagination
-        $airlineGroups = $query->paginate(10); // Paginate with 10 items per page
+        $airlineGroups = $query->paginate(10);
 
         // Get all airlines and cities for the filter dropdowns
         $airlines = Airline::all();

@@ -8,12 +8,16 @@
 
         <!-- Airline Groups Table -->
         <div class="card">
-            <div class="card-header border-bottom pt-3 pb-3">
+            <div class="card-header border-bottom pt-3 pb-3 d-flex align-items-center justify-content-between">
                 <h5 class="card-title mb-0">{{ $title }}</h5>
+                <a href="javascript:void(0)" onclick="downloadExcel('All Airline Group List')"
+                   class="btn btn-sm btn-primary">
+                    <i class="tf-icons ti ti-file-spreadsheet fs-6 me-1"></i>
+                    Download Excel
+                </a>
             </div>
-
             <div class="card-datatable table-responsive">
-                <table class="datatables-users table" id="datatable">
+                <table class="table table-hover table-sm table-bordered" id="excel-table">
                     <thead class="border-top">
                         <tr>
                             <th>Sr. No.</th>
@@ -126,6 +130,7 @@
                 </table>
             </div>
         </div>
+        {{ $airlineGroups -> appends(request() -> query()) -> onEachSide(5) -> links('pagination::bootstrap-5') }}
     </div>
     <!-- / Content -->
 

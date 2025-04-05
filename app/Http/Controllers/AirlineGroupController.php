@@ -22,51 +22,47 @@ class AirlineGroupController extends Controller
         $query = AirlineGroup::with(['segments', 'airline']);
 
         // Apply filter for departure_date
-        if ($request->has('departure_date') && $request->departure_date) {
-            $query->whereHas('segments', function ($query) use ($request) {
-                // Filter by exact departure date
-                $query->whereDate('departure_date', '=', $request->departure_date);
+        if ($request->filled('departure_date')) {
+            $query->whereHas('segments', function ($q) use ($request) {
+                $q->whereDate('departure_date', '=', $request->departure_date);
             });
         }
 
         // Apply filter for airline
-        if ($request->has('airline') && $request->airline) {
+        if ($request->filled('airline')) {
             $query->where('airline_id', $request->airline);
         }
 
         // Apply filter for origin city
-        if ($request->has('origin') && $request->origin) {
-            $query->whereHas('segments', function ($query) use ($request) {
-                $query->whereHas('originCity', function ($query) use ($request) {
-                    $query->where('title', 'like', '%' . $request->origin . '%');
-                });
+        if ($request->filled('origin')) {
+            $query->whereHas('segments.originCity', function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->origin . '%');
             });
         }
 
         // Apply filter for destination city
-        if ($request->has('destination') && $request->destination) {
-            $query->whereHas('segments', function ($query) use ($request) {
-                $query->whereHas('destinationCity', function ($query) use ($request) {
-                    $query->where('title', 'like', '%' . $request->destination . '%');
-                });
+        if ($request->filled('destination')) {
+            $query->whereHas('segments.destinationCity', function ($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->destination . '%');
             });
         }
 
-        // Get the filtered AirlineGroups
-        $airlineGroups = $query->get();
+        // Use pagination instead of get() to enable appends()
+        $airlineGroups = $query->paginate(10)->appends($request->all());
 
         // Fetch all airlines and cities for the filter dropdowns
         $airlines = (new AirlineService())->all();
         $cities = (new CityService())->all();
 
         // Prepare the data for the view
-        $data['title'] = 'Airline Groups';
-        $data['airlineGroups'] = $airlineGroups;
-        $data['airlines'] = $airlines;
-        $data['cities'] = $cities;
-
-        return view('airline-groups.index', $data);
+        return view('airline-groups.index', [
+            'title' => 'Airline Groups',
+            'airlineGroups' => $airlineGroups,
+            'airlines' => $airlines,
+            'cities' => $cities,
+        ]);
     }
+
 
 
     public function create()
