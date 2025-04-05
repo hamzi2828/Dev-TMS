@@ -21,7 +21,7 @@
                     <thead class="border-top">
                         <tr>
                             <th>Sr. No.</th>
-                            <th style="min-width: 100px">Dep. Date</th>
+                            <th style="min-width: 150px">Dep. Date</th>
                             <th style="min-width: 70px">Logo #</th>
                             <th>Airline</th>
                             <th style="min-width: 70px">Flight #</th>

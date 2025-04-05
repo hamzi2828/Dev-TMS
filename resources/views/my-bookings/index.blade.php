@@ -21,7 +21,7 @@
                     <thead class="border-top">
                         <tr>
                             <th>Sr. No.</th>
-                            <th style="min-width: 100px">Dep. Date</th>
+                            <th style="min-width: 150px">Dep. Date</th>
                             <th>Airline</th>
                             <th style="min-width: 70px">Flight #</th>
                             <th>Origin</th>
@@ -85,7 +85,7 @@
                                 <td>{{ number_format($group->sale_per_child, 2) }}</td>
                                 <td>{{ number_format($group->sale_per_infant, 2) }}</td>
                                 <td>
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center" style="min-width: 100px">
                                         <a href="{{ route('myBookings.create', ['airlineGroup' => $group->id]) }}"
                                            class="btn btn-primary btn-sm"
                                            title="Book Now">
