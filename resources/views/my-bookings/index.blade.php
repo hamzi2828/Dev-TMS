@@ -2,47 +2,9 @@
     <!-- Content -->
     <div class="container-p-x flex-grow-1 container-p-y">
         @include('_partials.errors.validation-errors')
-
+        @include('my-bookings.search')
         <!-- Filter Form -->
-        <form method="GET" action="{{ route('myBookings.index') }}" class="mb-3">
-            <div class="row">
-                <div class="col-md-2">
-                    <label for="departure_date">Departure Date</label>
-                    <input type="date" name="departure_date" id="departure_date" class="form-control" value="{{ request('departure_date') }}">
-                </div>
-                <div class="col-md-2">
-                    <label for="airline">Airline</label>
-                    <select name="airline" id="airline" class="form-control select2">
-                        <option value="">All Airlines</option>
-                        @foreach($airlines as $airline)
-                            <option value="{{ $airline->id }}" {{ request('airline') == $airline->id ? 'selected' : '' }}>{{ $airline->title }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="origin">Origin</label>
-                    <select name="origin" id="origin" class="form-control select2">
-                        <option value="">All Origins</option>
-                        @foreach($cities as $city)
-                            <option value="{{ $city->id }}" {{ request('origin') == $city->id ? 'selected' : '' }}>{{ $city->title }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="destination">Destination</label>
-                    <select name="destination" id="destination" class="form-control select2">
-                        <option value="">All Destinations</option>
-                        @foreach($cities as $city)
-                            <option value="{{ $city->id }}" {{ request('destination') == $city->id ? 'selected' : '' }}>{{ $city->title }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2">
 
-                    <button type="submit" class="btn btn-primary" style="margin-top: 22px;">Apply Filters</button>
-                </div>
-            </div>
-        </form>
 
         <!-- Airline Groups Table -->
         <div class="card">
@@ -51,7 +13,7 @@
             </div>
 
             <div class="card-datatable table-responsive">
-                <table class="datatables-users table" id="datatable">
+                <table class="datatables-users table" >
                     <thead class="border-top">
                         <tr>
                             <th>Sr. No.</th>
@@ -123,7 +85,7 @@
                                         <a href="{{ route('myBookings.create', ['airlineGroup' => $group->id]) }}"
                                            class="btn btn-primary btn-sm"
                                            title="Book Now">
-                                            <i class="ti ti-ticket ti-sm me-2"></i> Book Now
+                                            Book Now
                                         </a>
                                     </div>
                                 </td>
@@ -132,7 +94,12 @@
                     </tbody>
                 </table>
             </div>
+            @if(method_exists($airlineGroups, 'links'))
+                {{ $airlineGroups->onEachSide(5)->links('pagination::bootstrap-5') }}
+            @endif
+
         </div>
+
     </div>
     <!-- / Content -->
 

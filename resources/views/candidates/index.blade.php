@@ -86,7 +86,7 @@
                                                 <i class="ti ti-power ti-sm me-2"></i>
                                             </a>
                                         @endcan
-                                        
+
                                         @can('edit', $candidate)
                                             <a href="{{ route ('candidates.edit', ['candidate' => $candidate -> id]) }}"
                                                class="text-body" data-bs-toggle="tooltip"
@@ -106,7 +106,7 @@
                 </table>
             </div>
         </div>
-        {{ $candidates -> appends(request() -> query()) -> onEachSide(5) -> links('pagination::bootstrap-5') }}
+        {{-- {{ $candidates -> appends(request() -> query()) -> onEachSide(5) -> links('pagination::bootstrap-5') }} --}}
     </div>
     <!-- / Content -->
     @push('scripts')

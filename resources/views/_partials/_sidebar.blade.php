@@ -26,7 +26,7 @@
                 {{-- @can('mainMenu', \App\Models\AirlineGroup::class) --}}
                 <li class="menu-item {{ request()->routeIs('airlineGroups.*') ? 'active open' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-map-alt"></i>
+                        <i class="menu-icon tf-icons ti ti-plane-departure"></i>
                         <div data-i18n="Airline Groups">Airline Groups</div>
                     </a>
                     <ul class="menu-sub">

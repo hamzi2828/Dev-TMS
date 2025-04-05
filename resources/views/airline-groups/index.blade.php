@@ -4,45 +4,7 @@
         @include('_partials.errors.validation-errors')
 
         <!-- Filter Form -->
-         <form method="GET" action="{{ route('airlineGroups.index') }}" class="mb-3">
-            <div class="row">
-                <div class="col-md-2">
-                    <label for="departure_date">Departure Date</label>
-                    <input type="date" name="departure_date" id="departure_date" class="form-control" value="{{ request('departure_date') }}">
-                </div>
-                <div class="col-md-2">
-                    <label for="airline">Airline</label>
-                    <select name="airline" id="airline" class="form-control select2">
-                        <option value="">All Airlines</option>
-                        @foreach($airlines as $airline)
-                            <option value="{{ $airline->id }}" {{ request('airline') == $airline->id ? 'selected' : '' }}>{{ $airline->title }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="origin">Origin</label>
-                    <select name="origin" id="origin" class="form-control select2">
-                        <option value="">All Origins</option>
-                        @foreach($cities as $city)
-                            <option value="{{ $city->id }}" {{ request('origin') == $city->id ? 'selected' : '' }}>{{ $city->title }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label for="destination">Destination</label>
-                    <select name="destination" id="destination" class="form-control select2">
-                        <option value="">All Destinations</option>
-                        @foreach($cities as $city)
-                            <option value="{{ $city->id }}" {{ request('destination') == $city->id ? 'selected' : '' }}>{{ $city->title }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2">
-
-                    <button type="submit" class="btn btn-primary" style="margin-top: 22px;">Apply Filters</button>
-                </div>
-            </div>
-        </form>
+        @include('airline-groups.search')
 
         <!-- Airline Groups Table -->
         <div class="card">
