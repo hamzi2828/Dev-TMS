@@ -47,5 +47,6 @@ class AirlineGroup extends Model
         return $this->belongsTo(Airline::class);
     }
 
+    
 
 }

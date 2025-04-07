@@ -28,4 +28,18 @@ class Segment extends Model
     {
         return $this->belongsTo(AirlineGroup::class, 'airline_group_id');
     }
+
+
+    public function airline()
+    {
+        return $this->belongsTo(Airline::class, 'airline_id');
+    }
+    public function originCity()
+    {
+        return $this->belongsTo(City::class, 'origin');
+    }
+    public function destinationCity()
+    {
+        return $this->belongsTo(City::class, 'destination');
+    }
 }

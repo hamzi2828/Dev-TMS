@@ -3,15 +3,12 @@
     <div class="container-p-x flex-grow-1 container-p-y">
         @include('_partials.errors.validation-errors')
         @include('my-bookings.search')
-        <!-- Filter Form -->
-
 
         <!-- Airline Groups Table -->
         <div class="card">
             <div class="card-header border-bottom pt-3 pb-3 d-flex align-items-center justify-content-between">
                 <h5 class="card-title mb-0">{{ $title }}</h5>
-                <a href="javascript:void(0)" onclick="downloadExcel('My Booking List')"
-                   class="btn btn-sm btn-primary">
+                <a href="javascript:void(0)" onclick="downloadExcel('My Booking List')" class="btn btn-sm btn-primary">
                     <i class="tf-icons ti ti-file-spreadsheet fs-6 me-1"></i>
                     Download Excel
                 </a>
@@ -21,40 +18,46 @@
                     <thead class="border-top">
                         <tr>
                             <th>Sr. No.</th>
-                            <th style="min-width: 150px">Dep. Date</th>
-                            <th style="min-width: 70px"></th>
+                            <th>Booking Ref</th>
+                            <th>Departure Date</th>
                             <th>Airline</th>
-                            <th style="min-width: 100px">FLT No.</th>
+                            <th>Flight No.</th>
                             <th>Origin</th>
                             <th>Destination</th>
                             <th>Dep. Time</th>
                             <th>Arrival Time</th>
                             <th>Baggage</th>
                             <th>Meal</th>
-                            <th>Total Seats</th>
-                            <th>Price Adult</th>
-                            <th>Price Child</th>
-                            <th>Price Infant</th>
-                            <th>Actions</th>
+                            <th>Total Price</th>
+                            <th>Timer</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($airlineGroups as $group)
+                        @foreach($myBookings as $booking)
+                            @php
+                                $group = $booking->airlineGroup;
+                            @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>
+                                    <div><strong>{{ $booking->booking_reference }}</strong></div>
+                                    <small class="text-muted">
+                                         {{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y, H:i A') }}
+                                    </small>
+                                </td>
+                                
                                 <td>
                                     @foreach($group->segments as $segment)
                                         <div>{{ \Carbon\Carbon::parse($segment->departure_date)->format('d M Y') }}</div>
                                     @endforeach
                                 </td>
                                 <td>
-                                    @if(!empty(trim ($group->airline->file)))
-                                        <img src="{{ $group->airline->file }}" alt="Airline Logo" width="50" height="20">
+                                    @if(!empty(trim($booking->airline->file)))
+                                        <img src="{{ $booking->airline->file }}" alt="Airline Logo" width="50" height="20">
                                     @else
                                         N/A
                                     @endif
                                 </td>
-                                <td>{{ $group->airline->title ?? 'N/A' }}</td>
                                 <td>
                                     @foreach($group->segments as $segment)
                                         <div>{{ $segment->flight_number }}</div>
@@ -77,7 +80,7 @@
                                 </td>
                                 <td>
                                     @foreach($group->segments as $segment)
-                                        <div>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i')  }}</div>
+                                        <div>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i') }}</div>
                                     @endforeach
                                 </td>
                                 <td>
@@ -90,37 +93,61 @@
                                         <div>{{ ucfirst($segment->meal) }}</div>
                                     @endforeach
                                 </td>
-                                <td>{{ $group->total_seats }}</td>
-                                <td>{{ number_format($group->sale_per_adult, 2) }}</td>
-                                <td>{{ number_format($group->sale_per_child, 2) }}</td>
-                                <td>{{ number_format($group->sale_per_infant, 2) }}</td>
                                 <td>
-                                    <div class="d-flex align-items-center" style="min-width: 100px">
-                                        <a href="{{ route('myBookings.create', ['airlineGroup' => $group->id]) }}"
-                                           class="btn btn-primary btn-sm"
-                                           title="Book Now">
-                                            Book Now
-                                        </a>
-                                    </div>
+                                    @if($booking->total_price)
+                                        {{ number_format($booking->total_price, 2) }}
+                                    @else
+                                        N/A
+                                    @endif
                                 </td>
-
+                                <td>
+                                    <span id="timer-{{ $booking->id }}" class="badge bg-success fs-6">Loading...</span>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-            @if(method_exists($airlineGroups, 'links'))
-                {{ $airlineGroups->onEachSide(5)->links('pagination::bootstrap-5') }}
+
+            @if(method_exists($myBookings, 'links'))
+                <div class="mt-3">
+                    {{ $myBookings->onEachSide(5)->links('pagination::bootstrap-5') }}
+                </div>
             @endif
-
         </div>
-
     </div>
     <!-- / Content -->
 
     @push('scripts')
-        <script type="text/javascript">
-            init_datatable('{{ route('myBookings.create') }}');
-        </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @foreach($myBookings as $booking)
+                (function () {
+                    let createdAt = new Date("{{ $booking->created_at }}").getTime();
+                    let endTime = createdAt + 60 * 60 * 1000; // 1 hour later
+                    let timerId = "timer-{{ $booking->id }}";
+
+                    let interval = setInterval(() => {
+                        let now = new Date().getTime();
+                        let distance = endTime - now;
+
+                        let element = document.getElementById(timerId);
+                        if (!element) return;
+
+                        if (distance < 0) {
+                            element.innerHTML = "Expired";
+                            element.classList.remove("bg-success");
+                            element.classList.add("bg-danger");
+                            clearInterval(interval);
+                        } else {
+                            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                            element.innerHTML = `${minutes}m ${seconds}s`;
+                        }
+                    }, 1000);
+                })();
+            @endforeach
+        });
+    </script>
     @endpush
 </x-dashboard>

@@ -21,32 +21,54 @@ class AirlineGroupController extends Controller
         // Start the query for AirlineGroup, eager load segments and airline
         $query = AirlineGroup::with(['segments', 'airline']);
 
-        // Apply filter for departure_date
-        if ($request->filled('departure_date')) {
-            $query->whereHas('segments', function ($q) use ($request) {
-                $q->whereDate('departure_date', '=', $request->departure_date);
+        if ($request->has('departure_date') && $request->departure_date) {
+            $query->whereDoesntHave('segments', function ($query) use ($request) {
+                $query->whereDate('departure_date', '<', $request->departure_date);
             });
         }
+        
 
-        // Apply filter for airline
-        if ($request->filled('airline')) {
+        if ($request->has('airline') && $request->airline) {
             $query->where('airline_id', $request->airline);
         }
 
-        // Apply filter for origin city
-        if ($request->filled('origin')) {
-            $query->whereHas('segments.originCity', function ($q) use ($request) {
-                $q->where('title', 'like', '%' . $request->origin . '%');
+        if ($request->has('origin') && $request->origin) {
+            // Handle the case where origin is already a numeric ID
+            $query->whereHas('segments', function ($query) use ($request) {
+                // Check if it's a numeric value (direct ID)
+                if (is_numeric($request->origin)) {
+                    $query->where('origin', $request->origin);
+                } else {
+                    // Try to find matching cities by name
+                    $cityIds = \App\Models\City::where('title', 'like', '%' . $request->origin . '%')
+                        ->pluck('id')
+                        ->toArray();
+                    
+                    if (!empty($cityIds)) {
+                        $query->whereIn('origin', $cityIds);
+                    }
+                }
             });
         }
-
-        // Apply filter for destination city
-        if ($request->filled('destination')) {
-            $query->whereHas('segments.destinationCity', function ($q) use ($request) {
-                $q->where('title', 'like', '%' . $request->destination . '%');
+    
+        if ($request->has('destination') && $request->destination) {
+            // Handle the case where destination is already a numeric ID
+            $query->whereHas('segments', function ($query) use ($request) {
+                // Check if it's a numeric value (direct ID)
+                if (is_numeric($request->destination)) {
+                    $query->where('destination', $request->destination);
+                } else {
+                    // Try to find matching cities by name
+                    $cityIds = \App\Models\City::where('title', 'like', '%' . $request->destination . '%')
+                        ->pluck('id')
+                        ->toArray();
+                    
+                    if (!empty($cityIds)) {
+                        $query->whereIn('destination', $cityIds);
+                    }
+                }
             });
         }
-
         // Use pagination instead of get() to enable appends()
         $airlineGroups = $query->paginate(10)->appends($request->all());
 

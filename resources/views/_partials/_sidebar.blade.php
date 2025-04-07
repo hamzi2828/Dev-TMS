@@ -61,6 +61,17 @@
                                 <div data-i18n="All Booking">All Booking</div>
                             </a>
                         </li>
+                        <li class="menu-item {{ request()->routeIs('myBookings.pending') ? 'active' : '' }}">
+                            <a href="{{ route('myBookings.pending') }}" class="menu-link">
+                                <div data-i18n="Pending Booking">Pending Booking</div>
+                            </a>
+                        </li>
+                        <li class="menu-item {{ request()->routeIs('myBookings.canceled') ? 'active' : '' }}">
+                            <a href="{{ route('myBookings.canceled') }}" class="menu-link">
+                                <div data-i18n="Canceled Booking">Canceled Booking</div>
+                            </a>
+                        </li>
+                        
                     {{-- @endcan --}}
 
                 </ul>

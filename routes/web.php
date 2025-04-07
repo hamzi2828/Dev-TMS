@@ -61,6 +61,10 @@
         } );
         Route ::resource ( 'myBookings', MyBookingController::class );
         Route ::resource ( 'airlineGroups', AirlineGroupController::class );
+        Route::get('/pending-Bookings', [MyBookingController::class, 'pendingBookings'])->name('myBookings.pending');
+        Route::get('/canceled-Bookings', [MyBookingController::class, 'canceledBookings'])->name('myBookings.canceled');
+        
+
 
         Route ::prefix ( 'accounts' ) -> group ( function () {
             Route ::get ( 'chart-of-accounts', [ AccountController::class, 'chart_of_accounts' ] ) -> name ( 'accounts.chart-of-accounts' );

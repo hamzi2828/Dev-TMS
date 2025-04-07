@@ -23,7 +23,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                           
+
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="sector_id">Sector</label>
                                     <select class="form-select select2" id="sector_id" name="sector_id" required>
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                             </div>
-                            
+
                             <!-- End of Travel Agent Section -->
                               <div id="segments-container">
                                   <!-- First Segment -->

@@ -18,6 +18,7 @@
                         @endforeach
                     </select>
                 </div>
+
                 <div class="col-md-3">
                     <label for="origin">Origin</label>
                     <select name="origin" id="origin" class="form-control select2"  data-allow-clear="true">
@@ -36,9 +37,9 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-Add Airline Group3">
 
-                    <button type="submit" class="btn btn-primary" style="margin-top: 22px;">Apply Filters</button>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 22px;">Search</button>
                 </div>
             </div>
         </form>

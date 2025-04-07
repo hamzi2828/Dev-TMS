@@ -3,7 +3,8 @@
         <h5 class="card-title mb-0">Search</h5>
     </div>
     <div class="card-body mt-3">
-        <form method="GET" action="{{ route('myBookings.index') }}" class="mb-3">
+        <form method="GET" action="{{ request()->routeIs('myBookings.pending') ? route('myBookings.pending') : route('myBookings.index') }}" class="mb-3">
+            
             <div class="row">
                 <div class="col-md-3">
                     <label for="departure_date">Departure Date</label>
@@ -38,7 +39,7 @@
                 </div>
                 <div class="col-md-3">
 
-                    <button type="submit" class="btn btn-primary" style="margin-top: 22px;">Apply Filters</button>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 22px;">Search</button>
                 </div>
             </div>
         </form>

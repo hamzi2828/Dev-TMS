@@ -22,9 +22,9 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th style="min-width: 150px">Dep. Date</th>
-                            <th style="min-width: 70px">Logo #</th>
+                            <th style="min-width: 70px"></th>
                             <th>Airline</th>
-                            <th style="min-width: 70px">Flight #</th>
+                            <th style="min-width: 100px">FLT No.</th>
                             <th>Origin</th>
                             <th>Destination</th>
                             <th>Dep. Time</th>
@@ -49,7 +49,7 @@
                                 </td>
                                 <td>
                                     @if(!empty(trim ($group->airline->file)))
-                                        <img src="{{ $group->airline->file }}" alt="Airline Logo" width="50" height="50">
+                                        <img src="{{ $group->airline->file }}" alt="Airline Logo" width="50" height="20">
                                     @else
                                         N/A
                                     @endif
@@ -72,12 +72,12 @@
                                 </td>
                                 <td>
                                     @foreach($group->segments as $segment)
-                                        <div>{{ $segment->departure_time }}</div>
+                                        <div>{{ \Carbon\Carbon::parse($segment->departure_time)->format('H:i') }}</div>
                                     @endforeach
                                 </td>
                                 <td>
                                     @foreach($group->segments as $segment)
-                                        <div>{{ $segment->arrival_time }}</div>
+                                        <div>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i')  }}</div>
                                     @endforeach
                                 </td>
                                 <td>
