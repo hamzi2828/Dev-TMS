@@ -105,9 +105,9 @@
                                     <span id="timer-{{ $booking->id }}" class="badge bg-success fs-6">Loading...</span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('myBookings.confirm', $booking->id) }}" class="btn btn-sm btn-primary">
-                                        <i class="tf-icons ti ti-eye fs-6 me-1"></i>
-                                        View
+                                    <a href="{{ route('myBookings.confirmBooking', ['id' => $booking->id]) }}" class="btn btn-sm btn-info">
+                                        <i class="tf-icons ti ti-check-circle fs-6 me-1"></i>
+                                        Confirm
                                     </a>
                                 </td>
                             </tr>

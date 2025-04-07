@@ -71,6 +71,10 @@
                                 <div data-i18n="Canceled Booking">Canceled Booking</div>
                             </a>
                         </li>
+                        <li class="menu-item {{ request()->routeIs('myBookings.completed') ? 'active' : '' }}">
+                            <a href="{{ route('myBookings.completed') }}" class="menu-link">
+                                <div data-i18n="Completed Booking">Completed Booking</div>
+                            </a>
                         
                     {{-- @endcan --}}
 

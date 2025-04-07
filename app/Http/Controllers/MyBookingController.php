@@ -135,6 +135,34 @@ class MyBookingController extends Controller
     }
 
 
+    public function completedBookings(Request $request)
+    {
+        $query = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
+            ->where('status', 'confirmed');
+
+
+    
+        $myBookings = $query->paginate(10);
+    
+        $airlines = Airline::all();
+        $cities = City::all();
+    
+        $data['title'] = 'My Canceled Bookings';
+        $data['myBookings'] = $myBookings;
+        $data['airlines'] = $airlines;
+        $data['cities'] = $cities;
+    
+        return view('my-bookings.completedBookings', $data);
+    }
+    public function confirmBookings(Request $request)
+    {
+        // Change the status of the booking to 'confirmed' and redirect back with a success message
+        $booking = MyBooking::find($request->id);
+        $booking->status = 'confirmed';
+        $booking->save();
+        return redirect()->back()->with('success', 'Booking confirmed successfully');
+    }
+
     /**
      * Show the form for creating a new resource.
      */

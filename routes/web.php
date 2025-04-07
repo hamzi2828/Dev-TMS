@@ -63,6 +63,9 @@
         Route ::resource ( 'airlineGroups', AirlineGroupController::class );
         Route::get('/pending-Bookings', [MyBookingController::class, 'pendingBookings'])->name('myBookings.pending');
         Route::get('/canceled-Bookings', [MyBookingController::class, 'canceledBookings'])->name('myBookings.canceled');
+        Route::get('/completed-Bookings', [MyBookingController::class, 'completedBookings'])->name('myBookings.completed');
+        Route::get('/confirm-Bookings', [MyBookingController::class, 'confirmBookings'])->name('myBookings.confirmBooking');
+        
         
 
 

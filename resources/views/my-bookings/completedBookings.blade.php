@@ -101,7 +101,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <span class="badge bg-danger fs-6">Canceled</span>
+                                    <span  class="badge bg-success fs-6">Completed</span>
                                 </td>
                             </tr>
                         @endforeach
