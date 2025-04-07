@@ -5,6 +5,39 @@
             color: white;
         }
     </style>
+    @if(session('booking_success'))
+    <!-- Booking Success Modal -->
+    <div class="modal fade" id="bookingSuccessModal" tabindex="-1" aria-labelledby="bookingSuccessModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center p-4">
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="fa fa-check-circle text-success" style="font-size: 3rem;"></i>
+                    </div>
+                    <h4 class="fw-bold">Booking Success</h4>
+                    <p class="mt-2">
+                        This is to inform you that your ticket reservation has been successfully placed 
+                        <strong>ON HOLD</strong>.
+                    </p>
+                    <p>
+                        We request you to make the payment by<br>
+                        <strong>{{ session('payment_deadline') }}</strong><br>
+                        to guarantee your booking.
+                    </p>
+                    <button class="btn btn-primary mt-3" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Auto-show modal -->
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            const modal = new bootstrap.Modal(document.getElementById('bookingSuccessModal'));
+            modal.show();
+        });
+    </script>
+    @endif
     
     <div class="container-p-x flex-grow-1 container-p-y">
         @include('_partials.errors.validation-errors')

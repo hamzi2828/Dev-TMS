@@ -295,9 +295,13 @@ class MyBookingController extends Controller
             DB::commit();
     
             // Redirect with success message
-            return redirect()->route('myBookings.index')
-                ->with('success', 'Booking created successfully with reference: ' . $booking->booking_reference);
-                
+            return redirect()->back()
+    ->with([
+        'booking_success' => true,
+        'booking_reference' => $booking->booking_reference,
+        'payment_deadline' => now()->addHour()->format('H:i, F j, Y'),
+    ]);
+
         } catch (\Exception $e) {
             // Rollback the transaction in case of an error
             DB::rollBack();
