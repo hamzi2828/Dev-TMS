@@ -37,6 +37,18 @@
                         @endforeach
                     </select>
                 </div>
+
+                <div class="col-md-3">
+                    <label for="destination">Destination</label>
+                    <select name="destination" id="destination" class="form-control select2" data-allow-clear="true">>
+                        <option value="">All Destinations</option>
+                        @foreach($cities as $city)
+                            <option value="{{ $city->id }}" {{ request('destination') == $city->id ? 'selected' : '' }}>{{ $city->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                
                 <div class="col-md-Add Airline Group3">
 
                     <button type="submit" class="btn btn-primary" style="margin-top: 22px;">Search</button>

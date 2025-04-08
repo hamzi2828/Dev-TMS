@@ -19,6 +19,7 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th>Booking Ref</th>
+                            <th>Passengers</th> <!-- New column -->
                             <th>Departure Date</th>
                             <th>Airline</th>
                             <th>Flight No.</th>
@@ -45,7 +46,11 @@
                                          {{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y, H:i A') }}
                                     </small>
                                 </td>
-                                
+                                <td>
+                                    @foreach($booking->passengers as $passenger)
+                                        <div>{{ $passenger->title }} {{ $passenger->surname }} {{ $passenger->given_name }}</div>
+                                    @endforeach
+                                </td>
                                 <td>
                                     @foreach($group->segments as $segment)
                                         <div>{{ \Carbon\Carbon::parse($segment->departure_date)->format('d M Y') }}</div>

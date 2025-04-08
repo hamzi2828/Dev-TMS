@@ -8,6 +8,7 @@ use App\Models\Segment;
 use App\Models\Airline;
 use App\Models\section;
 use App\Models\Agent; // Assuming your travel agents are stored in `capl_agents` and model is `Agent`
+use Illuminate\Console\View\Components\Secret;
 
 class AirlineGroup extends Model
 {
@@ -47,6 +48,13 @@ class AirlineGroup extends Model
         return $this->belongsTo(Airline::class);
     }
 
-    
+    public function my_bookings()
+    {
+        return $this->hasMany(MyBooking::class, 'airline_group_id');
+    }
 
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'sector_id');
+    }
 }

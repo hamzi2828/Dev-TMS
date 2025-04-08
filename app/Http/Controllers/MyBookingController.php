@@ -74,6 +74,17 @@ class MyBookingController extends Controller
                 }
             });
         }
+
+
+        if ($request->filled('trip_type')) {
+            $query->whereHas('section', function ($query) use ($request) {
+                $query->where('trip_type', $request->trip_type);
+            });
+        }
+        
+        
+        
+
     
         // Get the filtered airline groups with pagination
         $airlineGroups = $query->paginate(10);
@@ -118,6 +129,7 @@ class MyBookingController extends Controller
     public function canceledBookings(Request $request)
     {
         $query = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
+        ->latest()
             ->where('status', 'cancelled');
 
 
@@ -139,6 +151,7 @@ class MyBookingController extends Controller
     public function completedBookings(Request $request)
     {
         $query = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
+        ->latest()
             ->where('status', 'confirmed');
 
 
@@ -164,6 +177,14 @@ class MyBookingController extends Controller
         return redirect()->back()->with('success', 'Booking confirmed successfully');
     }
 
+
+    public function cancelBookings(Request $request)
+    {
+        $booking = MyBooking::find($request->id);
+        $booking->status = 'cancelled';
+        $booking->save();
+        return redirect()->back()->with('success', 'Booking cancelled successfully');
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -328,7 +349,7 @@ class MyBookingController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        dd($id);
     }
 
     /**

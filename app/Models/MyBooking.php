@@ -74,4 +74,9 @@ class MyBooking extends Model
     {
         return $this->hasMany(Passenger::class, 'my_booking_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

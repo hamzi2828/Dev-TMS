@@ -19,6 +19,7 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th>Booking Ref</th>
+                            <th>Passengers</th> <!-- Add this new column -->
                             <th>Departure Date</th>
                             <th>Airline</th>
                             <th>Flight No.</th>
@@ -45,8 +46,13 @@
                                     <small class="text-muted">
                                          {{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y, H:i A') }}
                                     </small>
+                                    <div>{{ \App\Models\Agent::find($booking->user->agent_id )->name ?? 'N/A' }}</div>
                                 </td>
-                                
+                                <td>
+                                    @foreach($booking->passengers as $passenger)
+                                        {{ $passenger->title }} {{ $passenger->surname }} {{ $passenger->given_name }}<br>
+                                    @endforeach
+                                </td>
                                 <td>
                                     @foreach($group->segments as $segment)
                                         <div>{{ \Carbon\Carbon::parse($segment->departure_date)->format('d M Y') }}</div>
@@ -105,9 +111,14 @@
                                     <span id="timer-{{ $booking->id }}" class="badge bg-success fs-6">Loading...</span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('myBookings.confirmBooking', ['id' => $booking->id]) }}" class="btn btn-sm btn-info">
-                                        <i class="tf-icons ti ti-check-circle fs-6 me-1"></i>
+                                    <a href="{{ route('myBookings.confirmBooking', ['id' => $booking->id]) }}" class="btn btn-sm btn-info" style="width: 70px;">
                                         Confirm
+                                    </a>
+                                    <a href="{{ route('myBookings.canceleBooking', ['id' => $booking->id]) }}" class="btn btn-sm btn-danger mt-1" style="width: 70px;">
+                                        Cancel
+                                    </a>
+                                    <a href="{{ route('myBookings.edit', ['myBooking' => $booking->id]) }}" class="btn btn-sm btn-primary mt-1" style="width: 70px;">
+                                        Edit
                                     </a>
                                 </td>
                             </tr>
