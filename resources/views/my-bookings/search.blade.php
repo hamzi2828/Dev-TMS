@@ -4,7 +4,6 @@
     </div>
     <div class="card-body mt-3">
         <form method="GET" action="{{ request()->routeIs('myBookings.pending') ? route('myBookings.pending') : route('myBookings.index') }}" class="mb-3">
-            
             <div class="row">
                 <div class="col-md-3">
                     <label for="departure_date">Departure Date</label>

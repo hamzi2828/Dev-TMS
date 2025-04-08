@@ -349,16 +349,125 @@ class MyBookingController extends Controller
      */
     public function edit(string $id)
     {
-        dd($id);
+        // Find the booking with related data
+        $booking = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
+            ->findOrFail($id);
+        
+        // Get the airline group details for the booking
+        $airlineGroup = AirlineGroup::with(['segments', 'airline'])
+            ->find($booking->airline_group_id);
+        
+        // Prepare data for the view
+        $data['title'] = 'Edit Booking';
+        $data['booking'] = $booking;
+        $data['airlineGroup'] = $airlineGroup;
+        
+        // Return the edit view with the data
+        return view('my-bookings.edit', $data);
     }
 
+
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+ * Update the specified resource in storage.
+ */
+public function update(Request $request, string $id)
+{
+    // Remove the debug statement
+    // dd($request->all());
+
+    // Validate the request data
+    $request->validate([
+        'airline_id' => 'required|exists:airlines,id',
+        'airline_group_id' => 'required|exists:airline_groups,id',
+        'sector_id' => 'required|exists:sections,id',
+        'adults' => 'required|integer|min:0',
+        'children' => 'required|integer|min:0',
+        'infants' => 'required|integer|min:0',
+        'total_price' => 'required|numeric|min:0',
+        'terms_and_conditions' => 'required',
+    ]);
+
+    // Start a database transaction
+    DB::beginTransaction();
+
+    try {
+        // Find the booking
+        $booking = MyBooking::findOrFail($id);
+        
+        // Update basic booking details
+        $booking->update([
+            'adults' => $request->adults,
+            'children' => $request->children,
+            'infants' => $request->infants,
+            'total_price' => $request->total_price,
+        ]);
+
+        // Process passenger data
+        if ($request->has('passenger')) {
+            $passengers = $request->passenger;
+            $existingPassengerIds = [];
+            
+            // Process all passengers regardless of type
+            foreach ($passengers as $key => $passengerData) {
+                // Extract passenger type from the key (adult, child, infant)
+                $passengerType = explode('_', $key)[0];
+                
+                if (isset($passengerData['id'])) {
+                    // Update existing passenger
+                    $passenger = Passenger::findOrFail($passengerData['id']);
+                    $passenger->update([
+                        'title' => $passengerData['title'],
+                        'surname' => $passengerData['surname'],
+                        'given_name' => $passengerData['given_name'],
+                        'passport' => $passengerData['passport'],
+                        'dob' => $passengerData['dob'],
+                        'passport_expiry' => $passengerData['passport_expiry'],
+                        'nationality' => $passengerData['nationality'],
+                    ]);
+                    
+                    $existingPassengerIds[] = $passenger->id;
+                } else {
+                    // Create new passenger
+                    $passenger = Passenger::create([
+                        'my_booking_id' => $booking->id,
+                        'passenger_type' => $passengerType,
+                        'title' => $passengerData['title'],
+                        'surname' => $passengerData['surname'],
+                        'given_name' => $passengerData['given_name'],
+                        'passport' => $passengerData['passport'],
+                        'dob' => $passengerData['dob'],
+                        'passport_expiry' => $passengerData['passport_expiry'],
+                        'nationality' => $passengerData['nationality'],
+                    ]);
+                    
+                    $existingPassengerIds[] = $passenger->id;
+                }
+            }
+            
+            // Delete passengers that are no longer needed
+            // This will remove any passenger that wasn't updated or created in this request
+            $booking->passengers()
+                ->whereNotIn('id', $existingPassengerIds)
+                ->delete();
+        }
+
+        // Commit the transaction
+        DB::commit();
+
+        // Redirect with success message
+        return redirect()->route('myBookings.pending')
+                        ->with('success', 'Booking updated successfully.');
+
+    } catch (\Exception $e) {
+        // Rollback the transaction in case of an error
+        DB::rollBack();
+        
+        // Return with error message
+        return redirect()->back()
+                        ->with('error', 'Failed to update booking: ' . $e->getMessage())
+                        ->withInput();
     }
+}
 
     /**
      * Remove the specified resource from storage.
