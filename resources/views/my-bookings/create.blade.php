@@ -300,7 +300,7 @@
                                 <label class="form-label">Nationality  <label class="form-label text-danger">*</label></label>
                                 <select class="form-select select2" name="passenger[${type}_${index}][nationality]" required>
                                     <option value="">Select</option>
-                                    <option value="Pakistani">Pakistani</option>
+                                    <option value="Pakistani" selected>Pakistani</option>
                                     <option value="British">British</option>
                                     <option value="American">American</option>
                                     <option value="Indian">Indian</option>

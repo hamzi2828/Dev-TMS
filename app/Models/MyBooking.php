@@ -39,7 +39,8 @@ class MyBooking extends Model
         'infants',
         'total_price',
         'booking_reference',
-        'status'
+        'status',
+        'user_id',
     ];
 
     /**

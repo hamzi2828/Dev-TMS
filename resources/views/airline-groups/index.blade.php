@@ -22,7 +22,6 @@
                         <tr>
                             <th>Sr. No.</th>
                             <th style="min-width: 150px">Dep. Date</th>
-                            <th style="min-width: 70px"></th>
                             <th>Airline</th>
                             <th style="min-width: 100px">FLT No.</th>
                             <th>Origin</th>
@@ -49,12 +48,12 @@
                                 </td>
                                 <td>
                                     @if(!empty(trim ($group->airline->file)))
-                                        <img src="{{ $group->airline->file }}" alt="Airline Logo" width="50" height="20">
+                                        <img src="{{ $group->airline->file }}" alt="Airline Logo" width="70" height="30">
                                     @else
                                         N/A
                                     @endif
                                 </td>
-                                <td>{{ $group->airline->title ?? 'N/A' }}</td>
+
                                 <td>
                                     @foreach($group->segments as $segment)
                                         <div>{{ $segment->flight_number }}</div>

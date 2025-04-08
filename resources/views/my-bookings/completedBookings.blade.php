@@ -53,7 +53,7 @@
                                 </td>
                                 <td>
                                     @if(!empty(trim($booking->airline->file)))
-                                        <img src="{{ $booking->airline->file }}" alt="Airline Logo" width="50" height="20">
+                                        <img src="{{ $booking->airline->file }}" alt="Airline Logo"  width="70" height="30">
                                     @else
                                         N/A
                                     @endif

@@ -95,6 +95,7 @@ class MyBookingController extends Controller
     public function pendingBookings(Request $request)
     {
         $query = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
+            ->latest()
             ->where('status', 'pending');
     
         // Optional: Add filters (e.g., by airline, origin, etc.) if needed
@@ -230,6 +231,7 @@ class MyBookingController extends Controller
                 'total_price' => $request->total_price,
                 'booking_reference' => $bookingReference,
                 'status' => 'pending',
+                'user_id' => auth()->user()->id,
             ]);
     
             // Process passenger data
@@ -296,11 +298,11 @@ class MyBookingController extends Controller
     
             // Redirect with success message
             return redirect()->back()
-    ->with([
-        'booking_success' => true,
-        'booking_reference' => $booking->booking_reference,
-        'payment_deadline' => now()->addHour()->format('H:i, F j, Y'),
-    ]);
+            ->with([
+                'booking_success' => true,
+                'booking_reference' => $booking->booking_reference,
+                'payment_deadline' => now()->addHour()->format('H:i, F j, Y'),
+            ]);
 
         } catch (\Exception $e) {
             // Rollback the transaction in case of an error

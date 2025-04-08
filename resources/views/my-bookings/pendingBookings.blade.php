@@ -29,7 +29,7 @@
                             <th>Baggage</th>
                             <th>Meal</th>
                             <th>Total Price</th>
-                            <th>Timer</th>
+                            <th>Expiy Time</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -54,7 +54,7 @@
                                 </td>
                                 <td>
                                     @if(!empty(trim($booking->airline->file)))
-                                        <img src="{{ $booking->airline->file }}" alt="Airline Logo" width="50" height="20">
+                                        <img src="{{ $booking->airline->file }}" alt="Airline Logo"  width="70" height="30">
                                     @else
                                         N/A
                                     @endif
