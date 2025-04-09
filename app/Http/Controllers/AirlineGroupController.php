@@ -69,6 +69,15 @@ class AirlineGroupController extends Controller
                 }
             });
         }
+
+
+        if ($request->filled('trip_type')) {
+            $query->whereHas('section', function ($query) use ($request) {
+                $query->where('trip_type', $request->trip_type);
+            });
+        }
+
+        
         // Use pagination instead of get() to enable appends()
         $airlineGroups = $query->paginate(10)->appends($request->all());
 

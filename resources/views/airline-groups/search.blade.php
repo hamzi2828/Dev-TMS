@@ -28,15 +28,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <label for="destination">Destination</label>
-                    <select name="destination" id="destination" class="form-control select2" data-allow-clear="true">>
-                        <option value="">All Destinations</option>
-                        @foreach($cities as $city)
-                            <option value="{{ $city->id }}" {{ request('destination') == $city->id ? 'selected' : '' }}>{{ $city->title }}</option>
-                        @endforeach
-                    </select>
-                </div>
+
 
                 <div class="col-md-3">
                     <label for="destination">Destination</label>
@@ -48,8 +40,17 @@
                     </select>
                 </div>
 
-                
-                <div class="col-md-Add Airline Group3">
+
+                <div class="col-md-3 mt-3">
+                    <label class="form-label" for="trip_type">Trip Type</label>
+                    <select class="form-select select2" id="trip_type" name="trip_type"  data-allow-clear="true" >
+                        <option value="">Select Trip Type</option>
+                        <option value="oneway" {{ request('trip_type') == 'oneway' ? 'selected' : '' }}>One Way</option>
+                        <option value="roundtrip" {{ request('trip_type') == 'roundtrip' ? 'selected' : '' }}>Round Trip</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 mt-3">
 
                     <button type="submit" class="btn btn-primary" style="margin-top: 22px;">Search</button>
                 </div>

@@ -120,15 +120,15 @@
                                         <h6 class="fw-bold border-bottom pb-2">Passengers</h6>
                                         <div class="mb-3">
                                             <label class="form-label">Adults</label>
-                                            <input type="number" id="adults" class="form-control" name="adults" value="{{ $booking->adults }}" min="0" max="{{ $airlineGroup->total_seats }}" required>
+                                            <input type="number" id="adults" class="form-control" name="adults" value="{{ $booking->adults }}" min="0" max="{{ $airlineGroup->total_seats }}" readonly>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Children</label>
-                                            <input type="number" id="children" class="form-control" name="children" value="{{ $booking->children }}" min="0" max="{{ $airlineGroup->total_seats }}" required>
+                                            <input type="number" id="children" class="form-control" name="children" value="{{ $booking->children }}" min="0" max="{{ $airlineGroup->total_seats }}" readonly>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Infants</label>
-                                            <input type="number" id="infants" class="form-control" name="infants" value="{{ $booking->infants }}" min="0" max="{{ $airlineGroup->total_seats }}" required>
+                                            <input type="number" id="infants" class="form-control" name="infants" value="{{ $booking->infants }}" min="0" max="{{ $airlineGroup->total_seats }}" readonly>
                                         </div>
                                     </div>
                                 </div>

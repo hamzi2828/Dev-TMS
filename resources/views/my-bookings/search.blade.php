@@ -37,7 +37,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3 mt-3">
                     <label class="form-label" for="trip_type">Trip Type</label>
                     <select class="form-select select2" id="trip_type" name="trip_type"  data-allow-clear="true" >
                         <option value="">Select Trip Type</option>
@@ -46,8 +46,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-3">
-
+                <div class="col-md-3 mt-3">
                     <button type="submit" class="btn btn-primary" style="margin-top: 22px;">Search</button>
                 </div>
             </div>

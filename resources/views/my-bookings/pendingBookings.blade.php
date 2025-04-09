@@ -18,8 +18,8 @@
                     <thead class="border-top">
                         <tr>
                             <th>Sr. No.</th>
-                            <th>Booking Ref</th>
-                            <th>Passengers</th> <!-- Add this new column -->
+                            <th style="min-width: 200px">Booking Ref</th>
+                            <th style="min-width: 250px">Passengers</th> <!-- Add this new column -->
                             <th>Departure Date</th>
                             <th>Airline</th>
                             <th>Flight No.</th>
@@ -30,7 +30,7 @@
                             <th>Baggage</th>
                             <th>Meal</th>
                             <th>Total Price</th>
-                            <th>Expiy Time</th>
+                            <th>Expiry Time</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
