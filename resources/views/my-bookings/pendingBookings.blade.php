@@ -18,8 +18,8 @@
                     <thead class="border-top">
                         <tr>
                             <th>Sr. No.</th>
-                            <th style="min-width: 200px">Booking Ref</th>
-                            <th style="min-width: 250px">Passengers</th> <!-- Add this new column -->
+                            <th style="min-width: 250px">Booking Ref</th>
+                            <th style="min-width: 250px">Passengers</th>
                             <th>Departure Date</th>
                             <th>Airline</th>
                             <th>Flight No.</th>
@@ -35,18 +35,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($myBookings as $booking)
-                            @php
-                                $group = $booking->airlineGroup;
-                            @endphp
+                        @forelse($myBookings as $booking)
+                            @php $group = $booking->airlineGroup; @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     <div><strong>{{ $booking->booking_reference }}</strong></div>
                                     <small class="text-muted">
-                                         {{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y, H:i A') }}
+                                        {{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y, H:i A') }}
                                     </small>
-                                    <div>{{ \App\Models\Agent::find($booking->user->agent_id )->name ?? 'N/A' }}</div>
+                                    <div>{{ \App\Models\Agent::find($booking->user->agent_id)->name ?? 'N/A' }}</div>
                                 </td>
                                 <td>
                                     @foreach($booking->passengers as $passenger)
@@ -60,7 +58,7 @@
                                 </td>
                                 <td>
                                     @if(!empty(trim($booking->airline->file)))
-                                        <img src="{{ $booking->airline->file }}" alt="Airline Logo"  width="70" height="30">
+                                        <img src="{{ $booking->airline->file }}" alt="Airline Logo" width="70" height="30">
                                     @else
                                         N/A
                                     @endif
@@ -111,7 +109,7 @@
                                     <span id="timer-{{ $booking->id }}" class="badge bg-success fs-6">Loading...</span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('myBookings.confirmBooking', ['id' => $booking->id]) }}" class="btn btn-sm btn-info" style="width: 70px;">
+                                    <a href="javascript:void(0)" onclick="confirmWithPNR('{{ route('myBookings.confirmBooking', ['id' => $booking->id, 'pnr' => '']) }}')" class="btn btn-sm btn-info" style="width: 70px;">
                                         Confirm
                                     </a>
                                     <a href="{{ route('myBookings.canceleBooking', ['id' => $booking->id]) }}" class="btn btn-sm btn-danger mt-1" style="width: 70px;">
@@ -122,7 +120,11 @@
                                     </a>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="15" class="text-center">No bookings found.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -138,11 +140,20 @@
 
     @push('scripts')
     <script>
+        function confirmWithPNR(baseUrl) {
+            let pnr = prompt("Please enter the Airline PNR:");
+            if (pnr !== null && pnr.trim() !== "") {
+                window.location.href = baseUrl + encodeURIComponent(pnr);
+            } else {
+                alert("PNR is required to confirm the booking.");
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             @foreach($myBookings as $booking)
                 (function () {
                     let createdAt = new Date("{{ $booking->created_at }}").getTime();
-                    let endTime = createdAt + 60 * 60 * 1000; // 1 hour later
+                    let endTime = createdAt + 60 * 60 * 1000;
                     let timerId = "timer-{{ $booking->id }}";
 
                     let interval = setInterval(() => {

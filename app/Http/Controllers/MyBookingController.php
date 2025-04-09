@@ -170,10 +170,18 @@ class MyBookingController extends Controller
     }
     public function confirmBookings(Request $request)
     {
-        // Change the status of the booking to 'confirmed' and redirect back with a success message
         $booking = MyBooking::find($request->id);
         $booking->status = 'confirmed';
+
+        $pnr = $request->pnr;
+
+        if (MyBooking::where('pnr', $pnr)->exists()) {
+            return redirect()->back()->with('error', 'PNR already exists');
+        }
+
+        $booking->pnr = $pnr;
         $booking->save();
+
         return redirect()->back()->with('success', 'Booking confirmed successfully');
     }
 

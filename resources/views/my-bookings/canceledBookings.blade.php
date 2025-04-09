@@ -18,8 +18,8 @@
                     <thead class="border-top">
                         <tr>
                             <th>Sr. No.</th>
-                            <th>Booking Ref</th>
-                            <th>Passenger</th>
+                            <th style="min-width: 200px">Booking Ref</th>
+                            <th style="min-width: 250px">Passengers</th>
                             <th>Departure Date</th>
                             <th>Airline</th>
                             <th>Flight No.</th>
@@ -43,8 +43,9 @@
                                 <td>
                                     <div><strong>{{ $booking->booking_reference }}</strong></div>
                                     <small class="text-muted">
-                                         {{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y, H:i A') }}
+                                        {{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y, H:i A') }}
                                     </small>
+                                    <div>{{ \App\Models\Agent::find($booking->user->agent_id)->name ?? 'N/A' }}</div>
                                 </td>
                                 <td>
                                     @foreach($booking->passengers as $passenger)
