@@ -161,7 +161,7 @@ class MyBookingController extends Controller
         $airlines = Airline::all();
         $cities = City::all();
     
-        $data['title'] = 'My Canceled Bookings';
+        $data['title'] = 'My Confirmed Bookings';
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;

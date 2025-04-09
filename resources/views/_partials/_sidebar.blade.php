@@ -73,7 +73,7 @@
                         </li>
                         <li class="menu-item {{ request()->routeIs('myBookings.completed') ? 'active' : '' }}">
                             <a href="{{ route('myBookings.completed') }}" class="menu-link">
-                                <div data-i18n="Completed Booking">Completed Booking</div>
+                                <div data-i18n="Confirmed Booking">Confirmed Booking</div>
                             </a>
                         
                     {{-- @endcan --}}

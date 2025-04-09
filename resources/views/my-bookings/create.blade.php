@@ -427,9 +427,9 @@
                     return false;
                 }
                 
-                if (infants > adults) {
+                if (adults < 1) {
                     e.preventDefault();
-                    alert('Number of infants cannot exceed number of adults.');
+                    alert('At least 1 adult is mandatory.');
                     return false;
                 }
                 
