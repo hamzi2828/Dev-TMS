@@ -9,7 +9,7 @@ use App\Models\Passenger;
 use Illuminate\Support\Facades\DB;
 use App\Models\Airline;
 use App\Models\City;
-
+use App\Models\Section;
 
 class MyBookingController extends Controller
 {
@@ -94,7 +94,7 @@ class MyBookingController extends Controller
         $cities = \App\Models\City::all(); // Fetch all cities for the dropdown
 
         // Prepare data for the view
-        $data['title'] = 'My Booking';
+        $data['title'] = 'All Booking';
         $data['airlineGroups'] = $airlineGroups;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities; // Pass the cities to the view

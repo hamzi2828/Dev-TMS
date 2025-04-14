@@ -8,7 +8,7 @@ use App\Services\SectionService;
 use App\Services\AgentService;
 use App\Services\CompanyService;
 use App\Services\CityService;
-use App\Models\Segment;
+use App\Models\Section;
 use App\Models\AirlineGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -87,7 +87,7 @@ class AirlineGroupController extends Controller
 
         // Prepare the data for the view
         return view('airline-groups.index', [
-            'title' => 'Airline Groups',
+            'title' => 'All Airline Groups',
             'airlineGroups' => $airlineGroups,
             'airlines' => $airlines,
             'cities' => $cities,
