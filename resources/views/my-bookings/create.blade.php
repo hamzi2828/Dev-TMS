@@ -24,7 +24,7 @@
                         <strong>{{ session('payment_deadline') }}</strong><br>
                         to guarantee your booking.
                     </p>
-                    <button class="btn btn-primary mt-3" data-bs-dismiss="modal">OK</button>
+                    <button class="btn btn-primary mt-3" data-bs-dismiss="modal" onclick="window.location.href='{{ route('myBookings.index') }}'">OK</button>
                 </div>
             </div>
         </div>

@@ -112,7 +112,7 @@
                                     <a href="javascript:void(0)" onclick="confirmWithPNR('{{ route('myBookings.confirmBooking', ['id' => $booking->id, 'pnr' => '']) }}')" class="btn btn-sm btn-info" style="width: 70px;">
                                         Confirm
                                     </a>
-                                    <a href="{{ route('myBookings.canceleBooking', ['id' => $booking->id]) }}" class="btn btn-sm btn-danger mt-1" style="width: 70px;">
+                                    <a href="javascript:void(0)" onclick="confirmCancel('{{ route('myBookings.canceleBooking', ['id' => $booking->id]) }}')" class="btn btn-sm btn-danger mt-1" style="width: 70px;">
                                         Cancel
                                     </a>
                                     <a href="{{ route('myBookings.edit', ['myBooking' => $booking->id]) }}" class="btn btn-sm btn-primary mt-1" style="width: 70px;">
@@ -146,6 +146,12 @@
                 window.location.href = baseUrl + encodeURIComponent(pnr);
             } else {
                 alert("PNR is required to confirm the booking.");
+            }
+        }
+
+        function confirmCancel(url) {
+            if (confirm("Are you sure you want to cancel this booking?")) {
+                window.location.href = url;
             }
         }
 
