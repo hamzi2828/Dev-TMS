@@ -26,7 +26,7 @@ class AirlineGroupController extends Controller
                 $query->whereDate('departure_date', '<', $request->departure_date);
             });
         }
-        
+
 
         if ($request->has('airline') && $request->airline) {
             $query->where('airline_id', $request->airline);
@@ -43,14 +43,14 @@ class AirlineGroupController extends Controller
                     $cityIds = \App\Models\City::where('title', 'like', '%' . $request->origin . '%')
                         ->pluck('id')
                         ->toArray();
-                    
+
                     if (!empty($cityIds)) {
                         $query->whereIn('origin', $cityIds);
                     }
                 }
             });
         }
-    
+
         if ($request->has('destination') && $request->destination) {
             // Handle the case where destination is already a numeric ID
             $query->whereHas('segments', function ($query) use ($request) {
@@ -62,7 +62,7 @@ class AirlineGroupController extends Controller
                     $cityIds = \App\Models\City::where('title', 'like', '%' . $request->destination . '%')
                         ->pluck('id')
                         ->toArray();
-                    
+
                     if (!empty($cityIds)) {
                         $query->whereIn('destination', $cityIds);
                     }
@@ -77,7 +77,7 @@ class AirlineGroupController extends Controller
             });
         }
 
-        
+
         // Use pagination instead of get() to enable appends()
         $airlineGroups = $query->paginate(10)->appends($request->all());
 
@@ -117,17 +117,24 @@ class AirlineGroupController extends Controller
                 'sector_id' => 'required|exists:sections,id',
                 'company_id' => 'required|exists:companies,id',
 
+                'basic_per_adult' => 'nullable|numeric',
+                'tax_per_adult' => 'nullable|numeric',
                 'cost_per_adult' => 'nullable|numeric',
                 'sale_per_adult' => 'nullable|numeric',
+
+                'basic_per_child' => 'nullable|numeric',
+                'tax_per_child' => 'nullable|numeric',
                 'cost_per_child' => 'nullable|numeric',
                 'sale_per_child' => 'nullable|numeric',
+
+                'basic_per_infant' => 'nullable|numeric',
+                'tax_per_infant' => 'nullable|numeric',
                 'cost_per_infant' => 'nullable|numeric',
                 'sale_per_infant' => 'nullable|numeric',
 
                 'total_seats' => 'required|integer',
                 'admin_seats' => 'nullable|integer',
-                'travel_agent_id' => 'nullable|exists:agents,id',
-                'travel_agent_seats' => 'nullable|integer',
+
 
                 'segments' => 'required|array|min:1',
                 'segments.*.departure_date' => 'required|date',
@@ -148,16 +155,21 @@ class AirlineGroupController extends Controller
                 'airline_id' => $validated['airline_id'],
                 'sector_id' => $validated['sector_id'],
                 'company_id' => $validated['company_id'],
-                'cost_per_adult' => $request->cost_per_adult,
-                'sale_per_adult' => $request->sale_per_adult,
-                'cost_per_child' => $request->cost_per_child,
-                'sale_per_child' => $request->sale_per_child,
-                'cost_per_infant' => $request->cost_per_infant,
-                'sale_per_infant' => $request->sale_per_infant,
-                'total_seats' => $request->total_seats,
-                'admin_seats' => $request->admin_seats,
-                'travel_agent_id' => $request->travel_agent_id,
-                'travel_agent_seats' => $request->travel_agent_seats,
+                'basic_per_adult' => $validated['basic_per_adult'],
+                'tax_per_adult' => $validated['tax_per_adult'],
+                'cost_per_adult' => $validated['cost_per_adult'],
+                'sale_per_adult' => $validated['sale_per_adult'],
+                'basic_per_child' => $validated['basic_per_child'],
+                'tax_per_child' => $validated['tax_per_child'],
+                'cost_per_child' => $validated['cost_per_child'],
+                'sale_per_child' => $validated['sale_per_child'],
+                'basic_per_infant' => $validated['basic_per_infant'],
+                'tax_per_infant' => $validated['tax_per_infant'],
+                'cost_per_infant' => $validated['cost_per_infant'],
+                'sale_per_infant' => $validated['sale_per_infant'],
+                'total_seats' => $validated['total_seats'],
+                'admin_seats' => $validated['admin_seats'],
+
             ]);
 
             foreach ($validated['segments'] as $segment) {
@@ -210,6 +222,7 @@ class AirlineGroupController extends Controller
                 'segments.*.baggage' => 'nullable|string|max:255',
                 'segments.*.meal' => 'nullable|string|max:255',
                 'segments.*.id' => 'nullable|integer|exists:segments,id'
+
             ]);
 
             DB::beginTransaction();
@@ -219,10 +232,16 @@ class AirlineGroupController extends Controller
                 'airline_id' => $validated['airline_id'],
                 'sector_id' => $validated['sector_id'],
                 'company_id' => $request->company_id,
+                'basic_per_adult' => $request->basic_per_adult,
+                'tax_per_adult' => $request->tax_per_adult,
                 'cost_per_adult' => $request->cost_per_adult,
                 'sale_per_adult' => $request->sale_per_adult,
+                'basic_per_child' => $request->basic_per_child,
+                'tax_per_child' => $request->tax_per_child,
                 'cost_per_child' => $request->cost_per_child,
                 'sale_per_child' => $request->sale_per_child,
+                'basic_per_infant' => $request->basic_per_infant,
+                'tax_per_infant' => $request->tax_per_infant,
                 'cost_per_infant' => $request->cost_per_infant,
                 'sale_per_infant' => $request->sale_per_infant,
                 'total_seats' => $request->total_seats,
