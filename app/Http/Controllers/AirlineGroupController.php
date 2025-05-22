@@ -146,6 +146,7 @@ class AirlineGroupController extends Controller
                 'segments.*.arrival_time' => 'required|date_format:H:i',
                 'segments.*.baggage' => 'nullable|string|max:255',
                 'segments.*.meal' => 'nullable|in:yes,no',
+                 'expire_datetime' => 'required|date_format:Y-m-d\TH:i',
             ]);
 
             DB::beginTransaction();
@@ -169,7 +170,7 @@ class AirlineGroupController extends Controller
                 'sale_per_infant' => $validated['sale_per_infant'],
                 'total_seats' => $validated['total_seats'],
                 'admin_seats' => $validated['admin_seats'],
-
+                'expire_datetime' => $validated['expire_datetime'],
             ]);
 
             foreach ($validated['segments'] as $segment) {
@@ -221,9 +222,10 @@ class AirlineGroupController extends Controller
                 'segments.*.arrival_time' => 'required|string|max:255',
                 'segments.*.baggage' => 'nullable|string|max:255',
                 'segments.*.meal' => 'nullable|string|max:255',
-                'segments.*.id' => 'nullable|integer|exists:segments,id'
-
+                'segments.*.id' => 'nullable|integer|exists:segments,id',
+                'expire_datetime' => 'required|date_format:Y-m-d\TH:i',
             ]);
+
 
             DB::beginTransaction();
 
@@ -246,6 +248,7 @@ class AirlineGroupController extends Controller
                 'sale_per_infant' => $request->sale_per_infant,
                 'total_seats' => $request->total_seats,
                 'admin_seats' => $request->admin_seats,
+                'expire_datetime' => $request->expire_datetime,
             ]);
 
             $existingSegmentIds = $airlineGroup->segments()->pluck('id')->toArray();

@@ -125,6 +125,10 @@
                                     <label class="form-label" for="admin_seats">Seats Allocation for Admin</label>
                                     <input type="number" class="form-control" name="admin_seats" value="{{ $airlineGroup->admin_seats }}" required>
                                 </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="expire_datetime">Expire Date Time</label>
+                                    <input type="datetime-local" class="form-control" name="expire_datetime" value="{{ $airlineGroup->expire_datetime }}" required>
+                                </div>
                             </div>
 
                             <div id="segments-container">

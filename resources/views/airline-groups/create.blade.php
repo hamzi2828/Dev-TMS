@@ -107,6 +107,11 @@
                                     <label class="form-label" for="admin_seats">Seats Allocation for Admin</label>
                                     <input type="number" class="form-control" id="admin_seats" name="admin_seats" required>
                                 </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="expire_datetime">Expire Date Time</label>
+                                    <input type="datetime-local" class="form-control" id="expire_datetime" name="expire_datetime" required>
+                                </div>
+
                             </div>
                             </div>
 
