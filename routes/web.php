@@ -61,14 +61,15 @@
         } );
         Route ::resource ( 'myBookings', MyBookingController::class );
         Route ::resource ( 'airlineGroups', AirlineGroupController::class );
+        Route::get('/myBookings2', [MyBookingController::class, 'myBookings2'])->name('myBookings2');
         Route::get('/pending-Bookings', [MyBookingController::class, 'pendingBookings'])->name('myBookings.pending');
         Route::get('/canceled-Bookings', [MyBookingController::class, 'canceledBookings'])->name('myBookings.canceled');
         Route::get('/completed-Bookings', [MyBookingController::class, 'completedBookings'])->name('myBookings.completed');
         Route::get('/confirm-Bookings', [MyBookingController::class, 'confirmBookings'])->name('myBookings.confirmBooking');
         Route::get('/cancel-Bookings', [MyBookingController::class, 'cancelBookings'])->name('myBookings.canceleBooking');
 
-        
-        
+
+
 
 
         Route ::prefix ( 'accounts' ) -> group ( function () {

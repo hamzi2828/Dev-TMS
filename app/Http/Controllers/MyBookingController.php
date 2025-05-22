@@ -31,7 +31,7 @@ class MyBookingController extends Controller
                 $query->whereDate('departure_date', '<', $request->departure_date);
             });
         }
-        
+
 
         if ($request->has('airline') && $request->airline) {
             $query->where('airline_id', $request->airline);
@@ -48,14 +48,14 @@ class MyBookingController extends Controller
                     $cityIds = \App\Models\City::where('title', 'like', '%' . $request->origin . '%')
                         ->pluck('id')
                         ->toArray();
-                    
+
                     if (!empty($cityIds)) {
                         $query->whereIn('origin', $cityIds);
                     }
                 }
             });
         }
-    
+
         if ($request->has('destination') && $request->destination) {
             // Handle the case where destination is already a numeric ID
             $query->whereHas('segments', function ($query) use ($request) {
@@ -67,25 +67,25 @@ class MyBookingController extends Controller
                     $cityIds = \App\Models\City::where('title', 'like', '%' . $request->destination . '%')
                         ->pluck('id')
                         ->toArray();
-                    
+
                     if (!empty($cityIds)) {
                         $query->whereIn('destination', $cityIds);
                     }
                 }
             });
         }
- 
+
 
         if ($request->filled('trip_type')) {
             $query->whereHas('section', function ($query) use ($request) {
                 $query->where('trip_type', $request->trip_type);
             });
         }
-        
-        
-        
 
-    
+
+
+
+
         // Get the filtered airline groups with pagination
         $airlineGroups = $query->paginate(10);
 
@@ -103,27 +103,113 @@ class MyBookingController extends Controller
     }
 
 
+    public function myBookings2(Request $request)
+    {
+        // Get current date for comparison
+        $currentDate = now();
+
+        $query = AirlineGroup::with(['segments', 'airline'])
+            ->where('total_seats', '>', 0); // Filter for total_seats > 0
+
+        // Apply filters
+
+        if ($request->has('departure_date') && $request->departure_date) {
+            $query->whereDoesntHave('segments', function ($query) use ($request) {
+                $query->whereDate('departure_date', '<', $request->departure_date);
+            });
+        }
+
+
+        if ($request->has('airline') && $request->airline) {
+            $query->where('airline_id', $request->airline);
+        }
+
+        if ($request->has('origin') && $request->origin) {
+            // Handle the case where origin is already a numeric ID
+            $query->whereHas('segments', function ($query) use ($request) {
+                // Check if it's a numeric value (direct ID)
+                if (is_numeric($request->origin)) {
+                    $query->where('origin', $request->origin);
+                } else {
+                    // Try to find matching cities by name
+                    $cityIds = \App\Models\City::where('title', 'like', '%' . $request->origin . '%')
+                        ->pluck('id')
+                        ->toArray();
+
+                    if (!empty($cityIds)) {
+                        $query->whereIn('origin', $cityIds);
+                    }
+                }
+            });
+        }
+
+        if ($request->has('destination') && $request->destination) {
+            // Handle the case where destination is already a numeric ID
+            $query->whereHas('segments', function ($query) use ($request) {
+                // Check if it's a numeric value (direct ID)
+                if (is_numeric($request->destination)) {
+                    $query->where('destination', $request->destination);
+                } else {
+                    // Try to find matching cities by name
+                    $cityIds = \App\Models\City::where('title', 'like', '%' . $request->destination . '%')
+                        ->pluck('id')
+                        ->toArray();
+
+                    if (!empty($cityIds)) {
+                        $query->whereIn('destination', $cityIds);
+                    }
+                }
+            });
+        }
+
+
+        if ($request->filled('trip_type')) {
+            $query->whereHas('section', function ($query) use ($request) {
+                $query->where('trip_type', $request->trip_type);
+            });
+        }
+
+
+
+
+
+        // Get the filtered airline groups with pagination
+        $airlineGroups = $query->paginate(10);
+
+        // Get all airlines and cities for the filter dropdowns
+        $airlines = Airline::all();
+        $cities = \App\Models\City::all(); // Fetch all cities for the dropdown
+
+        // Prepare data for the view
+        $data['title'] = 'All Booking';
+        $data['airlineGroups'] = $airlineGroups;
+        $data['airlines'] = $airlines;
+        $data['cities'] = $cities; // Pass the cities to the view
+
+        return view('my-bookings.myBookings2', $data);
+    }
+
     public function pendingBookings(Request $request)
     {
         $query = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
             ->latest()
             ->where('status', 'pending');
-    
+
         // Optional: Add filters (e.g., by airline, origin, etc.) if needed
-    
+
         $myBookings = $query->paginate(10);
-    
+
         $airlines = Airline::all();
         $cities = City::all();
-    
+
         $data['title'] = 'My Pending Bookings';
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
-    
+
         return view('my-bookings.pendingBookings', $data);
     }
-    
+
 
 
     public function canceledBookings(Request $request)
@@ -133,17 +219,17 @@ class MyBookingController extends Controller
             ->where('status', 'cancelled');
 
 
-    
+
         $myBookings = $query->paginate(10);
-    
+
         $airlines = Airline::all();
         $cities = City::all();
-    
+
         $data['title'] = 'My Canceled Bookings';
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
-    
+
         return view('my-bookings.canceledBookings', $data);
     }
 
@@ -155,17 +241,17 @@ class MyBookingController extends Controller
             ->where('status', 'confirmed');
 
 
-    
+
         $myBookings = $query->paginate(10);
-    
+
         $airlines = Airline::all();
         $cities = City::all();
-    
+
         $data['title'] = 'My Confirmed Bookings';
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
-    
+
         return view('my-bookings.completedBookings', $data);
     }
     public function confirmBookings(Request $request)
@@ -241,10 +327,10 @@ class MyBookingController extends Controller
             'passenger.child_*' => 'required_if:children,>,0',
             'passenger.infant_*' => 'required_if:infants,>,0',
         ]);
-    
+
         // Start a database transaction
         DB::beginTransaction();
-    
+
         try {
                 $airlineCode = Airline::findOrFail($request->airline_id)->code;
                 $lastBookingRef = MyBooking::whereYear('created_at', date('Y'))
@@ -252,9 +338,9 @@ class MyBookingController extends Controller
                 ->whereDay('created_at', date('d'))
                 ->latest()
                 ->first();
-            
+
             $datePrefix = date('Ymd');
-            
+
             if ($lastBookingRef) {
                 // Extract the last 3 digits from the booking reference
                 $lastSequence = (int)substr($lastBookingRef->booking_reference, -3);
@@ -262,9 +348,9 @@ class MyBookingController extends Controller
             } else {
                 $nextSequence = '001';
             }
-            
+
             $bookingRef = $airlineCode . $datePrefix . $nextSequence;
-        
+
             // Create the booking
             $booking = MyBooking::create([
                 'airline_id' => $request->airline_id,
@@ -278,11 +364,11 @@ class MyBookingController extends Controller
                 'status' => 'pending',
                 'user_id' => auth()->user()->id,
             ]);
-    
+
             // Process passenger data
             if ($request->has('passenger')) {
                 $passengers = $request->passenger;
-    
+
                 // Process adult passengers
                 for ($i = 1; $i <= $request->adults; $i++) {
                     if (isset($passengers['adult_' . $i])) {
@@ -300,7 +386,7 @@ class MyBookingController extends Controller
                         ]);
                     }
                 }
-    
+
                 // Process child passengers
                 for ($i = 1; $i <= $request->children; $i++) {
                     if (isset($passengers['child_' . $i])) {
@@ -318,7 +404,7 @@ class MyBookingController extends Controller
                         ]);
                     }
                 }
-    
+
                 // Process infant passengers
                 for ($i = 1; $i <= $request->infants; $i++) {
                     if (isset($passengers['infant_' . $i])) {
@@ -337,10 +423,10 @@ class MyBookingController extends Controller
                     }
                 }
             }
-    
+
             // Commit the transaction
             DB::commit();
-    
+
             // Redirect with success message
             return redirect()->back()
             ->with([
@@ -352,7 +438,7 @@ class MyBookingController extends Controller
         } catch (\Exception $e) {
             // Rollback the transaction in case of an error
             DB::rollBack();
-            
+
             // Return with error message
             return redirect()->back()
                 ->with('error', 'Failed to create booking: ' . $e->getMessage())
@@ -376,16 +462,16 @@ class MyBookingController extends Controller
         // Find the booking with related data
         $booking = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
             ->findOrFail($id);
-        
+
         // Get the airline group details for the booking
         $airlineGroup = AirlineGroup::with(['segments', 'airline'])
             ->find($booking->airline_group_id);
-        
+
         // Prepare data for the view
         $data['title'] = 'Edit Booking';
         $data['booking'] = $booking;
         $data['airlineGroup'] = $airlineGroup;
-        
+
         // Return the edit view with the data
         return view('my-bookings.edit', $data);
     }
@@ -417,7 +503,7 @@ class MyBookingController extends Controller
         try {
             // Find the booking
             $booking = MyBooking::findOrFail($id);
-            
+
             // Update basic booking details
             $booking->update([
                 'adults' => $request->adults,
@@ -430,12 +516,12 @@ class MyBookingController extends Controller
             if ($request->has('passenger')) {
                 $passengers = $request->passenger;
                 $existingPassengerIds = [];
-                
+
                 // Process all passengers regardless of type
                 foreach ($passengers as $key => $passengerData) {
                     // Extract passenger type from the key (adult, child, infant)
                     $passengerType = explode('_', $key)[0];
-                    
+
                     if (isset($passengerData['id'])) {
                         // Update existing passenger
                         $passenger = Passenger::findOrFail($passengerData['id']);
@@ -448,7 +534,7 @@ class MyBookingController extends Controller
                             'passport_expiry' => $passengerData['passport_expiry'],
                             'nationality' => $passengerData['nationality'],
                         ]);
-                        
+
                         $existingPassengerIds[] = $passenger->id;
                     } else {
                         // Create new passenger
@@ -463,11 +549,11 @@ class MyBookingController extends Controller
                             'passport_expiry' => $passengerData['passport_expiry'],
                             'nationality' => $passengerData['nationality'],
                         ]);
-                        
+
                         $existingPassengerIds[] = $passenger->id;
                     }
                 }
-                
+
                 // Delete passengers that are no longer needed
                 // This will remove any passenger that wasn't updated or created in this request
                 $booking->passengers()
@@ -485,7 +571,7 @@ class MyBookingController extends Controller
         } catch (\Exception $e) {
             // Rollback the transaction in case of an error
             DB::rollBack();
-            
+
             // Return with error message
             return redirect()->back()
                             ->with('error', 'Failed to update booking: ' . $e->getMessage())
