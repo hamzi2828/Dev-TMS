@@ -1,5 +1,5 @@
 <x-dashboard :title="$title">
-  
+
     <style>
         .table:not(.table-dark) thead:not(.table-dark) th {
             color: white;
@@ -16,7 +16,7 @@
                     </div>
                     <h4 class="fw-bold">Booking Success</h4>
                     <p class="mt-2">
-                        This is to inform you that your ticket reservation has been successfully placed 
+                        This is to inform you that your ticket reservation has been successfully placed
                         <strong>ON HOLD</strong>.
                     </p>
                     <p>
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Auto-show modal -->
     <script>
         window.addEventListener('DOMContentLoaded', function () {
@@ -38,7 +38,7 @@
         });
     </script>
     @endif
-    
+
     <div class="container-p-x flex-grow-1 container-p-y">
         @include('_partials.errors.validation-errors')
         <div class="row">
@@ -74,16 +74,14 @@
                                             <th style="min-width: 150px">Dep. Date</th>
                                             <th>Airline</th>
                                             <th style="min-width: 70px">Flight</th>
-                                            <th>Origin</th>
-                                            <th>Destination</th>
-                                            <th>Dep. Time</th>
-                                            <th style="max-width: 120px"> Arrival Time</th>
+                                            <th style="min-width: 180px">Origin - Dest.</th>
+                                            <th style="min-width: 120px">Dep - Arr.</th>
                                             <th>Baggage</th>
                                             <th>Meal</th>
-                                            <th style="max-width: 100px"> Total Seats</th>
-                                            <th style="max-width: 100px">Price Adult</th>
-                                            <th>Price Child</th>
-                                            <th>Price Infant</th>
+                                            <th style="max-width: 100px">Seats</th>
+                                            <th style="max-width: 100px">Adult</th>
+                                            <th>Child</th>
+                                            <th>Infant</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -101,24 +99,15 @@
                                             </td>
                                             <td>
                                                 @foreach($airlineGroup->segments as $segment)
-                                                    <div>{{ \App\Models\City::find($segment->origin)->title ?? 'N/A' }}</div>
+                                                    <div>{{ \App\Models\City::find($segment->origin)->title ?? 'N/A' }} - {{ \App\Models\City::find($segment->destination)->title ?? 'N/A' }}</div>
                                                 @endforeach
                                             </td>
                                             <td>
                                                 @foreach($airlineGroup->segments as $segment)
-                                                    <div>{{ \App\Models\City::find($segment->destination)->title ?? 'N/A' }}</div>
+                                                    <div>{{ \Carbon\Carbon::parse($segment->departure_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i') }}</div>
                                                 @endforeach
                                             </td>
-                                            <td>
-                                                @foreach($airlineGroup->segments as $segment)
-                                                    <div>{{ \Carbon\Carbon::parse($segment->departure_time)->format('H:i') }}</div>
-                                                @endforeach
-                                            </td>
-                                            <td>
-                                                @foreach($airlineGroup->segments as $segment)
-                                                    <div>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i')  }}</div>
-                                                @endforeach
-                                            </td>
+
                                             <td>
                                                 @foreach($airlineGroup->segments as $segment)
                                                     <div>{{ $segment->baggage }}</div>
@@ -129,7 +118,7 @@
                                                     <div>{{ ucfirst($segment->meal) }}</div>
                                                 @endforeach
                                             </td>
-                                            <td>{{ $airlineGroup->total_seats }}</td>
+                                            <td>{{ ($airlineGroup->total_seats ?? 0) - ($airlineGroup->used_seats ?? 0) }}</td>
                                             <td>{{ number_format($airlineGroup->sale_per_adult, 2) }}</td>
                                             <td>{{ number_format($airlineGroup->sale_per_child, 2) }}</td>
                                             <td>{{ number_format($airlineGroup->sale_per_infant, 2) }}</td>
@@ -240,23 +229,23 @@
             const adultPrice = {{ $airlineGroup->sale_per_adult ?? 0 }};
             const childPrice = {{ $airlineGroup->sale_per_child ?? 0 }};
             const infantPrice = {{ $airlineGroup->sale_per_infant ?? 0 }};
-            const totalSeatsAvailable = {{ $airlineGroup->total_seats ?? 0 }};
-            
+            const totalSeatsAvailable = {{ $airlineGroup->total_seats - $airlineGroup->used_seats }};
+
             function formatCurrency(amount) {
-                return new Intl.NumberFormat('en-PK', { 
-                    style: 'currency', 
+                return new Intl.NumberFormat('en-PK', {
+                    style: 'currency',
                     currency: 'PKR',
                     minimumFractionDigits: 0,
-                    maximumFractionDigits: 0 
+                    maximumFractionDigits: 0
                 }).format(amount).replace('PKR', 'PKR ');
             }
-            
+
             function createSectionHeader(label) {
                 return `<hr><h5 class="mt-4 mb-3 fw-bold">${label}</h5>`;
             }
-    
+
             function createPassengerRow(index, type) {
-                const titleOptions = type === 'infant' ? 
+                const titleOptions = type === 'infant' ?
                     `<option value="">Select</option>
                      <option value="Master">Master</option>
                      <option value="Miss">Miss</option>` :
@@ -264,7 +253,7 @@
                      <option value="Mr.">Mr.</option>
                      <option value="Mrs.">Mrs.</option>
                      <option value="Ms.">Ms.</option>`;
-                
+
                 return `<div class="row mb-3">
                             <div class="col-md-1" style="max-width: 70px;">
                                 <label class="form-label">Sr #</label>
@@ -311,35 +300,35 @@
                             </div>
                         </div>`;
             }
-    
+
             function updatePriceSummary() {
                 const adults = parseInt($('#adults').val()) || 0;
                 const children = parseInt($('#children').val()) || 0;
                 const infants = parseInt($('#infants').val()) || 0;
-                
+
                 // Update seat counts
                 $('#adult-seats').text(adults);
                 $('#child-seats').text(children);
                 $('#infant-seats').text(infants);
                 $('#total-seats').text(adults + children + infants);
-                
+
                 // Calculate and update totals
                 const adultTotal = adults * adultPrice;
                 const childTotal = children * childPrice;
                 const infantTotal = infants * infantPrice;
                 const grandTotal = adultTotal + childTotal + infantTotal;
-                
+
                 $('#adult-total').text(formatCurrency(adultTotal));
                 $('#child-total').text(formatCurrency(childTotal));
                 $('#infant-total').text(formatCurrency(infantTotal));
                 $('#grand-total').text(formatCurrency(grandTotal));
                 $('#total_price').val(grandTotal);
-                
+
                 // Validate total passengers against available seats
                 const totalPassengers = adults + children + infants;
                 if (totalPassengers > totalSeatsAvailable) {
                     alert(`You can only book up to ${totalSeatsAvailable} seats. Please adjust your selection.`);
-                    
+
                     // Reset to valid values
                     $('#adults').val(0);
                     $('#children').val(0);
@@ -347,7 +336,7 @@
                     updatePriceSummary();
                     return false;
                 }
-                
+
                 // Validate infants against adults (usually 1 infant per adult)
                 // if (infants > adults) {
                 //     alert('Number of infants cannot exceed number of adults. Please adjust your selection.');
@@ -355,87 +344,87 @@
                 //     updatePriceSummary();
                 //     return false;
                 // }
-                
+
                 return true;
             }
-            
+
             function addPassengerRows(adults, children, infants) {
                 if (!updatePriceSummary()) {
                     return;
                 }
-                
+
                 let rows = '';
-    
+
                 if (adults > 0) {
                     rows += createSectionHeader("Adult Passengers");
                     for (let i = 1; i <= adults; i++) {
                         rows += createPassengerRow(i, 'adult');
                     }
                 }
-    
+
                 if (children > 0) {
                     rows += createSectionHeader("Child Passengers");
                     for (let i = 1; i <= children; i++) {
                         rows += createPassengerRow(i, 'child');
                     }
                 }
-    
+
                 if (infants > 0) {
                     rows += createSectionHeader("Infant Passengers");
                     for (let i = 1; i <= infants; i++) {
                         rows += createPassengerRow(i, 'infant');
                     }
                 }
-    
+
                 $('#passenger-details').html(rows);
-    
+
                 // Re-initialize select2 after DOM update
                 $('.select2').select2({
                     width: '100%'
                 });
-                
+
                 // Initialize flatpickr for date inputs
                 $('.flatpickr-basic').flatpickr({
                     dateFormat: 'Y-m-d',
                     allowInput: true
                 });
             }
-    
+
             $('#adults, #children, #infants').on('change', function () {
                 const adults = parseInt($('#adults').val()) || 0;
                 const children = parseInt($('#children').val()) || 0;
                 const infants = parseInt($('#infants').val()) || 0;
                 addPassengerRows(adults, children, infants);
             });
-            
+
             // Form validation before submission
             $('form').on('submit', function(e) {
                 const adults = parseInt($('#adults').val()) || 0;
                 const children = parseInt($('#children').val()) || 0;
                 const infants = parseInt($('#infants').val()) || 0;
                 const totalPassengers = adults + children + infants;
-                
+
                 if (totalPassengers === 0) {
                     e.preventDefault();
                     alert('Please select at least one passenger.');
                     return false;
                 }
-                
+
                 if (totalPassengers > totalSeatsAvailable) {
                     e.preventDefault();
                     alert(`You can only book up to ${totalSeatsAvailable} seats. Please adjust your selection.`);
                     return false;
                 }
-                
+
                 if (adults < 1) {
                     e.preventDefault();
                     alert('At least 1 adult is mandatory.');
                     return false;
                 }
-                
+
                 return true;
             });
-    
+
             // Initial load
             updatePriceSummary();
             addPassengerRows(

@@ -43,9 +43,9 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mt-5">
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="basic_per_adult">Basic Fair Per Adult</label>
+                                    <label class="form-label" for="basic_per_adult">Basic Fare Per Adult</label>
                                     <input type="number" step="0.01" class="form-control" id="basic_per_adult" name="basic_per_adult" onchange="calculateCost('adult')" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
@@ -63,7 +63,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="basic_per_child">Basic Fair Per Child</label>
+                                    <label class="form-label" for="basic_per_child">Basic Fare Per Child</label>
                                     <input type="number" step="0.01" class="form-control" id="basic_per_child" name="basic_per_child" onchange="calculateCost('child')">
                                 </div>
 
@@ -82,7 +82,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="basic_per_infant">Basic Fair Per Infant</label>
+                                    <label class="form-label" for="basic_per_infant">Basic Fare Per Infant</label>
                                     <input type="number" step="0.01" class="form-control" id="basic_per_infant" name="basic_per_infant" onchange="calculateCost('infant')">
                                 </div>
                                 <div class="col-md-3 mb-3">

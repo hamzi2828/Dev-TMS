@@ -24,16 +24,15 @@
                             <th style="min-width: 150px">Dep. Date</th>
                             <th>Airline</th>
                             <th style="min-width: 100px">FLT No.</th>
-                            <th>Origin</th>
-                            <th>Destination</th>
-                            <th>Dep. Time</th>
-                            <th>Arrival Time</th>
-                            <th>Baggage</th>
-                            <th>Meal</th>
-                            <th>Total Seats</th>
-                            <th>Price Adult</th>
-                            <th>Price Child</th>
-                            <th>Price Infant</th>
+                            <th style="min-width: 180px">Origin- Dest.</th>
+                            <th style="min-width: 140px">Dep - Arr.</th>
+                            <th style="min-width: 50px">Bag</th>
+                            <th style="min-width: 50px">Meal</th>
+                            <th style="min-width: 50px">Total<br>Seats</th>
+                            <th style="min-width: 50px">Avail<br>Seats</th>
+                            <th style="min-width: 50px">Adult</th>
+                            <th style="min-width: 50px">Child</th>
+                            <th style="min-width: 50px">Infant</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -61,22 +60,12 @@
                                 </td>
                                 <td>
                                     @foreach($group->segments as $segment)
-                                        <div>{{ \App\Models\City::find($segment->origin)->title ?? 'N/A' }}</div>
+                                        <div>{{ \App\Models\City::find($segment->origin)->title ?? 'N/A' }} - {{ \App\Models\City::find($segment->destination)->title ?? 'N/A' }}</div>
                                     @endforeach
                                 </td>
                                 <td>
                                     @foreach($group->segments as $segment)
-                                        <div>{{ \App\Models\City::find($segment->destination)->title ?? 'N/A' }}</div>
-                                    @endforeach
-                                </td>
-                                <td>
-                                    @foreach($group->segments as $segment)
-                                        <div>{{ \Carbon\Carbon::parse($segment->departure_time)->format('H:i') }}</div>
-                                    @endforeach
-                                </td>
-                                <td>
-                                    @foreach($group->segments as $segment)
-                                        <div>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i')  }}</div>
+                                        <div>{{ \Carbon\Carbon::parse($segment->departure_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i') }}</div>
                                     @endforeach
                                 </td>
                                 <td>
@@ -90,6 +79,7 @@
                                     @endforeach
                                 </td>
                                 <td>{{ $group->total_seats }}</td>
+                                <td>{{ ($group->total_seats ?? 0) - ($group->used_seats ?? 0) }}</td>
                                 <td>{{ number_format($group->sale_per_adult, 2) }}</td>
                                 <td>{{ number_format($group->sale_per_child, 2) }}</td>
                                 <td>{{ number_format($group->sale_per_infant, 2) }}</td>

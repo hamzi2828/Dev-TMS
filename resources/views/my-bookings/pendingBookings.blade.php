@@ -169,7 +169,7 @@
                         let element = document.getElementById(timerId);
                         if (!element) return;
 
-                        if (distance < 0) { 
+                        if (distance < 0) {
                             element.innerHTML = "Expired";
                             element.classList.remove("bg-success");
                             element.classList.add("bg-danger");

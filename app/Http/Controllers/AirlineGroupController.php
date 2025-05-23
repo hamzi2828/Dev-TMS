@@ -297,12 +297,12 @@ class AirlineGroupController extends Controller
 
 
     protected function handleDeletedSegments(AirlineGroup $airlineGroup, array $segmentIds)
-        {
+    {
 
-            if (!empty($segmentIds)) {
-                $airlineGroup->segments()->whereIn('id', $segmentIds)->delete();
-            }
+        if (!empty($segmentIds)) {
+            $airlineGroup->segments()->whereIn('id', $segmentIds)->delete();
         }
+    }
 
 
     public function destroy(AirlineGroup $airlineGroup)

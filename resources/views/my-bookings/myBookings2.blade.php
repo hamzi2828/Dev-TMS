@@ -49,11 +49,11 @@
                                 <th>Sr. No.</th>
                                 <th>Dep. Date</th>
                                 <th>FLT No.</th>
-                                <th style="max-width: 4rem">Origin - Dest.</th>
-                                <th style="max-width: 5rem">Dep - Arr. Time</th>
-                                <th style="max-width: 4.5rem">Bag</th>
-                                <th style="max-width: 4.5rem">Meal</th>
-                                <th style="max-width: 4.5rem">Seats</th>
+                                <th style="min-width: 4rem">Origin - Dest.</th>
+                                <th style="min-width: 5rem">Dep - Arr.</th>
+                                <th style="min-width: 4.5rem">Bag</th>
+                                <th style="min-width: 4.5rem">Meal</th>
+                                <th style="min-width: 4.5rem">Seats</th>
                                 <th>Adult</th>
                                 <th>Child</th>
                                 <th>Infant</th>
@@ -94,7 +94,7 @@
                                             <div>{{ ucfirst($segment->meal) }}</div>
                                         @endforeach
                                     </td>
-                                    <td>{{ $group->total_seats }}</td>
+                                    <td>{{ ($group->total_seats ?? 0) - ($group->used_seats ?? 0) }}</td>
                                     <td>£{{ number_format($group->sale_per_adult, 2) }}</td>
                                     <td>£{{ number_format($group->sale_per_child, 2) }}</td>
                                     <td>£{{ number_format($group->sale_per_infant, 2) }}</td>

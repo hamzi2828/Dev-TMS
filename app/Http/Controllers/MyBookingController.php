@@ -277,6 +277,13 @@ class MyBookingController extends Controller
         $booking = MyBooking::find($request->id);
         $booking->status = 'cancelled';
         $booking->save();
+
+        $airlineGroup = AirlineGroup::find($booking->airline_group_id);
+        $totalSeats = $booking->adults + $booking->children;
+        $airlineGroup->used_seats = $airlineGroup->used_seats - $totalSeats;
+        $airlineGroup->save();
+
+
         return redirect()->back()->with('success', 'Booking cancelled successfully');
     }
     /**
@@ -365,6 +372,9 @@ class MyBookingController extends Controller
                 'user_id' => auth()->user()->id,
             ]);
 
+            $airlineGroup = AirlineGroup::find($request->airline_group_id);
+            $airlineGroup->used_seats += $request->adults + $request->children;
+            $airlineGroup->save();
             // Process passenger data
             if ($request->has('passenger')) {
                 $passengers = $request->passenger;
