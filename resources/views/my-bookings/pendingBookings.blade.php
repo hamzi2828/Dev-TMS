@@ -81,7 +81,6 @@
                                         <div>{{ $segment->baggage }}</div>
                                     @endforeach
                                 </td>
-
                                 <td>
                                     @foreach($group->segments as $segment)
                                         <div>{{ ucfirst($segment->meal) }}</div>
@@ -95,8 +94,14 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <span id="timer-{{ $booking->id }}" class="badge bg-success fs-6">Loading...</span>
+                                    <span id="timer-{{ $booking->id }}" class="badge bg-success fs-6">Loading... </span>
+                                    <div class="text-muted small mt-1">
+                                        {{ optional($booking->airlineGroup)->expire_datetime
+                                            ? \Carbon\Carbon::parse($booking->airlineGroup->expire_datetime)->format('d M Y, H:i A')
+                                            : 'N/A' }}
+                                    </div>
                                 </td>
+
                                 <td>
                                     <a href="javascript:void(0)" onclick="confirmWithPNR('{{ route('myBookings.confirmBooking', ['id' => $booking->id, 'pnr' => '']) }}')" class="btn btn-sm btn-info" style="width: 70px;">
                                         Confirm
@@ -144,32 +149,83 @@
             }
         }
 
+        function parseDateWithTimeZone(dateString) {
+            // Parse the date string in the format 'YYYY-MM-DD HH:MM:SS'
+            const parts = dateString.split(/[- :]/);
+            if (parts.length >= 5) {
+                // Create date in local time (assuming the input is in PKT)
+                const localDate = new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5] || 0);
+
+                // Get timezone offset in minutes and convert to milliseconds
+                const timezoneOffset = localDate.getTimezoneOffset() * 60000;
+
+                // Adjust for Pakistan Standard Time (UTC+5)
+                const pktOffset = 5 * 60 * 60 * 1000; // 5 hours in milliseconds
+                const pktDate = new Date(localDate.getTime() + timezoneOffset + pktOffset);
+
+                console.log('Parsed PKT date:', pktDate.toString());
+                return pktDate;
+            }
+            return new Date(dateString); // Fallback to default parsing
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             @foreach($myBookings as $booking)
-                (function () {
-                    let createdAt = new Date("{{ $booking->created_at }}").getTime();
-                    let endTime = createdAt + 60 * 60 * 1000;
-                    let timerId = "timer-{{ $booking->id }}";
+            (function () {
+                let expireDatetimeStr = @json(optional($booking->airlineGroup)->expire_datetime);
+                let timerId = "timer-{{ $booking->id }}";
+                let element = document.getElementById(timerId);
 
-                    let interval = setInterval(() => {
-                        let now = new Date().getTime();
-                        let distance = endTime - now;
+                if (!element) return;
 
-                        let element = document.getElementById(timerId);
-                        if (!element) return;
+                if (!expireDatetimeStr) {
+                    element.innerHTML = "N/A";
+                    return;
+                }
 
-                        if (distance < 0) {
-                            element.innerHTML = "Expired";
-                            element.classList.remove("bg-success");
-                            element.classList.add("bg-danger");
-                            clearInterval(interval);
-                        } else {
-                            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                            element.innerHTML = `${minutes}m ${seconds}s`;
-                        }
-                    }, 1000);
-                })();
+                // Parse the date with timezone handling
+                let expireDate = parseDateWithTimeZone(expireDatetimeStr);
+
+                if (isNaN(expireDate.getTime())) {
+                    console.error('Invalid date format for booking {{ $booking->id }}:', expireDatetimeStr);
+                    element.innerHTML = "Invalid date";
+                    return;
+                }
+
+                const now = new Date();
+
+
+                let distance = expireDate - now;
+
+                updateCountdown();
+
+                let interval = setInterval(updateCountdown, 1000);
+
+                function updateCountdown() {
+                    const now = new Date();
+                    const distance = expireDate - now;
+
+                    if (distance < 0) {
+                        element.innerHTML = "Expired";
+                        element.classList.remove("bg-success");
+                        element.classList.add("bg-danger");
+                        clearInterval(interval);
+                    } else {
+                        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                        const countdown = [];
+                        if (days > 0) countdown.push(`${days}d`);
+                        if (hours > 0 || days > 0) countdown.push(`${hours}h`);
+                        if (minutes > 0 || hours > 0 || days > 0) countdown.push(`${minutes}m`);
+                        countdown.push(`${seconds}s`);
+
+                        element.innerHTML = countdown.join(' ');
+
+                    }
+                }
+            })();
             @endforeach
         });
     </script>
