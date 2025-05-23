@@ -8,24 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class MyBooking extends Model
 {
     use HasFactory;
-    
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'my_bookings';
-    
+
     /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
      */
     public $timestamps = true;
-    
+
     /**
      * Disable the model prefix
-     * 
+     *
      * @var string
      */
     protected $prefix = '';
@@ -41,6 +41,7 @@ class MyBooking extends Model
         'booking_reference',
         'status',
         'user_id',
+        'discount',
     ];
 
     /**

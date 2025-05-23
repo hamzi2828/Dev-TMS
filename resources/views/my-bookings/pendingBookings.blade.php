@@ -18,20 +18,18 @@
                     <thead class="border-top">
                         <tr>
                             <th>Sr. No.</th>
-                            <th style="min-width: 250px">Booking Ref</th>
-                            <th style="min-width: 250px">Passengers</th>
-                            <th>Departure Date</th>
-                            <th>Airline</th>
-                            <th>Flight No.</th>
-                            <th>Origin</th>
-                            <th>Destination</th>
-                            <th>Dep. Time</th>
-                            <th>Arrival Time</th>
-                            <th>Baggage</th>
-                            <th>Meal</th>
-                            <th>Total Price</th>
-                            <th>Expiry Time</th>
-                            <th>Actions</th>
+                            <th style="min-width: 200px">Booking Ref</th>
+                            <th style="min-width: 200px">Passengers</th>
+                            <th style="min-width: 130px">Dep. Date</th>
+                            <th style="min-width: 100px">Airline</th>
+                            <th style="min-width: 100px">Flight No.</th>
+                            <th style="min-width: 170px">Origin - Dest.</th>
+                            <th style="min-width: 130px">Dep - Arr.</th>
+                            <th style="min-width: 60px">Bag</th>
+                            <th style="min-width: 60px">Meal</th>
+                            <th style="min-width: 100px">Total <br> Price</th>
+                            <th style="min-width: 100px">Expiry <br> Time</th>
+                            <th style="min-width: 100px">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,22 +68,12 @@
                                 </td>
                                 <td>
                                     @foreach($group->segments as $segment)
-                                        <div>{{ \App\Models\City::find($segment->origin)->title ?? 'N/A' }}</div>
+                                        <div>{{ \App\Models\City::find($segment->origin)->title ?? 'N/A' }} - {{ \App\Models\City::find($segment->destination)->title ?? 'N/A' }}</div>
                                     @endforeach
                                 </td>
                                 <td>
                                     @foreach($group->segments as $segment)
-                                        <div>{{ \App\Models\City::find($segment->destination)->title ?? 'N/A' }}</div>
-                                    @endforeach
-                                </td>
-                                <td>
-                                    @foreach($group->segments as $segment)
-                                        <div>{{ \Carbon\Carbon::parse($segment->departure_time)->format('H:i') }}</div>
-                                    @endforeach
-                                </td>
-                                <td>
-                                    @foreach($group->segments as $segment)
-                                        <div>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i') }}</div>
+                                        <div>{{ \Carbon\Carbon::parse($segment->departure_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i') }}</div>
                                     @endforeach
                                 </td>
                                 <td>
@@ -93,6 +81,7 @@
                                         <div>{{ $segment->baggage }}</div>
                                     @endforeach
                                 </td>
+
                                 <td>
                                     @foreach($group->segments as $segment)
                                         <div>{{ ucfirst($segment->meal) }}</div>

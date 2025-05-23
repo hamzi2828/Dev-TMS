@@ -519,6 +519,7 @@ class MyBookingController extends Controller
                 'adults' => $request->adults,
                 'children' => $request->children,
                 'infants' => $request->infants,
+                'discount' => $request->discount,
                 'total_price' => $request->total_price,
             ]);
 

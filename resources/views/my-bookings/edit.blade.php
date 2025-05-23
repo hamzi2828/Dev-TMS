@@ -1,11 +1,11 @@
 <x-dashboard :title="$title">
-  
+
     <style>
         .table:not(.table-dark) thead:not(.table-dark) th {
             color: white;
         }
     </style>
-    
+
     <div class="container-p-x flex-grow-1 container-p-y">
         @include('_partials.errors.validation-errors')
         <div class="row">
@@ -165,11 +165,48 @@
                                                     <td id="infant-seats">{{ $booking->infants }}</td>
                                                     <td id="infant-total">PKR {{ number_format($booking->infants * $airlineGroup->sale_per_infant, 0) }}</td>
                                                 </tr>
+                                                <tr>
+                                                    <td colspan="3" class="text-end">Discount</td>
+                                                    <td>
+                                                        <input type="number"
+                                                               id="discount"
+                                                               name="discount"
+                                                               value="{{ $booking->discount ?? 0 }}"
+                                                               class="form-control"
+                                                               min="0"
+                                                               step="1"
+                                                               onchange="updateTotalPrice()"
+                                                               oninput="this.value = Math.min(parseInt(this.value) || 0, parseFloat(document.getElementById('total_price').value) || 0)">
+                                                        <small class="text-danger d-none" id="discount-error">Discount cannot exceed total price</small>
+                                                    </td>
+                                                </tr>
                                                 <tr class="fw-bold border-top">
                                                     <td colspan="2" class="text-end">Total</td>
                                                     <td id="total-seats">{{ $booking->adults + $booking->children + $booking->infants }}</td>
-                                                    <td id="grand-total">PKR {{ number_format($booking->total_price, 0) }}</td>
+                                                    <td id="grand-total">PKR <span id="total-price-span">{{ number_format($booking->total_price - ($booking->discount ?? 0), 2) }}</span></td>
                                                 </tr>
+
+                                                <script>
+                                                    function updateTotalPrice() {
+                                                        const discountInput = document.getElementById('discount');
+                                                        const discountError = document.getElementById('discount-error');
+                                                        const totalPrice = parseFloat(document.getElementById('total_price').value) || 0;
+                                                        let discount = parseInt(discountInput.value) || 0;
+
+                                                        // Ensure discount doesn't exceed total price
+                                                        if (discount > totalPrice) {
+                                                            discount = totalPrice;
+                                                            discountInput.value = totalPrice;
+                                                            discountError.classList.remove('d-none');
+                                                        } else {
+                                                            discountError.classList.add('d-none');
+                                                        }
+
+                                                        const newTotalPrice = Math.max(0, (totalPrice - discount)).toFixed(2);
+                                                        document.getElementById('grand-total').innerHTML = `PKR ${newTotalPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+                                                        document.getElementById('total-price-span').textContent = newTotalPrice;
+                                                    }
+                                                </script>
                                             </tbody>
                                         </table>
                                         <input type="hidden" id="total_price" name="total_price" value="{{ $booking->total_price }}">
@@ -381,32 +418,32 @@
             const childPrice = {{ $airlineGroup->sale_per_child ?? 0 }};
             const infantPrice = {{ $airlineGroup->sale_per_infant ?? 0 }};
             const totalSeatsAvailable = {{ $airlineGroup->total_seats ?? 0 }};
-            
+
             // Initialize select2 and flatpickr
             $('.select2').select2({
                 width: '100%'
             });
-            
+
             $('.flatpickr-basic').flatpickr({
                 dateFormat: 'Y-m-d',
                 allowInput: true
             });
-            
+
             function formatCurrency(amount) {
-                return new Intl.NumberFormat('en-PK', { 
-                    style: 'currency', 
+                return new Intl.NumberFormat('en-PK', {
+                    style: 'currency',
                     currency: 'PKR',
                     minimumFractionDigits: 0,
-                    maximumFractionDigits: 0 
+                    maximumFractionDigits: 0
                 }).format(amount).replace('PKR', 'PKR ');
             }
-            
+
             function createSectionHeader(label) {
                 return `<hr><h5 class="mt-4 mb-3 fw-bold">${label}</h5>`;
             }
-    
+
             function createPassengerRow(index, type) {
-                const titleOptions = type === 'infant' ? 
+                const titleOptions = type === 'infant' ?
                     `<option value="">Select</option>
                      <option value="Master">Master</option>
                      <option value="Miss">Miss</option>` :
@@ -414,7 +451,7 @@
                      <option value="Mr.">Mr.</option>
                      <option value="Mrs.">Mrs.</option>
                      <option value="Ms.">Ms.</option>`;
-                
+
                 return `<div class="row mb-3 new-passenger-row" data-type="${type}" data-index="${index}">
                             <div class="col-md-1" style="max-width: 70px;">
                                 <label class="form-label">Sr #</label>
@@ -461,35 +498,35 @@
                             </div>
                         </div>`;
             }
-    
+
             function updatePriceSummary() {
                 const adults = parseInt($('#adults').val()) || 0;
                 const children = parseInt($('#children').val()) || 0;
                 const infants = parseInt($('#infants').val()) || 0;
-                
+
                 // Update seat counts
                 $('#adult-seats').text(adults);
                 $('#child-seats').text(children);
                 $('#infant-seats').text(infants);
                 $('#total-seats').text(adults + children + infants);
-                
+
                 // Calculate and update totals
                 const adultTotal = adults * adultPrice;
                 const childTotal = children * childPrice;
                 const infantTotal = infants * infantPrice;
                 const grandTotal = adultTotal + childTotal + infantTotal;
-                
+
                 $('#adult-total').text(formatCurrency(adultTotal));
                 $('#child-total').text(formatCurrency(childTotal));
                 $('#infant-total').text(formatCurrency(infantTotal));
                 $('#grand-total').text(formatCurrency(grandTotal));
                 $('#total_price').val(grandTotal);
-                
+
                 // Validate total passengers against available seats
                 const totalPassengers = adults + children + infants;
                 if (totalPassengers > totalSeatsAvailable) {
                     alert(`You can only book up to ${totalSeatsAvailable} seats. Please adjust your selection.`);
-                    
+
                     // Reset to the original values
                     $('#adults').val({{ $booking->adults }});
                     $('#children').val({{ $booking->children }});
@@ -497,7 +534,7 @@
                     updatePriceSummary();
                     return false;
                 }
-                
+
                 // Validate infants against adults (usually 1 infant per adult)
                 if (infants > adults) {
                     alert('Number of infants cannot exceed number of adults. Please adjust your selection.');
@@ -505,26 +542,26 @@
                     updatePriceSummary();
                     return false;
                 }
-                
+
                 return true;
             }
-            
+
             function handlePassengerChanges() {
                 // Get current and new counts
                 const currentAdults = {{ $booking->passengers->where('passenger_type', 'adult')->count() }};
                 const currentChildren = {{ $booking->passengers->where('passenger_type', 'child')->count() }};
                 const currentInfants = {{ $booking->passengers->where('passenger_type', 'infant')->count() }};
-                
+
                 const newAdults = parseInt($('#adults').val()) || 0;
                 const newChildren = parseInt($('#children').val()) || 0;
                 const newInfants = parseInt($('#infants').val()) || 0;
-                
+
                 // Clear previous dynamic form elements
                 $('#dynamic-passenger-form').empty();
-                
+
                 // Handle additions
                 let formContent = '';
-                
+
                 // Add new adult passengers
                 if (newAdults > currentAdults) {
                     formContent += createSectionHeader("New Adult Passengers");
@@ -532,7 +569,7 @@
                         formContent += createPassengerRow(i, 'adult');
                     }
                 }
-                
+
                 // Add new child passengers
                 if (newChildren > currentChildren) {
                     formContent += createSectionHeader("New Child Passengers");
@@ -540,7 +577,7 @@
                         formContent += createPassengerRow(i, 'child');
                     }
                 }
-                
+
                 // Add new infant passengers
                 if (newInfants > currentInfants) {
                     formContent += createSectionHeader("New Infant Passengers");
@@ -548,7 +585,7 @@
                         formContent += createPassengerRow(i, 'infant');
                     }
                 }
-                
+
                 // Add warning for removed passengers
                 if (newAdults < currentAdults || newChildren < currentChildren || newInfants < currentInfants) {
                     formContent += `
@@ -556,7 +593,7 @@
                         <h6 class="fw-bold">Warning: Passenger Removal</h6>
                         <p>You have reduced the number of passengers. The following passengers will be removed upon saving:</p>
                         <ul>`;
-                    
+
                     if (newAdults < currentAdults) {
                         formContent += `<li>Adults: ${currentAdults - newAdults} passenger(s) will be removed</li>`;
                     }
@@ -566,81 +603,81 @@
                     if (newInfants < currentInfants) {
                         formContent += `<li>Infants: ${currentInfants - newInfants} passenger(s) will be removed</li>`;
                     }
-                    
+
                     formContent += `
                         </ul>
                         <p>If this is not intended, please adjust the passenger counts.</p>
                     </div>`;
                 }
-                
+
                 // Update the form
                 $('#dynamic-passenger-form').html(formContent);
-                
+
                 // Re-initialize select2 after DOM update
                 $('.select2').select2({
                     width: '100%'
                 });
-                
+
                 // Initialize flatpickr for date inputs
                 $('.flatpickr-basic').flatpickr({
                     dateFormat: 'Y-m-d',
                     allowInput: true
                 });
             }
-    
+
             // Update price summary and passenger form when passenger counts change
             $('#adults, #children, #infants').on('change', function () {
                 if (updatePriceSummary()) {
                     handlePassengerChanges();
                 }
             });
-            
+
             // Form validation before submission
             $('form').on('submit', function(e) {
                 const adults = parseInt($('#adults').val()) || 0;
                 const children = parseInt($('#children').val()) || 0;
                 const infants = parseInt($('#infants').val()) || 0;
                 const totalPassengers = adults + children + infants;
-                
+
                 if (totalPassengers === 0) {
                     e.preventDefault();
                     alert('Please select at least one passenger.');
                     return false;
                 }
-                
+
                 if (totalPassengers > totalSeatsAvailable) {
                     e.preventDefault();
                     alert(`You can only book up to ${totalSeatsAvailable} seats. Please adjust your selection.`);
                     return false;
                 }
-                
+
                 if (infants > adults) {
                     e.preventDefault();
                     alert('Number of infants cannot exceed number of adults.');
                     return false;
                 }
-                
+
                 if (!$('#terms_and_conditions').is(':checked')) {
                     e.preventDefault();
                     alert('Please confirm that all information is accurate and complete.');
                     return false;
                 }
-                
+
                 // Confirm submission if passengers are being removed
                 const currentAdults = {{ $booking->passengers->where('passenger_type', 'adult')->count() }};
                 const currentChildren = {{ $booking->passengers->where('passenger_type', 'child')->count() }};
                 const currentInfants = {{ $booking->passengers->where('passenger_type', 'infant')->count() }};
-                
+
                 if (adults < currentAdults || children < currentChildren || infants < currentInfants) {
                     if (!confirm('You are about to remove some passengers. Are you sure you want to continue?')) {
                         e.preventDefault();
                         return false;
                     }
                 }
-                
+
                 return true;
             });
-    
+
             // Initialize price summary on page load
             updatePriceSummary();
         });
