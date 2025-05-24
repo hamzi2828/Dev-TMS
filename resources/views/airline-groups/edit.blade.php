@@ -55,7 +55,7 @@
                                     </select>
                                 </div>
                             </div>
-
+                            <h5 class="card-header border-bottom pt-3 pb-2 mb-3"></h5>
                             {{-- Adult --}}
                             <div class="row">
                                 <div class="col-md-3 mb-3">

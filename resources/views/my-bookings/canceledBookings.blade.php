@@ -101,7 +101,7 @@
                                 </td>
                                 <td>
                                     @if($booking->total_price)
-                                        {{ number_format($booking->total_price, 2) }}
+                                    {{ number_format($booking->total_price - $booking->discount, 2 ) }}
                                     @else
                                         N/A
                                     @endif

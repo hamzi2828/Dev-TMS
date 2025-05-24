@@ -75,7 +75,7 @@
                             <a href="{{ route('myBookings.completed') }}" class="menu-link">
                                 <div data-i18n="Confirmed Booking">Confirmed Booking</div>
                             </a>
-                        
+
                     {{-- @endcan --}}
 
                 </ul>

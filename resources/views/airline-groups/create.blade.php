@@ -43,7 +43,8 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="row mt-5">
+                            <h5 class="card-header border-bottom pt-3 pb-2 mb-3"></h5>
+                            <div class="row">
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="basic_per_adult">Basic Fare Per Adult</label>
                                     <input type="number" step="0.01" class="form-control" id="basic_per_adult" name="basic_per_adult" onchange="calculateCost('adult')" required>
