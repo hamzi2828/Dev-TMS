@@ -47,27 +47,38 @@
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
             <tr>
                 <td style="padding: 2px 0; font-weight: bold;">Booking Reference Number (PNR)</td>
-                <td style="padding: 2px 0;">402750317-402756037</td>
+                <td style="padding: 2px 0;">{{ $data['booking']->pnr }}</td>
             </tr>
             <tr>
                 <td style="padding: 2px 0; font-weight: bold;">Booking ID</td>
-                <td style="padding: 2px 0;">99628</td>
+                <td style="padding: 2px 0;">{{ $data['booking']->id }}</td>
             </tr>
             <tr>
                 <td style="padding: 2px 0; font-weight: bold;">Issued By</td>
-                <td style="padding: 2px 0;">Travel Pass</td>
+                <td style="padding: 2px 0;">n/a</td>
             </tr>
             <tr>
                 <td style="padding: 2px 0; font-weight: bold;">Agent Name</td>
-                <td style="padding: 2px 0;">Zeeshan Naeem</td>
+                <td style="padding: 2px 0;">n/a</td>
             </tr>
             <tr>
                 <td style="padding: 2px 0; font-weight: bold;">Contact</td>
-                <td style="padding: 2px 0;">03215655191</td>
+                <td style="padding: 2px 0;">n/a</td>
             </tr>
         </table>
 
-        <div style="color: #808080; font-size: 16px; font-weight: bold; margin: 15px 0 5px 0;">Flight 1 - LAHORE (LHE) to JEDDAH (JED)</div>
+        <div style="color: #808080; font-size: 16px; font-weight: bold; margin: 15px 0 5px 0;">
+            @php
+                $firstSegment = $data['airlineGroup']->segments->first();
+                $originCity = \App\Models\City::find($firstSegment->origin);
+                $destinationCity = \App\Models\City::find($firstSegment->destination);
+                $route =
+                    ($originCity ? $originCity->title . ' (' . $originCity->code . ')' : 'N/A') .
+                    ' to ' .
+                    ($destinationCity ? $destinationCity->title . ' (' . $destinationCity->code . ')' : 'N/A');
+            @endphp
+            {{ $route }}
+        </div>
         <table style="width: 100%; border: 1px solid #ccc; border-collapse: collapse; font-size: 12px;">
             <tr style="background-color: #f2f2f2; border-bottom: 1px solid #ccc;">
                 <th style="text-align: left; padding: 8px; font-weight: bold;">AIRLINE</th>
@@ -77,23 +88,23 @@
                 <th style="text-align: left; padding: 8px; font-weight: bold;">ARRIVAL</th>
             </tr>
             <tr style="border-bottom: 1px solid #f2f2f2;">
-                <td style="padding: 10px 8px;">Fly Jinnah</td>
-                <td style="padding: 10px 8px;">9P 586</td>
+                <td style="padding: 10px 8px;">{{ $data['booking']->airline->title }}</td>
+                <td style="padding: 10px 8px;">{{ $data['airlineGroup']->segments->first()->flight_number }}</td>
                 <td style="padding: 10px 8px;">
-                    <strong>17:35</strong><br>
-                    LAHORE (LHE)<br>
-                    <span style="color: #666;">Tue 08 Apr 2025</span>
+                    <strong>{{ \Carbon\Carbon::parse($data['airlineGroup']->segments->first()->departure_time)->format('H:i') }}</strong><br>
+                    {{ $data['booking']->departure_airport }}<br>
+                    <span style="color: #666;">{{ \Carbon\Carbon::parse($data['airlineGroup']->segments->first()->departure_date)->format('D d M Y') }}</span>
                 </td>
                 <td style="text-align: center; font-size: 20px;">✈</td>
                 <td style="padding: 10px 8px;">
-                    <strong>21:00</strong><br>
-                    JEDDAH (JED)<br>
-                    <span style="color: #666;">Tue 08 Apr 2025</span>
+                    <strong>{{ \Carbon\Carbon::parse($data['airlineGroup']->segments->last()->arrival_time)->format('H:i') }}</strong><br>
+                    {{ $data['booking']->arrival_airport }}<br>
+
                 </td>
             </tr>
             <tr>
                 <td colspan="5" style="padding: 8px; background-color: #f9f9f9;">
-                    <strong>Baggage:</strong> 20+07 KG
+                    <strong>Baggage:</strong> {{ $data['airlineGroup']->segments->first()->baggage }}
                 </td>
             </tr>
         </table>

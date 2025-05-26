@@ -612,7 +612,7 @@
                 $title = 'Booking Confirmation';
 
                 // Eager load all necessary relationships
-                $data['booking'] = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
+                $data['booking'] = MyBooking::with(['airline', 'passengers'])
                 ->where('id', $myBooking->id)
                 ->firstOrFail();
 
@@ -621,7 +621,7 @@
                 ->firstOrFail();
 
 
-                $html_content = view('invoices.my-bookings', ['booking' => $data['booking'], 'airlineGroup' => $data['airlineGroup']])->render();
+                $html_content = view('invoices.my-bookings', ['data' => $data])->render();
                 $mpdf                = new Mpdf( [
                                                      'mode'             => 'utf-8',
                                                      'autoScriptToLang' => true,
