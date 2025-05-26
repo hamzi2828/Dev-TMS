@@ -312,4 +312,13 @@ class AirlineGroupController extends Controller
         return redirect()->route('airlineGroups.index')
             ->with('success', 'Airline Group deleted successfully');
     }
+
+    public function status(AirlineGroup $airlineGroup)
+    {
+        $airlineGroup->status = $airlineGroup->status == 'active' ? 'inactive' : 'active';
+        $airlineGroup->save();
+
+        return redirect()->route('airlineGroups.index')
+            ->with('success', 'Airline Group status changed successfully');
+    }
 }

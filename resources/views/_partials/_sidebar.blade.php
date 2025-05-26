@@ -36,6 +36,11 @@
                                     <div data-i18n="All Airline Groups">All Airline Groups</div>
                                 </a>
                             </li>
+                            <li class="menu-item {{ request()->routeIs('airlineGroups.index') && $airlineGroups -> where('status', 'inactive')->count() > 0 ? 'active' : '' }}">
+                                <a href="{{ route('airlineGroups.index') }}" class="menu-link">
+                                    <div data-i18n="All Airline Groups">All Airline Groups (Inactive)</div>
+                                </a>
+                            </li>
                         {{-- @endcan --}}
 
                         {{-- @can('create', \App\Models\AirlineGroup::class) --}}
@@ -58,7 +63,7 @@
                     {{-- @can('all', \App\Models\AirlineGroup::class) --}}
                         <li class="menu-item {{ request()->routeIs('myBookings.index') ? 'active' : '' }}">
                             <a href="{{ route('myBookings.index') }}" class="menu-link">
-                                <div data-i18n="Book Tickets"> Book Tickets</div>
+                                <div data-i18n="Book Tickets">Book Tickets</div>
                             </a>
                         </li>
                         <li class="menu-item {{ request()->routeIs('myBookings.pending') ? 'active' : '' }}">

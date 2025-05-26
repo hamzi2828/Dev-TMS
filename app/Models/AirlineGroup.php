@@ -37,6 +37,7 @@ class AirlineGroup extends Model
         'travel_agent_id',
         'travel_agent_seats',
         'expire_datetime',
+        'status',
     ];
 
     /**
