@@ -109,7 +109,9 @@ class MyBookingController extends Controller
         $currentDate = now();
 
         $query = AirlineGroup::with(['segments', 'airline'])
-            ->where('total_seats', '>', 0); // Filter for total_seats > 0
+            ->where('total_seats', '>', 0)
+            ->where('status', 'active');
+
 
         // Apply filters
 

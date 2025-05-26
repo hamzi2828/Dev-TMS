@@ -31,14 +31,14 @@
                     </a>
                     <ul class="menu-sub">
                         {{-- @can('all', \App\Models\AirlineGroup::class) --}}
-                            <li class="menu-item {{ request()->routeIs('airlineGroups.index') ? 'active' : '' }}">
+                            <li class="menu-item {{ request()->routeIs('airlineGroups.index') && !request()->has('inactive') ? 'active' : '' }}">
                                 <a href="{{ route('airlineGroups.index') }}" class="menu-link">
                                     <div data-i18n="All Airline Groups">All Airline Groups</div>
                                 </a>
                             </li>
-                            <li class="menu-item {{ request()->routeIs('airlineGroups.index') && $airlineGroups -> where('status', 'inactive')->count() > 0 ? 'active' : '' }}">
-                                <a href="{{ route('airlineGroups.index') }}" class="menu-link">
-                                    <div data-i18n="All Airline Groups">All Airline Groups (Inactive)</div>
+                            <li class="menu-item {{ request()->routeIs('airlineGroups.index') && request()->query('inactive') === 'true' ? 'active' : '' }}">
+                                <a href="{{ route('airlineGroups.index', ['inactive' => 'true']) }}" class="menu-link">
+                                    <div data-i18n="Airline Groups (Inactive)">Airline Groups (Inactive)</div>
                                 </a>
                             </li>
                         {{-- @endcan --}}
