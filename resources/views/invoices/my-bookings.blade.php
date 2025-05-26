@@ -115,14 +115,20 @@
                 <th style="padding: 8px; text-align: left; font-weight: bold;">Sr #</th>
                 <th style="padding: 8px; text-align: left; font-weight: bold;">Passenger Name</th>
                 <th style="padding: 8px; text-align: left; font-weight: bold;">Passport #</th>
-                <th style="padding: 8px; text-align: left; font-weight: bold;">Meal</th>
+                <th style="padding: 8px; text-align: left; font-weight: bold;">Type</th>
+                <th style="padding: 8px; text-align: left; font-weight: bold;">DOB</th>
+                <th style="padding: 8px; text-align: left; font-weight: bold;">Passport Expiry</th>
             </tr>
+            @foreach($data['booking']->passengers as $index => $passenger)
             <tr style="border-bottom: 1px solid #f2f2f2;">
-                <td style="padding: 10px 8px;">1</td>
-                <td style="padding: 10px 8px;">KHAN ALI</td>
-                <td style="padding: 10px 8px;">KJ6767677</td>
-                <td style="padding: 10px 8px;">No</td>
+                <td style="padding: 10px 8px;">{{ $index + 1 }}</td>
+                <td style="padding: 10px 8px;">{{ $passenger->title }} {{ $passenger->given_name }} {{ $passenger->surname }}</td>
+                <td style="padding: 10px 8px;">{{ $passenger->passport }}</td>
+                <td style="padding: 10px 8px; text-transform: capitalize;">{{ $passenger->passenger_type }}</td>
+                <td style="padding: 10px 8px;">{{ \Carbon\Carbon::parse($passenger->dob)->format('d M Y') }}</td>
+                <td style="padding: 10px 8px;">{{ \Carbon\Carbon::parse($passenger->passport_expiry)->format('d M Y') }}</td>
             </tr>
+            @endforeach
         </table>
 
         <div class="footer">
