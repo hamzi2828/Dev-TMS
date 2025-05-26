@@ -125,5 +125,6 @@
             Route ::get ( '/general-ledger', [ InvoiceController::class, 'general_ledger' ] ) -> name ( 'general-ledger' );
             Route ::get ( '/transaction', [ InvoiceController::class, 'transaction' ] ) -> name ( 'transaction' );
             Route ::get ( '/company-requisitions/{requisition}', [ InvoiceController::class, 'company_requisitions' ] ) -> name ( 'company-requisitions' );
+            Route ::get ( '/bookings/{myBooking}', [ InvoiceController::class, 'myBookingsPrint' ] ) -> name ( 'bookings.print' );
         } );
     } );

@@ -1,9 +1,10 @@
 <?php
-    
+
     namespace App\Http\Controllers;
-    
+
     use App\Models\Candidate;
-    use App\Models\CandidateDocumentReady;
+    use App\Models\MyBooking;
+    use App\Models\DocumentReady;
     use App\Models\CandidateMedical;
     use App\Models\CompanyRequisition;
     use App\Models\Fee;
@@ -16,19 +17,19 @@
     use Illuminate\Http\Request;
     use Mpdf\Mpdf;
     use Mpdf\MpdfException;
-    
+
     class InvoiceController extends Controller {
-        
+
         protected object $accountService;
         protected object $accountTypeService;
         protected object $generalLedgerService;
-        
+
         public function __construct ( AccountService $accountService, AccountTypeService $accountTypeService, GeneralLedgerService $generalLedgerService ) {
             $this -> accountService       = $accountService;
             $this -> accountTypeService   = $accountTypeService;
             $this -> generalLedgerService = $generalLedgerService;
         }
-        
+
         public function pdf_settings (): Mpdf {
             return new Mpdf( [
                                  'mode'             => 'utf-8',
@@ -42,7 +43,7 @@
                                  'margin_footer'    => 5,
                              ] );
         }
-        
+
         public function trial_balance_sheet (): void {
             $this -> authorize ( 'trial_balance_sheet', GeneralLedger::class );
             try {
@@ -64,7 +65,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function profit_and_loss_report (): void {
             $this -> authorize ( 'profit_and_loss', GeneralLedger::class );
             try {
@@ -78,7 +79,7 @@
                 $data[ 'taxes' ]                  = ( new ReportingService() ) -> get_ledgers_by_account_head ( config ( 'constants.tax' ) );
                 $html_content                     = view ( 'invoices.profit-and-loss-report', $data ) -> render ();
                 $mpdf                             = $this -> pdf_settings ();
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -93,7 +94,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function balance_sheet (): void {
             $this -> authorize ( 'balance_sheet', GeneralLedger::class );
             try {
@@ -105,7 +106,7 @@
                 $data[ 'profit' ]             = ( new ReportingService() ) -> profit ();
                 $html_content                 = view ( 'invoices.balance-sheet', $data ) -> render ();
                 $mpdf                         = $this -> pdf_settings ();
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -120,7 +121,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function customer_receivable_report (): void {
             $this -> authorize ( 'customer_receivable', GeneralLedger::class );
             try {
@@ -128,7 +129,7 @@
                 $data[ 'account_heads' ] = ( new AccountService() ) -> customersTrialBalance ();
                 $html_content            = view ( 'invoices.customer-receivable-report', $data ) -> render ();
                 $mpdf                    = $this -> pdf_settings ();
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -143,7 +144,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function vendor_payable_report (): void {
             $this -> authorize ( 'vendor_payable', GeneralLedger::class );
             try {
@@ -151,7 +152,7 @@
                 $data[ 'account_heads' ] = ( new AccountService() ) -> vendorsTrialBalance ();
                 $html_content            = view ( 'invoices.customer-receivable-report', $data ) -> render ();
                 $mpdf                    = $this -> pdf_settings ();
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -166,7 +167,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function general_ledger (): void {
             $this -> authorize ( 'all', GeneralLedger::class );
             try {
@@ -178,7 +179,7 @@
                 $data[ 'ledgers' ]   = $this -> generalLedgerService -> build_ledgers_table ( $account_heads_list );
                 $html_content        = view ( 'invoices.general-ledger', $data ) -> render ();
                 $mpdf                = $this -> pdf_settings ();
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -193,7 +194,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function transaction (): void {
             $this -> authorize ( 'search', GeneralLedger::class );
             try {
@@ -201,7 +202,7 @@
                 $data[ 'transactions' ] = ( new ReportingService() ) -> search_transactions ();
                 $html_content           = view ( 'invoices.transactions', $data ) -> render ();
                 $mpdf                   = $this -> pdf_settings ();
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -216,7 +217,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function candidate_ticket ( Candidate $candidate ): void {
             $this -> authorize ( 'print_candidates_ticket', $candidate );
             try {
@@ -232,7 +233,7 @@
                                                      'margin_header' => 0,
                                                      'margin_footer' => 0,
                                                  ] );
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -247,7 +248,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function candidate_bio_data ( Candidate $candidate ): void {
             $this -> authorize ( 'print_bio_data_form', $candidate );
             try {
@@ -265,7 +266,7 @@
                                                      'margin_header'    => 5,
                                                      'margin_footer'    => 5,
                                                  ] );
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkImage ( asset ( '/assets/watermark.jpeg' ), 0.1 );
@@ -280,7 +281,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function candidate_fee ( Candidate $candidate, Fee $fee ): void {
             $this -> authorize ( 'print_test_slip', $candidate );
             try {
@@ -300,7 +301,7 @@
                                                      'margin_header'    => 5,
                                                      'margin_footer'    => 5,
                                                  ] );
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkImage ( asset ( '/assets/watermark.jpeg' ), 0.1 );
@@ -315,7 +316,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function candidate_test_fee_slip ( Candidate $candidate ): void {
             $this -> authorize ( 'print_test_slip', $candidate );
             try {
@@ -334,7 +335,7 @@
                                                      'margin_header'    => 5,
                                                      'margin_footer'    => 5,
                                                  ] );
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkImage ( asset ( '/assets/watermark.jpeg' ), 0.1, [ 80, 80 ] );
@@ -349,7 +350,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function medical_receipt ( Candidate $candidate, CandidateMedical $medical ): View {
             $this -> authorize ( 'print_medical_slip', $medical );
             try {
@@ -370,7 +371,7 @@
 //                                                     'margin_header'    => 5,
 //                                                     'margin_footer'    => 0,
 //                                                 ] );
-                
+
 //                $mpdf -> SetTitle ( $title );
 //                $mpdf -> SetAuthor ( config ( 'app.name' ) );
 //                $mpdf -> SetWatermarkImage ( asset ( '/assets/watermark.jpeg' ), 0.1, [ 50, 50 ] );
@@ -385,7 +386,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function company_requisitions ( CompanyRequisition $requisition ): void {
             $requisition -> load ( [ 'principal', 'jobs.job' ] );
             try {
@@ -393,7 +394,7 @@
                 $data[ 'requisition' ] = $requisition;
                 $html_content          = view ( 'invoices.company-requisitions', $data ) -> render ();
                 $mpdf                  = $this -> pdf_settings ();
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -408,7 +409,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function agreement ( Candidate $candidate, CandidateDocumentReady $document_ready ): void {
             $document_ready -> load ( [ 'agreement.principal', 'agreement.job' ] );
             try {
@@ -427,7 +428,7 @@
                                                           'margin_header'    => 2,
                                                           'margin_footer'    => 0,
                                                       ] );
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -442,7 +443,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function specialized_deposit_slip ( Candidate $candidate ): void {
             try {
                 $data[ 'title' ]     = $title = 'Specialized Deposit Slip';
@@ -459,7 +460,7 @@
                                                      'margin_header'    => 5,
                                                      'margin_footer'    => 5,
                                                  ] );
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -474,7 +475,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function foreign_services_contract ( Candidate $candidate ): void {
             try {
                 $data[ 'title' ]     = $title = 'Foreign Services Contract';
@@ -491,7 +492,7 @@
                                                      'margin_header'    => 0,
                                                      'margin_footer'    => 0,
                                                  ] );
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -506,7 +507,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function form_7 ( Candidate $candidate ): void {
             try {
                 $data[ 'title' ]     = $title = 'Form-7';
@@ -523,7 +524,7 @@
                                                      'margin_header'    => 2,
                                                      'margin_footer'    => 2,
                                                  ] );
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -538,7 +539,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function form_32a ( Candidate $candidate ): void {
             try {
                 $data[ 'title' ]     = $title = 'Form-32A';
@@ -555,7 +556,7 @@
                                                      'margin_header'    => 5,
                                                      'margin_footer'    => 5,
                                                  ] );
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -570,7 +571,7 @@
                 dd ( $exception );
             }
         }
-        
+
         public function undertaking ( Candidate $candidate ): void {
             try {
                 $data[ 'title' ]     = $title = 'Undertaking';
@@ -587,7 +588,7 @@
                                                      'margin_header'    => 5,
                                                      'margin_footer'    => 5,
                                                  ] );
-                
+
                 $mpdf -> SetTitle ( $title );
                 $mpdf -> SetAuthor ( config ( 'app.name' ) );
                 $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
@@ -602,5 +603,41 @@
                 dd ( $exception );
             }
         }
-        
+
+
+        public function myBookingsPrint(MyBooking $myBooking) {
+            try {
+                $title = 'My Booking';
+
+                $booking = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
+                ->latest()
+                    ->where('id', $myBooking->id)->first();
+                $html_content = view('invoices.my-bookings', $booking)->render();
+                $mpdf                = new Mpdf( [
+                                                     'mode'             => 'utf-8',
+                                                     'autoScriptToLang' => true,
+                                                     'autoLangToFont'   => true,
+                                                     'margin_left'      => 5,
+                                                     'margin_right'     => 5,
+                                                     'margin_top'       => 5,
+                                                     'margin_bottom'    => 5,
+                                                     'margin_header'    => 5,
+                                                     'margin_footer'    => 5,
+                                                 ] );
+
+                $mpdf -> SetTitle ( $title );
+                $mpdf -> SetAuthor ( config ( 'app.name' ) );
+                $mpdf -> SetWatermarkText ( config ( 'app.name' ) );
+                $mpdf -> showWatermarkText  = false;
+                $mpdf -> watermark_font     = 'DejaVuSansCondensed';
+                $mpdf -> watermarkTextAlpha = 0.1;
+                $mpdf -> SetDisplayMode ( 'real' );
+                $mpdf -> WriteHTML ( $html_content );
+                $mpdf -> Output ( $title . '.pdf', 'I' );
+            }
+            catch ( MpdfException $exception ) {
+                dd ( $exception );
+            }
+        }
+
     }
