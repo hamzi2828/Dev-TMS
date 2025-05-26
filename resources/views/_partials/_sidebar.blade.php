@@ -58,7 +58,7 @@
                     {{-- @can('all', \App\Models\AirlineGroup::class) --}}
                         <li class="menu-item {{ request()->routeIs('myBookings.index') ? 'active' : '' }}">
                             <a href="{{ route('myBookings.index') }}" class="menu-link">
-                                <div data-i18n="All Booking"> Book Tickets</div>
+                                <div data-i18n="Book Tickets"> Book Tickets</div>
                             </a>
                         </li>
                         <li class="menu-item {{ request()->routeIs('myBookings.pending') ? 'active' : '' }}">
