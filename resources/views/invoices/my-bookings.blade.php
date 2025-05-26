@@ -39,7 +39,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Fly_Jinnah_logo.png" alt="Fly Jinnah Logo">
+            <img src="{{ $data['booking']->airline->file }}" alt="{{ $data['booking']->airline->title }} Logo" style="max-height: 80px;">
         </div>
 
         <div class="title">Electronic Ticket Reservation</div>
