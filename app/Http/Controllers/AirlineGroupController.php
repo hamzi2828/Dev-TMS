@@ -79,7 +79,7 @@ class AirlineGroupController extends Controller
 
 
         // Use pagination instead of get() to enable appends()
-        $airlineGroups = $query->paginate(10)->appends($request->all());
+        $airlineGroups = $query->paginate(100)->appends($request->all());
 
         // Fetch all airlines and cities for the filter dropdowns
         $airlines = (new AirlineService())->all();

@@ -103,6 +103,9 @@
                                     <a href="{{ route('myBookings.edit', ['myBooking' => $booking->id]) }}" class="btn btn-sm btn-primary mt-1" style="width: 70px;">
                                         Edit
                                     </a>
+                                    <a href="javascript:void(0)" onclick="confirmCancel('{{ route('myBookings.canceleBooking', ['id' => $booking->id]) }}')" class="btn btn-sm btn-danger mt-1" style="width: 70px;">
+                                        Cancel
+                                    </a>
                                     <span  class="badge bg-success fs-6 mt-2">Completed</span>
                                 </td>
                             </tr>
@@ -119,6 +122,12 @@
         </div>
     </div>
     <!-- / Content -->
-
+<script>
+    function confirmCancel(url) {
+        if (confirm("Are you sure you want to cancel this booking?")) {
+            window.location.href = url;
+        }
+    }
+</script>
 
 </x-dashboard>
