@@ -67,47 +67,55 @@
             </tr>
         </table>
 
-        <div style="color: #808080; font-size: 16px; font-weight: bold; margin: 15px 0 5px 0;">
-            @php
-                $firstSegment = $data['airlineGroup']->segments->first();
-                $originCity = \App\Models\City::find($firstSegment->origin);
-                $destinationCity = \App\Models\City::find($firstSegment->destination);
-                $route =
-                    ($originCity ? $originCity->title . ' (' . $originCity->code . ')' : 'N/A') .
-                    ' to ' .
-                    ($destinationCity ? $destinationCity->title . ' (' . $destinationCity->code . ')' : 'N/A');
-            @endphp
-            {{ $route }}
-        </div>
-        <table style="width: 100%; border: 1px solid #ccc; border-collapse: collapse; font-size: 12px;">
-            <tr style="background-color: #f2f2f2; border-bottom: 1px solid #ccc;">
-                <th style="text-align: left; padding: 8px; font-weight: bold;">AIRLINE</th>
-                <th style="text-align: left; padding: 8px; font-weight: bold;">FLIGHT #</th>
-                <th style="text-align: left; padding: 8px; font-weight: bold;">DEPARTURE</th>
-                <th style="width: 50px;"></th>
-                <th style="text-align: left; padding: 8px; font-weight: bold;">ARRIVAL</th>
-            </tr>
-            <tr style="border-bottom: 1px solid #f2f2f2;">
-                <td style="padding: 10px 8px;">{{ $data['booking']->airline->title }}</td>
-                <td style="padding: 10px 8px;">{{ $data['airlineGroup']->segments->first()->flight_number }}</td>
-                <td style="padding: 10px 8px;">
-                    <strong>{{ \Carbon\Carbon::parse($data['airlineGroup']->segments->first()->departure_time)->format('H:i') }}</strong><br>
-                    {{ $data['booking']->departure_airport }}<br>
-                    <span style="color: #666;">{{ \Carbon\Carbon::parse($data['airlineGroup']->segments->first()->departure_date)->format('D d M Y') }}</span>
-                </td>
-                <td style="text-align: center; font-size: 20px;">✈</td>
-                <td style="padding: 10px 8px;">
-                    <strong>{{ \Carbon\Carbon::parse($data['airlineGroup']->segments->last()->arrival_time)->format('H:i') }}</strong><br>
-                    {{ $data['booking']->arrival_airport }}<br>
+@php
+    $segments = $data['airlineGroup']->segments;
+@endphp
 
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5" style="padding: 8px; background-color: #f9f9f9;">
-                    <strong>Baggage:</strong> {{ $data['airlineGroup']->segments->first()->baggage }}
-                </td>
-            </tr>
-        </table>
+@foreach($segments as $index => $segment)
+@php
+    $originCity = \App\Models\City::find($segment->origin);
+    $destinationCity = \App\Models\City::find($segment->destination);
+    $route = ($originCity ? $originCity->title . ' (' . $originCity->code . ')' : 'N/A') .
+             ' to ' .
+             ($destinationCity ? $destinationCity->title . ' (' . $destinationCity->code . ')' : 'N/A');
+@endphp
+
+<div style="color: #808080; font-size: 16px; font-weight: bold; margin: 15px 0 5px 0;">
+    Flight {{ $index + 1 }} - {{ $route }}
+</div>
+
+<table style="width: 100%; border: 1px solid #ccc; border-collapse: collapse; font-size: 12px; margin-bottom: 20px;">
+    <tr style="background-color: #f2f2f2; border-bottom: 1px solid #ccc;">
+        <th style="text-align: left; padding: 8px; font-weight: bold;">AIRLINE</th>
+        <th style="text-align: left; padding: 8px; font-weight: bold;">FLIGHT #</th>
+        <th style="text-align: left; padding: 8px; font-weight: bold;">DEPARTURE</th>
+        <th style="width: 50px;"></th>
+        <th style="text-align: left; padding: 8px; font-weight: bold;">ARRIVAL</th>
+    </tr>
+    <tr style="border-bottom: 1px solid #f2f2f2;">
+        <td style="padding: 10px 8px;">{{ $data['booking']->airline->title }}</td>
+        <td style="padding: 10px 8px;">{{ $segment->flight_number }}</td>
+        <td style="padding: 10px 8px;">
+            <strong>{{ \Carbon\Carbon::parse($segment->departure_time)->format('H:i') }}</strong><br>
+            {{ $originCity->title ?? 'N/A' }} ({{ $originCity->code ?? 'N/A' }})<br>
+            <span style="color: #666;">{{ \Carbon\Carbon::parse($segment->departure_date)->format('D d M Y') }}</span>
+        </td>
+        <td style="text-align: center; font-size: 20px;">✈</td>
+        <td style="padding: 10px 8px;">
+            <strong>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i') }}</strong><br>
+            {{ $destinationCity->title ?? 'N/A' }} ({{ $destinationCity->code ?? 'N/A' }})<br>
+            <span style="color: #666;">{{ \Carbon\Carbon::parse($segment->arrival_date ?? $segment->departure_date)->format('D d M Y') }}</span>
+        </td>
+    </tr>
+    @if($segment->baggage)
+    <tr>
+        <td colspan="5" style="padding: 8px; background-color: #f9f9f9;">
+            <strong>Baggage:</strong> {{ $segment->baggage }}
+        </td>
+    </tr>
+    @endif
+</table>
+@endforeach
 
         <div class="section-title">Passenger Information</div>
         <table style="width: 100%; border: 1px solid #ccc; border-collapse: collapse; font-size: 12px; margin-bottom: 20px;">
