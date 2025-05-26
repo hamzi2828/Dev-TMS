@@ -99,23 +99,19 @@
         </table>
 
         <div class="section-title">Passenger Information</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Sr #</th>
-                    <th>Passenger Name</th>
-                    <th>Passport #</th>
-                    <th>Meal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>KHAN ALI</td>
-                    <td>KJ6767677</td>
-                    <td>No</td>
-                </tr>
-            </tbody>
+        <table style="width: 100%; border: 1px solid #ccc; border-collapse: collapse; font-size: 12px; margin-bottom: 20px;">
+            <tr style="background-color: #f2f2f2; border-bottom: 1px solid #ccc;">
+                <th style="padding: 8px; text-align: left; font-weight: bold;">Sr #</th>
+                <th style="padding: 8px; text-align: left; font-weight: bold;">Passenger Name</th>
+                <th style="padding: 8px; text-align: left; font-weight: bold;">Passport #</th>
+                <th style="padding: 8px; text-align: left; font-weight: bold;">Meal</th>
+            </tr>
+            <tr style="border-bottom: 1px solid #f2f2f2;">
+                <td style="padding: 10px 8px;">1</td>
+                <td style="padding: 10px 8px;">KHAN ALI</td>
+                <td style="padding: 10px 8px;">KJ6767677</td>
+                <td style="padding: 10px 8px;">No</td>
+            </tr>
         </table>
 
         <div class="footer">

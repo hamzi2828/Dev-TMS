@@ -4,6 +4,8 @@
 
     use App\Models\Candidate;
     use App\Models\MyBooking;
+    use App\Models\AirlineGroup;
+    use App\Models\Section;
     use App\Models\DocumentReady;
     use App\Models\CandidateMedical;
     use App\Models\CompanyRequisition;
@@ -607,12 +609,19 @@
 
         public function myBookingsPrint(MyBooking $myBooking) {
             try {
-                $title = 'My Booking';
+                $title = 'Booking Confirmation';
 
-                $booking = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
-                ->latest()
-                    ->where('id', $myBooking->id)->first();
-                $html_content = view('invoices.my-bookings', $booking)->render();
+                // Eager load all necessary relationships
+                $data['booking'] = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
+                ->where('id', $myBooking->id)
+                ->firstOrFail();
+
+                $data['airlineGroup'] = AirlineGroup::with(['segments', 'airline'])
+                ->where('id', $data['booking']->airline_group_id)
+                ->firstOrFail();
+
+
+                $html_content = view('invoices.my-bookings', ['booking' => $data['booking'], 'airlineGroup' => $data['airlineGroup']])->render();
                 $mpdf                = new Mpdf( [
                                                      'mode'             => 'utf-8',
                                                      'autoScriptToLang' => true,
