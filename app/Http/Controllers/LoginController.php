@@ -4,6 +4,7 @@
 
     use App\Http\Requests\LoginFormRequest;
     use App\Http\Requests\LoginRequest;
+    use App\Http\Requests\RegisterFormRequest;
     use App\Services\LoginService;
     use Illuminate\Contracts\View\View;
     use Illuminate\Database\QueryException;
@@ -42,6 +43,21 @@
         public function register (): View {
             $title = 'Register';
             return view ( 'register.index', compact ( 'title' ) );
+        }
+
+        public function registerUser ( RegisterFormRequest $request ): RedirectResponse {
+            try {
+                dd($request->all());
+                $user_id = ( new LoginService() ) -> register ( $request );
+                if ( $user_id > 0 )
+                    return redirect () -> intended ( route ( 'login' ) );
+                else
+                    return redirect () -> back () -> with ( 'error', 'Invalid Credentials.' );
+            }
+            catch ( QueryException | \Exception $exception ) {
+                Log ::info ( $exception );
+                return redirect () -> back () -> with ( 'error', $exception -> getMessage () );
+            }
         }
 
     }
