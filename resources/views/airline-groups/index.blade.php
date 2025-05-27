@@ -85,42 +85,48 @@
                                 <td>{{ number_format($group->sale_per_infant, 2) }}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <a href="{{ route('airlineGroups.edit', ['airlineGroup' => $group->id]) }}"
-                                           class="text-body"
-                                           data-bs-toggle="tooltip"
-                                           data-bs-placement="top"
-                                           data-bs-custom-class="tooltip-primary"
-                                           title="Edit">
-                                            <i class="ti ti-edit ti-sm me-2"></i>
-                                        </a>
-                                        <form action="{{ route('airlineGroups.status', $group->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            <button type="submit"
-                                                    class="text-body bg-transparent border-0 p-0"
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="top"
-                                                    data-bs-custom-class="tooltip-warning"
-                                                    title="Change Status"
-                                                    onclick="return confirm('Are you sure you want to change the status?')">
-                                                <i class="ti ti-status-change ti-sm me-2"></i>
-                                            </button>
-                                        </form>
-                                        <form method="POST"
-                                              id="delete-record-form-{{ $group->id }}"
-                                              action="{{ route('airlineGroups.destroy', ['airlineGroup' => $group->id]) }}"
-                                              class="mb-0">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button"
-                                                    class="text-body delete-record bg-transparent border-0 p-0"
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="top"
-                                                    data-bs-custom-class="tooltip-danger"
-                                                    title="Delete"
-                                                    onclick="delete_confirmation({{ $group->id }})">
-                                                <i class="ti ti-trash ti-sm mx-2"></i>
-                                            </button>
-                                        </form>
+                                        @can('editAllAirlineGroups', \App\Models\AirlineGroup::class)
+                                            <a href="{{ route('airlineGroups.edit', ['airlineGroup' => $group->id]) }}"
+                                               class="text-body"
+                                               data-bs-toggle="tooltip"
+                                               data-bs-placement="top"
+                                               data-bs-custom-class="tooltip-primary"
+                                               title="Edit">
+                                                <i class="ti ti-edit ti-sm me-2"></i>
+                                            </a>
+                                        @endcan
+                                        @can('statusAllAirlineGroups', \App\Models\AirlineGroup::class)
+                                            <form action="{{ route('airlineGroups.status', $group->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit"
+                                                        class="text-body bg-transparent border-0 p-0"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        data-bs-custom-class="tooltip-warning"
+                                                        title="Change Status"
+                                                        onclick="return confirm('Are you sure you want to change the status?')">
+                                                    <i class="ti ti-status-change ti-sm me-2"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                        @can('deleteAllAirlineGroups', \App\Models\AirlineGroup::class)
+                                            <form method="POST"
+                                                  id="delete-record-form-{{ $group->id }}"
+                                                  action="{{ route('airlineGroups.destroy', ['airlineGroup' => $group->id]) }}"
+                                                  class="mb-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button"
+                                                        class="text-body delete-record bg-transparent border-0 p-0"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        data-bs-custom-class="tooltip-danger"
+                                                        title="Delete"
+                                                        onclick="delete_confirmation({{ $group->id }})">
+                                                    <i class="ti ti-trash ti-sm mx-2"></i>
+                                                </button>
+                                            </form>
+                                        @endcan
                                     </div>
                                 </td>
 
