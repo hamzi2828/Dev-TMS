@@ -20,7 +20,8 @@
             text-align: right;
         }
         .logo img {
-            width: 150px;
+            width: 200px;
+            height: auto;
         }
         .title {
             font-size: 22px;
@@ -39,7 +40,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="{{ $data['booking']->airline->file }}" alt="{{ $data['booking']->airline->title }} Logo" style="max-height: 80px; width: auto; max-width: 300px;">
+            <img src="{{ $data['booking']->airline->file }}" alt="{{ $data['booking']->airline->title }} Logo" style="width: 100px; height: auto;">
         </div>
 
         <div class="title">Electronic Ticket Reservation</div>
@@ -100,7 +101,9 @@
             {{ $originCity->title ?? 'N/A' }} ({{ $originCity->code ?? 'N/A' }})<br>
             <span style="color: #666;">{{ \Carbon\Carbon::parse($segment->departure_date)->format('D d M Y') }}</span>
         </td>
-        <td style="padding: 10px 8px;"><img src="{{ asset('assets/flt2.png') }}" alt="flight" style="width: 40px; height: 30px; transform: rotate({{ $index === 1 ? '180' : '0' }}deg);"></td>
+        <td style="padding: 10px 8px;">
+            <img src="{{ asset('assets/flt2.png') }}" alt="flight" style="width: 50px; height: 30px; transform: rotate({{ $index === 1 ? '180' : '0' }}deg);">
+        </td>
         <td style="padding: 10px 8px;">
             <strong>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i') }}</strong><br>
             {{ $destinationCity->title ?? 'N/A' }} ({{ $destinationCity->code ?? 'N/A' }})<br>
@@ -124,25 +127,21 @@
                 <th style="padding: 8px; text-align: left; font-weight: bold;">Passenger Name</th>
                 <th style="padding: 8px; text-align: left; font-weight: bold;">Passport #</th>
                 <th style="padding: 8px; text-align: left; font-weight: bold;">Type</th>
-                <th style="padding: 8px; text-align: left; font-weight: bold;">DOB</th>
-                <th style="padding: 8px; text-align: left; font-weight: bold;">Passport Expiry</th>
             </tr>
             @foreach($data['booking']->passengers as $index => $passenger)
             <tr style="border-bottom: 1px solid #f2f2f2;">
-                <td style="padding: 10px 8px;">{{ $index + 1 }}</td>
-                <td style="padding: 10px 8px;">{{ $passenger->title }} {{ $passenger->given_name }} {{ $passenger->surname }}</td>
-                <td style="padding: 10px 8px;">{{ $passenger->passport }}</td>
-                <td style="padding: 10px 8px; text-transform: capitalize;">{{ $passenger->passenger_type }}</td>
-                <td style="padding: 10px 8px;">{{ \Carbon\Carbon::parse($passenger->dob)->format('d M Y') }}</td>
-                <td style="padding: 10px 8px;">{{ \Carbon\Carbon::parse($passenger->passport_expiry)->format('d M Y') }}</td>
+                <td style="padding: 6px 8px;">{{ $index + 1 }}</td>
+                <td style="padding: 6px 8px;">{{ $passenger->title }} {{ $passenger->given_name }} {{ $passenger->surname }}</td>
+                <td style="padding: 6px 8px;">{{ $passenger->passport }}</td>
+                <td style="padding: 6px 8px; text-transform: capitalize;">{{ $passenger->passenger_type }}</td>
             </tr>
             @endforeach
         </table>
 
-        <div class="footer">
-            <p><strong>Terms & Conditions</strong></p>
-            <p>1- Passenger should report at check-in counter at least 04:00 hours prior to flight.</p>
-            <p>2- Tickets are non-refundable and non-changeable any time.</p>
+        <div style="font-size: 14px;">
+            <p ><strong>Terms & Conditions</strong></p>
+            <p style="padding-top: -10px;">1- Passenger should report at check-in counter at least 04:00 hours prior to flight.</p>
+            <p style="padding-top: -10px;">2- Tickets are non-refundable and non-changeable any time.</p>
         </div>
     </div>
 </body>
