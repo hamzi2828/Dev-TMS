@@ -4,24 +4,22 @@
 
 'use strict';
 
-(function () {
-  let labelColor, headingColor;
+document.addEventListener('DOMContentLoaded', function (e) {
+  let labelColor, headingColor, borderColor, legendColor, fontFamily;
 
-  if (isDarkStyle) {
-    labelColor = config.colors_dark.textMuted;
-    headingColor = config.colors_dark.headingColor;
-  } else {
-    labelColor = config.colors.textMuted;
-    headingColor = config.colors.headingColor;
-  }
+  labelColor = config.colors.textMuted;
+  headingColor = config.colors.headingColor;
+  borderColor = config.colors.borderColor;
+  legendColor = config.colors.bodyColor;
+  fontFamily = config.fontFamily;
 
   // Chart Colors
   const chartColors = {
     donut: {
       series1: config.colors.success,
-      series2: '#28c76fb3',
-      series3: '#28c76f80',
-      series4: config.colors_label.success
+      series2: 'color-mix(in sRGB, ' + config.colors.success + ' 80%, ' + config.colors.cardColor + ')',
+      series3: 'color-mix(in sRGB, ' + config.colors.success + ' 60%, ' + config.colors.cardColor + ')',
+      series4: 'color-mix(in sRGB, ' + config.colors.success + ' 40%, ' + config.colors.cardColor + ')'
     },
     line: {
       series1: config.colors.warning,
@@ -47,24 +45,18 @@
         }
       ],
       chart: {
-        height: 270,
+        height: 320,
         type: 'line',
         stacked: false,
         parentHeightOffset: 0,
-        toolbar: {
-          show: false
-        },
-        zoom: {
-          enabled: false
-        }
+        toolbar: { show: false },
+        zoom: { enabled: false }
       },
       markers: {
-        size: 4,
+        size: 5,
         colors: [config.colors.white],
         strokeColors: chartColors.line.series2,
-        hover: {
-          size: 6
-        },
+        hover: { size: 6 },
         borderRadius: 4
       },
       stroke: {
@@ -76,27 +68,28 @@
         show: true,
         position: 'bottom',
         markers: {
-          width: 8,
-          height: 8,
+          size: 4,
+          strokeWidth: 0,
+          shape: 'circle',
           offsetX: -3
         },
         height: 40,
-        offsetY: 10,
         itemMargin: {
           horizontal: 10,
           vertical: 0
         },
         fontSize: '15px',
-        fontFamily: 'Public Sans',
+        fontFamily: fontFamily,
         fontWeight: 400,
         labels: {
           colors: headingColor,
           useSeriesColors: false
         },
-        offsetY: 10
+        offsetY: 8
       },
       grid: {
-        strokeDashArray: 8
+        strokeDashArray: 8,
+        borderColor
       },
       colors: [chartColors.line.series1, chartColors.line.series2],
       fill: {
@@ -110,9 +103,7 @@
           borderRadius: 4
         }
       },
-      dataLabels: {
-        enabled: false
-      },
+      dataLabels: { enabled: false },
       xaxis: {
         tickAmount: 10,
         categories: ['1 Jan', '2 Jan', '3 Jan', '4 Jan', '5 Jan', '6 Jan', '7 Jan', '8 Jan', '9 Jan', '10 Jan'],
@@ -120,26 +111,22 @@
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: 'Public Sans',
+            fontFamily: fontFamily,
             fontWeight: 400
           }
         },
-        axisBorder: {
-          show: false
-        },
-        axisTicks: {
-          show: false
-        }
+        axisBorder: { show: false },
+        axisTicks: { show: false }
       },
       yaxis: {
         tickAmount: 4,
-        min: 10,
+        min: 0,
         max: 50,
         labels: {
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: 'Public Sans',
+            fontFamily: fontFamily,
             fontWeight: 400
           },
           formatter: function (val) {
@@ -152,7 +139,7 @@
           breakpoint: 1400,
           options: {
             chart: {
-              height: 270
+              height: 320
             },
             xaxis: {
               labels: {
@@ -172,37 +159,21 @@
           }
         },
         {
-          breakpoint: 1399,
+          breakpoint: 1025,
           options: {
-            chart: {
-              height: 415
-            },
-            plotOptions: {
-              bar: {
-                columnWidth: '50%'
-              }
-            }
+            chart: { height: 415 },
+            plotOptions: { bar: { columnWidth: '50%' } }
           }
         },
         {
           breakpoint: 982,
-          options: {
-            plotOptions: {
-              bar: {
-                columnWidth: '30%'
-              }
-            }
-          }
+          options: { plotOptions: { bar: { columnWidth: '30%' } } }
         },
         {
           breakpoint: 480,
           options: {
-            chart: {
-              height: 250
-            },
-            legend: {
-              offsetY: 7
-            }
+            chart: { height: 250 },
+            legend: { offsetY: 7 }
           }
         }
       ]
@@ -217,7 +188,7 @@
   const deliveryExceptionsChartE1 = document.querySelector('#deliveryExceptionsChart'),
     deliveryExceptionsChartConfig = {
       chart: {
-        height: 420,
+        height: 391,
         parentHeightOffset: 0,
         type: 'donut'
       },
@@ -241,7 +212,7 @@
       legend: {
         show: true,
         position: 'bottom',
-        offsetY: 10,
+        offsetY: 15,
         markers: {
           width: 8,
           height: 8,
@@ -249,10 +220,10 @@
         },
         itemMargin: {
           horizontal: 15,
-          vertical: 5
+          vertical: 8
         },
         fontSize: '13px',
-        fontFamily: 'Public Sans',
+        fontFamily: fontFamily,
         fontWeight: 400,
         labels: {
           colors: headingColor,
@@ -260,18 +231,11 @@
         }
       },
       tooltip: {
-        theme: false
+        theme: 'dark'
       },
       grid: {
         padding: {
           top: 15
-        }
-      },
-      states: {
-        hover: {
-          filter: {
-            type: 'none'
-          }
         }
       },
       plotOptions: {
@@ -281,24 +245,25 @@
             labels: {
               show: true,
               value: {
-                fontSize: '26px',
-                fontFamily: 'Public Sans',
+                fontSize: '24px',
+                fontFamily: fontFamily,
                 color: headingColor,
                 fontWeight: 500,
-                offsetY: -30,
+                offsetY: -20,
                 formatter: function (val) {
                   return parseInt(val) + '%';
                 }
               },
               name: {
-                offsetY: 20,
-                fontFamily: 'Public Sans'
+                offsetY: 30,
+                fontFamily: fontFamily
               },
               total: {
                 show: true,
-                fontSize: '.75rem',
+                fontSize: '15px',
+                fontFamily: fontFamily,
+                color: legendColor,
                 label: 'AVG. Exceptions',
-                color: labelColor,
                 formatter: function (w) {
                   return '30%';
                 }
@@ -322,21 +287,18 @@
     const deliveryExceptionsChart = new ApexCharts(deliveryExceptionsChartE1, deliveryExceptionsChartConfig);
     deliveryExceptionsChart.render();
   }
-})();
 
-// DataTable (jquery)
-// --------------------------------------------------------------------
-$(function () {
-  // Variable declaration for table
-  var dt_dashboard_table = $('.dt-route-vehicles');
+  // DataTable (js)
+  // --------------------------------------------------------------------
+  const dt_dashboard_table = document.querySelector('.dt-route-vehicles');
 
   // On route vehicles DataTable
-  if (dt_dashboard_table.length) {
-    var dt_dashboard = dt_dashboard_table.DataTable({
+  if (dt_dashboard_table) {
+    var dt_dashboard = new DataTable(dt_dashboard_table, {
       ajax: assetsPath + 'json/logistics-dashboard.json',
       columns: [
         { data: 'id' },
-        { data: 'id' },
+        { data: 'id', orderable: false, render: DataTable.render.select() },
         { data: 'location' },
         { data: 'start_city' },
         { data: 'end_city' },
@@ -360,8 +322,8 @@ $(function () {
           targets: 1,
           orderable: false,
           searchable: false,
-          checkboxes: true,
           responsivePriority: 3,
+          checkboxes: true,
           render: function () {
             return '<input type="checkbox" class="dt-checkboxes form-check-input">';
           },
@@ -370,133 +332,179 @@ $(function () {
           }
         },
         {
-          // Icon and location
           targets: 2,
           responsivePriority: 1,
-          render: function (data, type, full, meta) {
-            var $location = full['location'];
-            // Creates full output for row
-            var $row_output =
-              '<div class="d-flex justify-content-start align-items-center user-name">' +
-              '<div class="avatar-wrapper">' +
-              '<div class="avatar me-2">' +
-              '<span class="avatar-initial rounded-circle bg-label-secondary text-body"><i class="ti ti-truck"></i></span>' +
-              '</div>' +
-              '</div>' +
-              '<div class="d-flex flex-column">' +
-              '<a class="text-body fw-medium" href="app-logistics-fleet.html">VOL-' +
-              $location +
-              '</a>' +
-              '</div>' +
-              '</div>';
-            return $row_output;
+          render: (data, type, full) => {
+            const location = full['location'];
+
+            return `
+                  <div class="d-flex justify-content-start align-items-center user-name">
+                      <div class="avatar-wrapper">
+                          <div class="avatar me-4">
+                              <span class="avatar-initial rounded-circle bg-label-secondary">
+                                  <i class="icon-base ti tabler-car icon-lg"></i>
+                              </span>
+                          </div>
+                      </div>
+                      <div class="d-flex flex-column">
+                          <a class="text-heading text-nowrap fw-medium" href="app-logistics-fleet.html">VOL-${location}</a>
+                      </div>
+                  </div>
+              `;
           }
         },
         {
-          // starting route
           targets: 3,
-          render: function (data, type, full, meta) {
-            var $start_city = full['start_city'],
-              $start_country = full['start_country'];
-            var $row_output = '<div class="text-body">' + $start_city + ', ' + $start_country + '</div >';
-            return $row_output;
+          render: (data, type, full) => {
+            const { start_city, start_country } = full;
+
+            return `
+                  <div class="text-body">
+                      ${start_city}, ${start_country}
+                  </div>
+              `;
           }
         },
         {
-          // ending route
           targets: 4,
-          render: function (data, type, full, meta) {
-            var $end_city = full['end_city'],
-              $end_country = full['end_country'];
-            var $row_output = '<div class="text-body">' + $end_city + ', ' + $end_country + '</div >';
-            return $row_output;
+          render: (data, type, full) => {
+            const { end_city, end_country } = full;
+
+            return `
+                  <div class="text-body">
+                      ${end_city}, ${end_country}
+                  </div>
+              `;
           }
         },
         {
-          // warnings
           targets: -2,
-          render: function (data, type, full, meta) {
-            var $status_number = full['warnings'];
-            var $status = {
+          render: (data, type, full) => {
+            const statusNumber = full['warnings'];
+            const status = {
               1: { title: 'No Warnings', class: 'bg-label-success' },
-              2: {
-                title: 'Temperature Not Optimal',
-                class: 'bg-label-warning'
-              },
+              2: { title: 'Temperature Not Optimal', class: 'bg-label-warning' },
               3: { title: 'Ecu Not Responding', class: 'bg-label-danger' },
               4: { title: 'Oil Leakage', class: 'bg-label-info' },
-              5: { title: 'fuel problems', class: 'bg-label-primary' }
+              5: { title: 'Fuel Problems', class: 'bg-label-primary' }
             };
-            if (typeof $status[$status_number] === 'undefined') {
+
+            const warning = status[statusNumber];
+
+            if (!warning) {
               return data;
             }
-            return (
-              '<span class="badge rounded ' +
-              $status[$status_number].class +
-              '">' +
-              $status[$status_number].title +
-              '</span>'
-            );
+
+            return `
+                  <span class="badge rounded ${warning.class}">
+                      ${warning.title}
+                  </span>
+              `;
           }
         },
         {
-          // progress
           targets: -1,
-          render: function (data, type, full, meta) {
-            var $progress = full['progress'];
-            var $progress_output =
-              '<div class="d-flex align-items-center">' +
-              '<div div class="progress w-100" style="height: 8px;">' +
-              '<div class="progress-bar" role="progressbar" style="width:' +
-              $progress +
-              '%;" aria-valuenow="' +
-              $progress +
-              '" aria-valuemin="0" aria-valuemax="100"></div>' +
-              '</div>' +
-              '<div class="text-body ms-3">' +
-              $progress +
-              '%</div>' +
-              '</div>';
-            return $progress_output;
+          render: (data, type, full) => {
+            const progress = full['progress'];
+
+            return `
+                  <div class="d-flex align-items-center">
+                      <div class="progress w-100" style="height: 8px;">
+                          <div
+                              class="progress-bar"
+                              role="progressbar"
+                              style="width: ${progress}%"
+                              aria-valuenow="${progress}"
+                              aria-valuemin="0"
+                              aria-valuemax="100">
+                          </div>
+                      </div>
+                      <div class="text-body ms-3">${progress}%</div>
+                  </div>
+              `;
           }
         }
       ],
+      select: {
+        style: 'multi',
+        selector: 'td:nth-child(2)'
+      },
       order: [2, 'asc'],
-      dom: '<"table-responsive"t><"row d-flex align-items-center"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
-      displayLength: 5,
+      layout: {
+        topStart: {
+          rowClass: '',
+          features: []
+        },
+        topEnd: {},
+        bottomStart: {
+          rowClass: 'row mx-3 justify-content-between',
+          features: ['info']
+        },
+        bottomEnd: 'paging'
+      },
+      lengthMenu: [5],
+      language: {
+        paginate: {
+          next: '<i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-18px"></i>',
+          previous: '<i class="icon-base ti tabler-chevron-left scaleX-n1-rtl icon-18px"></i>',
+          first: '<i class="icon-base ti tabler-chevrons-left scaleX-n1-rtl icon-18px"></i>',
+          last: '<i class="icon-base ti tabler-chevrons-right scaleX-n1-rtl icon-18px"></i>'
+        }
+      },
       responsive: {
         details: {
-          display: $.fn.dataTable.Responsive.display.modal({
+          display: DataTable.Responsive.display.modal({
             header: function (row) {
-              var data = row.data();
+              const data = row.data();
               return 'Details of ' + data['location'];
             }
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
-            var data = $.map(columns, function (col, i) {
-              return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                ? '<tr data-dt-row="' +
-                    col.rowIndex +
-                    '" data-dt-column="' +
-                    col.columnIndex +
-                    '">' +
-                    '<td>' +
-                    col.title +
-                    ':' +
-                    '</td> ' +
-                    '<td>' +
-                    col.data +
-                    '</td>' +
-                    '</tr>'
-                : '';
-            }).join('');
+            const data = columns
+              .map(function (col) {
+                return col.title !== '' // Do not show row in modal popup if title is blank (for check box)
+                  ? `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
+                      <td>${col.title}:</td>
+                      <td>${col.data}</td>
+                    </tr>`
+                  : '';
+              })
+              .join('');
 
-            return data ? $('<table class="table"/><tbody />').append(data) : false;
+            if (data) {
+              const table = document.createElement('table');
+              table.classList.add('table', 'datatables-basic', 'mb-2');
+              const tbody = document.createElement('tbody');
+              tbody.innerHTML = data;
+              table.appendChild(tbody);
+              return table;
+            }
+            return false;
           }
         }
       }
     });
-    $('.dataTables_info').addClass('pt-0');
   }
+
+  setTimeout(() => {
+    const elementsToModify = [
+      { selector: '.dt-layout-start', classToAdd: 'my-0' },
+      { selector: '.dt-layout-end', classToAdd: 'my-0' },
+      { selector: '.dt-layout-table', classToRemove: 'row mt-2', classToAdd: 'mt-n2' },
+      { selector: '.dt-layout-full', classToRemove: 'col-md col-12', classToAdd: 'table-responsive' }
+    ];
+
+    // Delete record
+    elementsToModify.forEach(({ selector, classToRemove, classToAdd }) => {
+      document.querySelectorAll(selector).forEach(element => {
+        if (classToRemove) {
+          classToRemove.split(' ').forEach(className => element.classList.remove(className));
+        }
+        if (classToAdd) {
+          classToAdd.split(' ').forEach(className => element.classList.add(className));
+        }
+      });
+    });
+  }, 100);
 });

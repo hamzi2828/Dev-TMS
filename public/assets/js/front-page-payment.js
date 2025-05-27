@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+document.addEventListener('DOMContentLoaded', function (e) {
   // Variables
   const billingZipCode = document.querySelector('.billings-zip-code'),
     creditCardMask = document.querySelector('.billing-card-mask'),
@@ -10,39 +10,54 @@
 
   // Pincode
   if (billingZipCode) {
-    new Cleave(billingZipCode, {
-      delimiter: '',
-      numeral: true
+    billingZipCode.addEventListener('input', event => {
+      billingZipCode.value = formatNumeral(event.target.value, {
+        delimiter: '',
+        numeral: true
+      });
     });
   }
 
   if (creditCardMask) {
-    new Cleave(creditCardMask, {
-      creditCard: true,
-      onCreditCardTypeChanged: function (type) {
-        if (type != '' && type != 'unknown') {
-          document.querySelector('.card-type').innerHTML =
-            '<img src="' + assetsPath + 'img/icons/payments/' + type + '-cc.png" height="28"/>';
-        } else {
-          document.querySelector('.card-type').innerHTML = '';
-        }
+    creditCardMask.addEventListener('input', event => {
+      creditCardMask.value = formatCreditCard(event.target.value);
+      const cleanValue = event.target.value.replace(/\D/g, '');
+      let cardType = getCreditCardType(cleanValue);
+      if (cardType && cardType !== 'unknown' && cardType !== 'general') {
+        document.querySelector('.card-type').innerHTML =
+          `<img src="${assetsPath}img/icons/payments/${cardType}-cc.png" height="28"/>`;
+      } else {
+        document.querySelector('.card-type').innerHTML = '';
       }
     });
+    registerCursorTracker({
+      input: creditCardMask,
+      delimiter: ' '
+    });
   }
+
   // Expiry Date Mask
   if (expiryDateMask) {
-    new Cleave(expiryDateMask, {
-      date: true,
-      delimiter: '/',
-      datePattern: ['m', 'y']
+    expiryDateMask.addEventListener('input', event => {
+      expiryDateMask.value = formatDate(event.target.value, {
+        delimiter: '/',
+        datePattern: ['m', 'y']
+      });
+    });
+    registerCursorTracker({
+      input: expiryDateMask,
+      delimiter: '/'
     });
   }
 
   // CVV
   if (cvvMask) {
-    new Cleave(cvvMask, {
-      numeral: true,
-      numeralPositiveOnly: true
+    cvvMask.addEventListener('input', event => {
+      const cleanValue = event.target.value.replace(/\D/g, '');
+      cvvMask.value = formatNumeral(cleanValue, {
+        numeral: true,
+        numeralPositiveOnly: true
+      });
     });
   }
 
@@ -59,4 +74,4 @@
       });
     });
   }
-})();
+});

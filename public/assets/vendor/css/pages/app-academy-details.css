@@ -1,15 +1,11 @@
 /**
  * Academy Course courseContent
  */
+/* (C) */
 .stick-top {
   position: sticky;
-  bottom: 0;
-  top: 10px;
+  inset-block: 10px 0;
 }
 .stick-top.course-content-fixed {
-  top: 80px;
-}
-
-.accordion-button::after {
-  margin-top: 1rem;
+  inset-block-start: 80px;
 }

@@ -25,6 +25,7 @@
 
     Route ::middleware ( [ 'guest', 'throttle:10', 'web' ] ) -> group ( function () {
         Route ::get ( '/', [ LoginController::class, 'index' ] ) -> name ( 'login' );
+        Route ::get ( '/register', [ LoginController::class, 'register' ] ) -> name ( 'register' );
         Route ::post ( '/', [ LoginController::class, 'authenticate' ] ) -> name ( 'authenticate' );
     } );
 

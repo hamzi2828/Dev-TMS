@@ -1,9 +1,12 @@
+/* Miscellaneous
+******************************************************************************* */
+/* (C) */
 .misc-wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  justify-content: center;
+  min-block-size: calc(100vh - 1.5rem * 2); /* ?we have added container-p-y class to add padding on top & bottom */
   text-align: center;
 }
 
@@ -12,18 +15,17 @@
 }
 .misc-bg-wrapper img {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
   z-index: -1;
+  inline-size: 100%;
+  inset-block-end: 0;
+  inset-inline: 0;
 }
 
 @media (max-width: 1499.98px) {
   .misc-bg-wrapper img {
-    height: 250px;
+    block-size: 250px;
   }
   .misc-under-maintenance-bg-wrapper img {
-    height: 270px !important;
+    block-size: 270px !important;
   }
 }

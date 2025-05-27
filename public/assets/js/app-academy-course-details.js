@@ -2,10 +2,10 @@
 
 'use strict';
 
-(function () {
+document.addEventListener('DOMContentLoaded', function (e) {
   // video
   const videoPlayer = new Plyr('#plyr-video-player');
-  document.getElementsByClassName('plyr')[0].style.borderRadius = '7px';
+  document.getElementsByClassName('plyr')[0].style.borderRadius = '6px';
 
   // content sticky
 
@@ -24,4 +24,4 @@
   window.onscroll = function () {
     TopSticky();
   };
-})();
+});

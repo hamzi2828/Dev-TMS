@@ -13,28 +13,14 @@ if (commentEditor) {
     modules: {
       toolbar: '.comment-toolbar'
     },
-    placeholder: 'Enter category description...',
+    placeholder: 'Write a Comment...',
     theme: 'snow'
   });
 }
 
-// Datatable (jquery)
-
-$(function () {
-  let borderColor, bodyBg, headingColor;
-
-  if (isDarkStyle) {
-    borderColor = config.colors_dark.borderColor;
-    bodyBg = config.colors_dark.bodyBg;
-    headingColor = config.colors_dark.headingColor;
-  } else {
-    borderColor = config.colors.borderColor;
-    bodyBg = config.colors.bodyBg;
-    headingColor = config.colors.headingColor;
-  }
-
-  // Variable declaration for category list table
-  var dt_category_list_table = $('.datatables-category-list');
+// Datatable (js)
+document.addEventListener('DOMContentLoaded', function (e) {
+  var dt_category_list_table = document.querySelector('.datatables-category-list');
 
   //select2 for dropdowns in offcanvas
 
@@ -51,17 +37,17 @@ $(function () {
 
   // Customers List Datatable
 
-  if (dt_category_list_table.length) {
-    var dt_category = dt_category_list_table.DataTable({
+  if (dt_category_list_table) {
+    var dt_category = new DataTable(dt_category_list_table, {
       ajax: assetsPath + 'json/ecommerce-category-list.json', // JSON file to add data
       columns: [
         // columns according to JSON
-        { data: '' },
         { data: 'id' },
+        { data: 'id', orderable: false, render: DataTable.render.select() },
         { data: 'categories' },
         { data: 'total_products' },
         { data: 'total_earnings' },
-        { data: '' }
+        { data: 'id' }
       ],
       columnDefs: [
         {
@@ -90,52 +76,37 @@ $(function () {
           }
         },
         {
-          // Categories and Category Detail
           targets: 2,
           responsivePriority: 2,
           render: function (data, type, full, meta) {
-            var $name = full['categories'],
-              $category_detail = full['category_detail'],
-              $image = full['cat_image'],
-              $id = full['id'];
-            if ($image) {
+            const name = full['categories'];
+            const categoryDetail = full['category_detail'];
+            const image = full['cat_image'];
+            const id = full['id'];
+            let output;
+            if (image) {
               // For Product image
-              var $output =
-                '<img src="' +
-                assetsPath +
-                'img/ecommerce-images/' +
-                $image +
-                '" alt="Product-' +
-                $id +
-                '" class="rounded-2">';
+              output = `<img src="${assetsPath}img/ecommerce-images/${image}" alt="Product-${id}" class="rounded">`;
             } else {
               // For Product badge
-              var stateNum = Math.floor(Math.random() * 6);
-              var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-              var $state = states[stateNum],
-                $name = full['category_detail'],
-                $initials = $name.match(/\b\w/g) || [];
-              $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
-              $output = '<span class="avatar-initial rounded-2 bg-label-' + $state + '">' + $initials + '</span>';
+              const stateNum = Math.floor(Math.random() * 6);
+              const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+              const state = states[stateNum];
+              const initials = (categoryDetail.match(/\b\w/g) || []).slice(0, 2).join('').toUpperCase();
+              output = `<span class="avatar-initial rounded-2 bg-label-${state}">${initials}</span>`;
             }
             // Creates full output for Categories and Category Detail
-            var $row_output =
-              '<div class="d-flex align-items-center">' +
-              '<div class="avatar-wrapper me-2 rounded-2 bg-label-secondary">' +
-              '<div class="avatar">' +
-              $output +
-              '</div>' +
-              '</div>' +
-              '<div class="d-flex flex-column justify-content-center">' +
-              '<span class="text-body text-wrap fw-medium">' +
-              $name +
-              '</span>' +
-              '<span class="text-muted text-truncate mb-0 d-none d-sm-block"><small>' +
-              $category_detail +
-              '</small></span>' +
-              '</div>' +
-              '</div>';
-            return $row_output;
+            const rowOutput = `
+              <div class="d-flex align-items-center">
+                <div class="avatar-wrapper me-3 rounded-2 bg-label-secondary">
+                  <div class="avatar">${output}</div>
+                </div>
+                <div class="d-flex flex-column justify-content-center">
+                  <span class="text-heading text-wrap fw-medium">${name}</span>
+                  <span class="text-truncate mb-0 d-none d-sm-block"><small>${categoryDetail}</small></span>
+                </div>
+              </div>`;
+            return rowOutput;
           }
         },
         {
@@ -143,8 +114,8 @@ $(function () {
           targets: 3,
           responsivePriority: 3,
           render: function (data, type, full, meta) {
-            var $total_products = full['total_products'];
-            return '<div class="text-sm-end">' + $total_products + '</div>';
+            const total_products = full['total_products'];
+            return '<div class="text-sm-end">' + total_products + '</div>';
           }
         },
         {
@@ -152,8 +123,8 @@ $(function () {
           targets: 4,
           orderable: false,
           render: function (data, type, full, meta) {
-            var $total_earnings = full['total_earnings'];
-            return "<div class='h6 mb-0 text-sm-end'>" + $total_earnings + '</div';
+            const total_earnings = full['total_earnings'];
+            return "<div class='mb-0 text-sm-end'>" + total_earnings + '</div';
           }
         },
         {
@@ -163,91 +134,138 @@ $(function () {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            return (
-              '<div class="d-flex align-items-sm-center justify-content-sm-center">' +
-              '<button class="btn btn-sm btn-icon delete-record me-2"><i class="ti ti-trash"></i></button>' +
-              '<button class="btn btn-sm btn-icon"><i class="ti ti-edit"></i></button>' +
-              '</div>'
-            );
+            return `
+              <div class="d-flex align-items-sm-center justify-content-sm-center">
+                <button class="btn btn-text-secondary rounded-pill waves-effect btn-icon"><i class="icon-base ti tabler-edit icon-22px"></i></button>
+                <button class="btn btn-text-secondary rounded-pill waves-effect btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="icon-base ti tabler-dots-vertical icon-22px"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end m-0">
+                  <a href="javascript:void(0);" class="dropdown-item">View</a>
+                  <a href="javascript:void(0);" class="dropdown-item">Suspend</a>
+                </div>
+              </div>
+            `;
           }
         }
       ],
-      order: [2, 'desc'], //set any columns order asc/desc
-      dom:
-        '<"card-header d-flex flex-wrap pb-2"' +
-        '<f>' +
-        '<"d-flex justify-content-center justify-content-md-end align-items-baseline"<"dt-action-buttons d-flex justify-content-center flex-md-row mb-3 mb-md-0 ps-1 ms-1 align-items-baseline"lB>>' +
-        '>t' +
-        '<"row mx-2"' +
-        '<"col-sm-12 col-md-6"i>' +
-        '<"col-sm-12 col-md-6"p>' +
-        '>',
-      lengthMenu: [7, 10, 20, 50, 70, 100], //for length of menu
-      language: {
-        sLengthMenu: '_MENU_',
-        search: '',
-        searchPlaceholder: 'Search Category'
+      select: {
+        style: 'multi',
+        selector: 'td:nth-child(2)'
       },
-      // Button for offcanvas
-      buttons: [
-        {
-          text: '<i class="ti ti-plus ti-xs me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add Category</span>',
-          className: 'add-new btn btn-primary ms-2',
-          attr: {
-            'data-bs-toggle': 'offcanvas',
-            'data-bs-target': '#offcanvasEcommerceCategoryList'
+      order: [2, 'desc'],
+      displayLength: 7,
+      layout: {
+        topStart: {
+          rowClass: 'row m-3 my-0 justify-content-between',
+          features: [
+            {
+              search: {
+                placeholder: 'Search Category',
+                text: '_INPUT_'
+              }
+            }
+          ]
+        },
+        topEnd: {
+          rowClass: 'row m-3 my-0 justify-content-between',
+          features: {
+            pageLength: {
+              menu: [7, 10, 25, 50, 100],
+              text: '_MENU_'
+            },
+            buttons: [
+              {
+                text: `<i class="icon-base ti tabler-plus icon-16px me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Add Category</span>`,
+                className: 'add-new btn btn-primary',
+                attr: {
+                  'data-bs-toggle': 'offcanvas',
+                  'data-bs-target': '#offcanvasEcommerceCategoryList'
+                }
+              }
+            ]
           }
+        },
+        bottomStart: {
+          rowClass: 'row mx-3 justify-content-between',
+          features: ['info']
+        },
+        bottomEnd: 'paging'
+      },
+      language: {
+        paginate: {
+          next: '<i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-18px"></i>',
+          previous: '<i class="icon-base ti tabler-chevron-left scaleX-n1-rtl icon-18px"></i>',
+          first: '<i class="icon-base ti tabler-chevrons-left scaleX-n1-rtl icon-18px"></i>',
+          last: '<i class="icon-base ti tabler-chevrons-right scaleX-n1-rtl icon-18px"></i>'
         }
-      ],
+      },
       // For responsive popup
       responsive: {
         details: {
-          display: $.fn.dataTable.Responsive.display.modal({
+          display: DataTable.Responsive.display.modal({
             header: function (row) {
-              var data = row.data();
+              const data = row.data();
               return 'Details of ' + data['categories'];
             }
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
-            var data = $.map(columns, function (col, i) {
-              return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                ? '<tr data-dt-row="' +
-                    col.rowIndex +
-                    '" data-dt-column="' +
-                    col.columnIndex +
-                    '">' +
-                    '<td> ' +
-                    col.title +
-                    ':' +
-                    '</td> ' +
-                    '<td class="ps-0">' +
-                    col.data +
-                    '</td>' +
-                    '</tr>'
-                : '';
-            }).join('');
+            const data = columns
+              .map(function (col) {
+                return col.title !== '' // Do not show row in modal popup if title is blank (for check box)
+                  ? `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
+                      <td>${col.title}:</td>
+                      <td>${col.data}</td>
+                    </tr>`
+                  : '';
+              })
+              .join('');
 
-            return data ? $('<table class="table"/><tbody />').append(data) : false;
+            if (data) {
+              const div = document.createElement('div');
+              div.classList.add('table-responsive');
+              const table = document.createElement('table');
+              div.appendChild(table);
+              table.classList.add('table');
+              const tbody = document.createElement('tbody');
+              tbody.innerHTML = data;
+              table.appendChild(tbody);
+              return div;
+            }
+            return false;
           }
         }
       }
     });
-    $('.dt-action-buttons').addClass('pt-0');
-    $('.dataTables_filter').addClass('me-3 ps-0');
   }
 
-  // Delete Record
-  $('.datatables-category-list tbody').on('click', '.delete-record', function () {
-    dt_category.row($(this).parents('tr')).remove().draw();
-  });
-
   // Filter form control to default size
-  // ? setTimeout used for multilingual table initialization
+  // ? setTimeout used for category-list table initialization
   setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-  }, 300);
+    const elementsToModify = [
+      { selector: '.dt-buttons .btn', classToRemove: 'btn-secondary' },
+      { selector: '.dt-buttons.btn-group', classToAdd: 'mb-md-0 mb-6' },
+      { selector: '.dt-search .form-control', classToRemove: 'form-control-sm', classToAdd: 'ms-0' },
+      { selector: '.dt-search', classToAdd: 'mb-0 mb-md-6' },
+      { selector: '.dt-length .form-select', classToRemove: 'form-select-sm' },
+      { selector: '.dt-layout-table', classToRemove: 'row mt-2', classToAdd: 'border-top' },
+      { selector: '.dt-layout-end', classToAdd: 'gap-md-2 gap-0 mt-0' },
+      { selector: '.dt-layout-start', classToAdd: 'mt-0' },
+      { selector: '.dt-layout-full', classToRemove: 'col-md col-12', classToAdd: 'table-responsive' }
+    ];
+
+    elementsToModify.forEach(({ selector, classToRemove, classToAdd }) => {
+      document.querySelectorAll(selector).forEach(element => {
+        if (classToRemove) {
+          classToRemove.split(' ').forEach(className => element.classList.remove(className));
+        }
+        if (classToAdd) {
+          classToAdd.split(' ').forEach(className => element.classList.add(className));
+        }
+      });
+    });
+  }, 100);
 });
 
 //For form validation
@@ -279,7 +297,7 @@ $(function () {
         eleValidClass: 'is-valid',
         rowSelector: function (field, ele) {
           // field is the field name & ele is the field element
-          return '.mb-3';
+          return '.form-control-validation';
         }
       }),
       submitButton: new FormValidation.plugins.SubmitButton(),

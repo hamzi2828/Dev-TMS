@@ -5,7 +5,7 @@
 
 //Javascript to handle the e-commerce settings page
 
-$(function () {
+document.addEventListener('DOMContentLoaded', function (e) {
   // Select2
   var select2 = $('.select2');
   if (select2.length) {
@@ -17,18 +17,23 @@ $(function () {
       });
     });
   }
-});
 
-(function () {
   // Phone Number
   const phoneMaskList = document.querySelectorAll('.phone-mask');
 
   if (phoneMaskList) {
     phoneMaskList.forEach(function (phoneMask) {
-      new Cleave(phoneMask, {
-        phone: true,
-        phoneRegionCode: 'US'
+      phoneMask.addEventListener('input', event => {
+        const cleanValue = event.target.value.replace(/\D/g, '');
+        phoneMask.value = formatGeneral(cleanValue, {
+          blocks: [3, 3, 4],
+          delimiters: [' ', ' ']
+        });
+      });
+      registerCursorTracker({
+        input: phoneMask,
+        delimiter: ' '
       });
     });
   }
-})();
+});

@@ -79,17 +79,28 @@
                         <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="remember-me" name="remember-me"
-                                value="1" />
+                <div class="my-8">
+                    <div class="d-flex justify-content-between">
+                      <div class="form-check mb-0 ms-2">
+                        <input class="form-check-input" type="checkbox" id="remember-me" />
                         <label class="form-check-label" for="remember-me"> Remember Me </label>
+                      </div>
+                      <a href="auth-forgot-password-cover.html">
+                        <p class="mb-0">Forgot Password?</p>
+                      </a>
                     </div>
-                </div>
-                <div class="mb-3">
+                  </div>
+                <div class="mt-3">
                     <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
                 </div>
             </form>
+
+            <p class="text-center">
+                <span>New on our platform?</span>
+                <a href="{{ route ('register') }}">
+                  <span>Create an account</span>
+                </a>
+              </p>
         </div>
         <!-- /Login -->
       </div>

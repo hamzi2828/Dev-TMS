@@ -1,8 +1,9 @@
+/* (C) */
 .mapboxgl-map {
-  -webkit-tap-highlight-color: rgb(0 0 0/0);
   font: 12px/20px Helvetica Neue, Arial, Helvetica, sans-serif;
   overflow: hidden;
   position: relative;
+  -webkit-tap-highlight-color: rgb(0 0 0/0);
 }
 
 .mapboxgl-canvas {
@@ -46,7 +47,7 @@
   touch-action: none;
 }
 
-.mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right, .mapboxgl-ctrl-top-left, .mapboxgl-ctrl-top-right {
+.mapboxgl-ctrl-bottom, .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right, .mapboxgl-ctrl-left, .mapboxgl-ctrl-right, .mapboxgl-ctrl-top, .mapboxgl-ctrl-top-left, .mapboxgl-ctrl-top-right {
   pointer-events: none;
   position: absolute;
   z-index: 2;
@@ -57,9 +58,32 @@
   top: 0;
 }
 
+.mapboxgl-ctrl-top {
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
 .mapboxgl-ctrl-top-right {
   right: 0;
   top: 0;
+}
+
+.mapboxgl-ctrl-right {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mapboxgl-ctrl-bottom-right {
+  bottom: 0;
+  right: 0;
+}
+
+.mapboxgl-ctrl-bottom {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .mapboxgl-ctrl-bottom-left {
@@ -67,9 +91,10 @@
   left: 0;
 }
 
-.mapboxgl-ctrl-bottom-right {
-  bottom: 0;
-  right: 0;
+.mapboxgl-ctrl-left {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .mapboxgl-ctrl {
@@ -83,19 +108,29 @@
   margin: 10px 0 0 10px;
 }
 
+.mapboxgl-ctrl-top .mapboxgl-ctrl {
+  float: left;
+  margin: 10px 0;
+}
+
 .mapboxgl-ctrl-top-right .mapboxgl-ctrl {
   float: right;
   margin: 10px 10px 0 0;
 }
 
-.mapboxgl-ctrl-bottom-left .mapboxgl-ctrl {
-  float: left;
-  margin: 0 0 10px 10px;
-}
-
-.mapboxgl-ctrl-bottom-right .mapboxgl-ctrl {
+.mapboxgl-ctrl-bottom-right .mapboxgl-ctrl, .mapboxgl-ctrl-right .mapboxgl-ctrl {
   float: right;
   margin: 0 10px 10px 0;
+}
+
+.mapboxgl-ctrl-bottom .mapboxgl-ctrl {
+  float: left;
+  margin: 10px 0;
+}
+
+.mapboxgl-ctrl-bottom-left .mapboxgl-ctrl, .mapboxgl-ctrl-left .mapboxgl-ctrl {
+  float: left;
+  margin: 0 0 10px 10px;
 }
 
 .mapboxgl-ctrl-group {
@@ -343,6 +378,7 @@ a.mapboxgl-ctrl-logo.mapboxgl-compact {
   .mapboxgl-ctrl-attrib.mapboxgl-compact {
     background-color: #fff;
     border-radius: 12px;
+    box-sizing: content-box;
     margin: 10px;
     min-height: 20px;
     padding: 2px 24px 2px 0;
@@ -352,7 +388,7 @@ a.mapboxgl-ctrl-logo.mapboxgl-compact {
     padding: 2px 28px 2px 8px;
     visibility: visible;
   }
-  .mapboxgl-ctrl-bottom-left > .mapboxgl-ctrl-attrib.mapboxgl-compact-show, .mapboxgl-ctrl-top-left > .mapboxgl-ctrl-attrib.mapboxgl-compact-show {
+  .mapboxgl-ctrl-bottom-left > .mapboxgl-ctrl-attrib.mapboxgl-compact-show, .mapboxgl-ctrl-left > .mapboxgl-ctrl-attrib.mapboxgl-compact-show, .mapboxgl-ctrl-top-left > .mapboxgl-ctrl-attrib.mapboxgl-compact-show {
     border-radius: 12px;
     padding: 2px 8px 2px 28px;
   }
@@ -374,7 +410,7 @@ a.mapboxgl-ctrl-logo.mapboxgl-compact {
     top: 0;
     width: 24px;
   }
-  .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl-attrib-button, .mapboxgl-ctrl-top-left .mapboxgl-ctrl-attrib-button {
+  .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl-attrib-button, .mapboxgl-ctrl-left .mapboxgl-ctrl-attrib-button, .mapboxgl-ctrl-top-left .mapboxgl-ctrl-attrib-button {
     left: 0;
   }
   .mapboxgl-ctrl-attrib.mapboxgl-compact .mapboxgl-ctrl-attrib-button, .mapboxgl-ctrl-attrib.mapboxgl-compact-show .mapboxgl-ctrl-attrib-inner {
@@ -387,6 +423,9 @@ a.mapboxgl-ctrl-logo.mapboxgl-compact {
     bottom: 0;
     right: 0;
   }
+  .mapboxgl-ctrl-right > .mapboxgl-ctrl-attrib.mapboxgl-compact:after {
+    right: 0;
+  }
   .mapboxgl-ctrl-top-right > .mapboxgl-ctrl-attrib.mapboxgl-compact:after {
     right: 0;
     top: 0;
@@ -397,6 +436,9 @@ a.mapboxgl-ctrl-logo.mapboxgl-compact {
   }
   .mapboxgl-ctrl-bottom-left > .mapboxgl-ctrl-attrib.mapboxgl-compact:after {
     bottom: 0;
+    left: 0;
+  }
+  .mapboxgl-ctrl-left > .mapboxgl-ctrl-attrib.mapboxgl-compact:after {
     left: 0;
   }
 }
@@ -714,5 +756,5 @@ a.mapboxgl-ctrl-logo.mapboxgl-compact {
 }
 
 .marker-focus {
-  filter: drop-shadow(0px 0px 7px #7367f0);
+  filter: drop-shadow(0 0 7px var(--bs-primary));
 }

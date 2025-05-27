@@ -14,42 +14,61 @@
   // Phone Number
   if (phoneMaskList) {
     phoneMaskList.forEach(function (phoneMask) {
-      new Cleave(phoneMask, {
-        phone: true,
-        phoneRegionCode: 'US'
+      phoneMask.addEventListener('input', event => {
+        const cleanValue = event.target.value.replace(/\D/g, '');
+        phoneMask.value = formatGeneral(cleanValue, {
+          blocks: [3, 3, 4],
+          delimiters: [' ', ' ']
+        });
+      });
+      registerCursorTracker({
+        input: phoneMask,
+        delimiter: ' '
       });
     });
   }
 
   // Credit Card
   if (creditCardMask) {
-    new Cleave(creditCardMask, {
-      creditCard: true,
-      onCreditCardTypeChanged: function (type) {
-        if (type != '' && type != 'unknown') {
-          document.querySelector('.card-type').innerHTML =
-            '<img src="' + assetsPath + 'img/icons/payments/' + type + '-cc.png" height="28"/>';
-        } else {
-          document.querySelector('.card-type').innerHTML = '';
-        }
+    creditCardMask.addEventListener('input', event => {
+      creditCardMask.value = formatCreditCard(event.target.value);
+      const cleanValue = event.target.value.replace(/\D/g, '');
+      let cardType = getCreditCardType(cleanValue);
+      if (cardType && cardType !== 'unknown' && cardType !== 'general') {
+        document.querySelector('.card-type').innerHTML =
+          `<img src="${assetsPath}img/icons/payments/${cardType}-cc.png" height="28"/>`;
+      } else {
+        document.querySelector('.card-type').innerHTML = '';
       }
+    });
+    registerCursorTracker({
+      input: creditCardMask,
+      delimiter: ' '
     });
   }
 
   // Expiry Date Mask
   if (expiryDateMask) {
-    new Cleave(expiryDateMask, {
-      date: true,
-      delimiter: '/',
-      datePattern: ['m', 'y']
+    expiryDateMask.addEventListener('input', event => {
+      expiryDateMask.value = formatDate(event.target.value, {
+        delimiter: '/',
+        datePattern: ['m', 'y']
+      });
+    });
+    registerCursorTracker({
+      input: expiryDateMask,
+      delimiter: '/'
     });
   }
 
   // CVV
   if (cvvMask) {
-    new Cleave(cvvMask, {
-      numeral: true,
-      numeralPositiveOnly: true
+    cvvMask.addEventListener('input', event => {
+      const cleanValue = event.target.value.replace(/\D/g, '');
+      cvvMask.value = formatNumeral(cleanValue, {
+        numeral: true,
+        numeralPositiveOnly: true
+      });
     });
   }
 
@@ -79,27 +98,8 @@
 
 // select2 (jquery)
 $(function () {
-  // Form sticky actions
-  var topSpacing;
-  const stickyEl = $('.sticky-element');
-
   // Init custom option check
   window.Helpers.initCustomOptionCheck();
-
-  // Set topSpacing if the navbar is fixed
-  if (Helpers.isNavbarFixed()) {
-    topSpacing = $('.layout-navbar').height() + 7;
-  } else {
-    topSpacing = 0;
-  }
-
-  // sticky element init (Sticky Layout)
-  if (stickyEl.length) {
-    stickyEl.sticky({
-      topSpacing: topSpacing,
-      zIndex: 9
-    });
-  }
 
   // Select2 Country
   var select2 = $('.select2');

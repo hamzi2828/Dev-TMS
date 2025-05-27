@@ -4,32 +4,26 @@
 
 'use strict';
 
-(function () {
-  let cardColor, headingColor, legendColor, labelColor;
-  if (isDarkStyle) {
-    cardColor = config.colors_dark.cardColor;
-    labelColor = config.colors_dark.textMuted;
-    legendColor = config.colors_dark.bodyColor;
-    headingColor = config.colors_dark.headingColor;
-  } else {
-    cardColor = config.colors.cardColor;
-    labelColor = config.colors.textMuted;
-    legendColor = config.colors.bodyColor;
-    headingColor = config.colors.headingColor;
-  }
+document.addEventListener('DOMContentLoaded', function (e) {
+  let cardColor, headingColor, legendColor, labelColor, fontFamily;
+  cardColor = config.colors.cardColor;
+  labelColor = config.colors.textMuted;
+  legendColor = config.colors.bodyColor;
+  headingColor = config.colors.headingColor;
+  fontFamily = config.fontFamily;
 
   // Radial bar chart functions
   function radialBarChart(color, value, show) {
     const radialBarChartOpt = {
       chart: {
-        height: show == 'true' ? 58 : 53,
-        width: show == 'true' ? 58 : 43,
+        height: show == 'true' ? 60 : 48,
+        width: show == 'true' ? 58 : 38,
         type: 'radialBar'
       },
       plotOptions: {
         radialBar: {
           hollow: {
-            size: show == 'true' ? '50%' : '33%'
+            size: show == 'true' ? '50%' : '25%'
           },
           dataLabels: {
             show: show == 'true' ? true : false,
@@ -37,7 +31,7 @@
               offsetY: -10,
               fontSize: '15px',
               fontWeight: 500,
-              fontFamily: 'Public Sans',
+              fontFamily: fontFamily,
               color: headingColor
             }
           },
@@ -173,4 +167,4 @@
       }
     });
   }
-})();
+});
