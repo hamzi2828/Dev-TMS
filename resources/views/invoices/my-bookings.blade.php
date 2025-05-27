@@ -100,7 +100,7 @@
             {{ $originCity->title ?? 'N/A' }} ({{ $originCity->code ?? 'N/A' }})<br>
             <span style="color: #666;">{{ \Carbon\Carbon::parse($segment->departure_date)->format('D d M Y') }}</span>
         </td>
-        <td style="text-align: center; padding: 10px 8px;"><img src="{{ asset('assets/flt2.png') }}" alt="flight" style="width: 24px; height: 24px; transform: rotate({{ $index === 1 ? '180' : '0' }}deg);"></td>
+        <td style="text-align: center; padding: 10px 8px;"><img src="{{ asset('assets/flt2.png') }}" alt="flight" style="width: 34px; height: 34px; transform: rotate({{ $index === 1 ? '180' : '0' }}deg);"></td>
         <td style="padding: 10px 8px;">
             <strong>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i') }}</strong><br>
             {{ $destinationCity->title ?? 'N/A' }} ({{ $destinationCity->code ?? 'N/A' }})<br>
