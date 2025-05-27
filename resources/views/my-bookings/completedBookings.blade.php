@@ -100,16 +100,16 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('myBookings.edit', ['myBooking' => $booking->id]) }}" class="btn btn-sm btn-primary mt-1" style="width: 70px;">
+                                    <a href="{{ route('myBookings.edit', ['myBooking' => $booking->id]) }}" class="btn btn-sm btn-primary mt-1" style="width: 120px;">
                                         Edit
                                     </a>
-                                    <a href="{{ url('invoices/bookings/' . $booking->id) }}" class="btn btn-sm btn-primary mt-1" style="width: 70px;">
-                                        Print
+                                    <a href="{{ url('invoices/bookings/' . $booking->id) }}" target="_blank" class="btn btn-sm btn-warning mt-1" style="width: 120px;">
+                                        Print Ticket
                                     </a>
-                                    <a href="javascript:void(0)" onclick="confirmCancel('{{ route('myBookings.canceleBooking', ['id' => $booking->id]) }}')" class="btn btn-sm btn-danger mt-1" style="width: 70px;">
+                                    <a href="javascript:void(0)" onclick="confirmCancel('{{ route('myBookings.canceleBooking', ['id' => $booking->id]) }}')" class="btn btn-sm btn-danger mt-1" style="width: 120px;">
                                         Cancel
                                     </a>
-                                    <span  class="badge bg-success fs-6 mt-2">Completed</span>
+                                    <span  class="btn btn-sm btn-success mt-1" style="width: 120px;">Confirmed</span>
                                 </td>
                             </tr>
                         @endforeach
