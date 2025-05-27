@@ -24,7 +24,7 @@
         @include('_partials.menus.airline-groups')
 
 
-@include('_partials.menus.my-bookings')
+        @include('_partials.menus.my-bookings')
         @include('_partials.menus.settings')
 
 

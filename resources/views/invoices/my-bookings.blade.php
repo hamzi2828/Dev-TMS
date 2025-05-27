@@ -39,8 +39,9 @@
 </head>
 <body>
     <div class="container">
+
         <div class="logo">
-            <img src="{{ $data['booking']->airline->file }}" alt="{{ $data['booking']->airline->title }} Logo" style="width: 100px; height: auto;">
+            {{-- <img src="{{ $data['booking']->airline->file }}" alt="{{ $data['booking']->airline->title }} Logo" style="width: 100px; height: auto;"> --}}
         </div>
 
         <div class="title">Electronic Ticket Reservation</div>
@@ -52,7 +53,7 @@
             </tr>
             <tr>
                 <td style="padding: 2px 0; font-weight: bold;">Booking ID</td>
-                <td style="padding: 2px 0;">{{ $data['booking']->id }}</td>
+                <td style="padding: 2px 0;">{{ $data['booking']->booking_reference }}</td>
             </tr>
             <tr>
                 <td style="padding: 2px 0; font-weight: bold;">Issued By</td>
@@ -102,7 +103,7 @@
             <span style="color: #666;">{{ \Carbon\Carbon::parse($segment->departure_date)->format('D d M Y') }}</span>
         </td>
         <td style="padding: 10px 8px;">
-            <img src="{{ asset('assets/flt2.png') }}" alt="flight" style="width: 50px; height: 30px; transform: rotate({{ $index === 1 ? '180' : '0' }}deg);">
+            {{-- <img src="{{ asset('assets/flt2.png') }}" alt="flight" style="width: 50px; height: 30px; transform: rotate({{ $index === 1 ? '180' : '0' }}deg);"> --}}
         </td>
         <td style="padding: 10px 8px;">
             <strong>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i') }}</strong><br>
@@ -127,6 +128,7 @@
                 <th style="padding: 8px; text-align: left; font-weight: bold;">Passenger Name</th>
                 <th style="padding: 8px; text-align: left; font-weight: bold;">Passport #</th>
                 <th style="padding: 8px; text-align: left; font-weight: bold;">Type</th>
+                <th style="padding: 8px; text-align: left; font-weight: bold;">Meal</th>
             </tr>
             @foreach($data['booking']->passengers as $index => $passenger)
             <tr style="border-bottom: 1px solid #f2f2f2;">
@@ -134,6 +136,7 @@
                 <td style="padding: 6px 8px;">{{ $passenger->title }} {{ $passenger->given_name }} {{ $passenger->surname }}</td>
                 <td style="padding: 6px 8px;">{{ $passenger->passport }}</td>
                 <td style="padding: 6px 8px; text-transform: capitalize;">{{ $passenger->passenger_type }}</td>
+                <td style="padding: 6px 8px; text-transform: capitalize;">{{ $segments->first()->meal }}</td>
             </tr>
             @endforeach
         </table>
