@@ -99,9 +99,11 @@
                                     <td>£{{ number_format($group->sale_per_child, 2) }}</td>
                                     <td>£{{ number_format($group->sale_per_infant, 2) }}</td>
                                     <td>
+                                        @can('bookNowBookTickets', \App\Models\MyBooking::class)
                                         <a href="{{ route('myBookings.create', ['airlineGroup' => $group->id]) }}" class="btn btn-sm btn-primary" target="_blank">
                                             Book Now
                                         </a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

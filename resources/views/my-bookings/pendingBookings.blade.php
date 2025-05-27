@@ -103,15 +103,21 @@
                                 </td>
 
                                 <td>
+                                    @can('confirmBookingPendingBooking', \App\Models\MyBooking::class)
                                     <a href="javascript:void(0)" onclick="confirmWithPNR('{{ route('myBookings.confirmBooking', ['id' => $booking->id, 'pnr' => '']) }}')" class="btn btn-sm btn-info" style="width: 70px;">
                                         Confirm
                                     </a>
+                                    @endcan
+                                    @can('cancelBookingPendingBooking', \App\Models\MyBooking::class)
                                     <a href="javascript:void(0)" onclick="confirmCancel('{{ route('myBookings.canceleBooking', ['id' => $booking->id]) }}')" class="btn btn-sm btn-danger mt-1" style="width: 70px;">
                                         Cancel
                                     </a>
+                                    @endcan
+                                    @can('editBookingPendingBooking', \App\Models\MyBooking::class)
                                     <a href="{{ route('myBookings.edit', ['myBooking' => $booking->id]) }}" class="btn btn-sm btn-primary mt-1" style="width: 70px;">
                                         Edit
                                     </a>
+                                    @endcan
                                 </td>
                             </tr>
                         @empty

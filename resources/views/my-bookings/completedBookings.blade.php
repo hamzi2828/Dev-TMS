@@ -102,15 +102,21 @@
                                 <td>
                                     <span  class="btn btn-sm btn-success mt-1" style="width: 110px;">Confirmed</span>
 
+                                    @can('editConfirmedBooking', \App\Models\MyBooking::class)
                                     <a href="{{ route('myBookings.edit', ['myBooking' => $booking->id]) }}" class="btn btn-sm btn-primary mt-1" style="width: 110px;">
                                         Edit
                                     </a>
+                                    @endcan
+                                    @can('cancelBookingConfirmedBooking', \App\Models\MyBooking::class)
                                     <a href="javascript:void(0)" onclick="confirmCancel('{{ route('myBookings.canceleBooking', ['id' => $booking->id]) }}')" class="btn btn-sm btn-danger mt-1" style="width: 110px;">
                                         Cancel
                                     </a>
+                                    @endcan
+                                    @can('printTicketConfirmedBooking', \App\Models\MyBooking::class)
                                     <a href="{{ url('invoices/bookings/' . $booking->id) }}" target="_blank" class="btn btn-sm btn-warning mt-1" style="width: 110px;">
                                         Print Ticket
                                     </a>
+                                    @endcan
 
 
                                 </td>
