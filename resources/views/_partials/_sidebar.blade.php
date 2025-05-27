@@ -21,70 +21,10 @@
 
         @include('_partials.menus.accounts-reporting')
         @include('_partials.menus.accounts-settings')
+        @include('_partials.menus.airline-groups')
 
 
-                {{-- @can('mainMenu', \App\Models\AirlineGroup::class) --}}
-                <li class="menu-item {{ request()->routeIs('airlineGroups.*') ? 'active open' : '' }}">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-plane-departure"></i>
-                        <div data-i18n="Airline Groups">Airline Groups</div>
-                    </a>
-                    <ul class="menu-sub">
-                        {{-- @can('all', \App\Models\AirlineGroup::class) --}}
-                            <li class="menu-item {{ request()->routeIs('airlineGroups.index') && !request()->has('inactive') ? 'active' : '' }}">
-                                <a href="{{ route('airlineGroups.index') }}" class="menu-link">
-                                    <div data-i18n="All Airline Groups">All Airline Groups</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ request()->routeIs('airlineGroups.index') && request()->query('inactive') === 'true' ? 'active' : '' }}">
-                                <a href="{{ route('airlineGroups.index', ['inactive' => 'true']) }}" class="menu-link">
-                                    <div data-i18n="Airline Groups (Inactive)">Airline Groups (Inactive)</div>
-                                </a>
-                            </li>
-                        {{-- @endcan --}}
-
-                        {{-- @can('create', \App\Models\AirlineGroup::class) --}}
-                            <li class="menu-item {{ request()->routeIs('airlineGroups.create') ? 'active' : '' }}">
-                                <a href="{{ route('airlineGroups.create') }}" class="menu-link">
-                                    <div data-i18n="Add Airline Group">Add Airline Group</div>
-                                </a>
-                            </li>
-                        {{-- @endcan --}}
-                    </ul>
-                </li>
-            {{-- @endcan --}}
-
-            <li class="menu-item {{ request()->routeIs('myBookings.*') ? 'active open' : '' }}">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon tf-icons ti ti-ticket"></i>
-                    <div data-i18n="My Booking">My Booking</div>
-                </a>
-                <ul class="menu-sub">
-                    {{-- @can('all', \App\Models\AirlineGroup::class) --}}
-                        <li class="menu-item {{ request()->routeIs('myBookings.index') ? 'active' : '' }}">
-                            <a href="{{ route('myBookings.index') }}" class="menu-link">
-                                <div data-i18n="Book Tickets">Book Tickets</div>
-                            </a>
-                        </li>
-                        <li class="menu-item {{ request()->routeIs('myBookings.pending') ? 'active' : '' }}">
-                            <a href="{{ route('myBookings.pending') }}" class="menu-link">
-                                <div data-i18n="Pending Booking">Pending Booking</div>
-                            </a>
-                        </li>
-                        <li class="menu-item {{ request()->routeIs('myBookings.canceled') ? 'active' : '' }}">
-                            <a href="{{ route('myBookings.canceled') }}" class="menu-link">
-                                <div data-i18n="Canceled Booking">Canceled Booking</div>
-                            </a>
-                        </li>
-                        <li class="menu-item {{ request()->routeIs('myBookings.completed') ? 'active' : '' }}">
-                            <a href="{{ route('myBookings.completed') }}" class="menu-link">
-                                <div data-i18n="Confirmed Booking">Confirmed Booking</div>
-                            </a>
-
-                    {{-- @endcan --}}
-
-                </ul>
-            </li>
+@include('_partials.menus.my-bookings')
         @include('_partials.menus.settings')
 
 

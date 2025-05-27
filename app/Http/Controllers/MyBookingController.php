@@ -22,93 +22,6 @@ class MyBookingController extends Controller
         $currentDate = now();
 
         $query = AirlineGroup::with(['segments', 'airline'])
-            ->where('total_seats', '>', 0); // Filter for total_seats > 0
-
-        // Apply filters
-
-        if ($request->has('departure_date') && $request->departure_date) {
-            $query->whereDoesntHave('segments', function ($query) use ($request) {
-                $query->whereDate('departure_date', '<', $request->departure_date);
-            });
-        }
-
-
-        if ($request->has('airline') && $request->airline) {
-            $query->where('airline_id', $request->airline);
-        }
-
-        if ($request->has('origin') && $request->origin) {
-            // Handle the case where origin is already a numeric ID
-            $query->whereHas('segments', function ($query) use ($request) {
-                // Check if it's a numeric value (direct ID)
-                if (is_numeric($request->origin)) {
-                    $query->where('origin', $request->origin);
-                } else {
-                    // Try to find matching cities by name
-                    $cityIds = \App\Models\City::where('title', 'like', '%' . $request->origin . '%')
-                        ->pluck('id')
-                        ->toArray();
-
-                    if (!empty($cityIds)) {
-                        $query->whereIn('origin', $cityIds);
-                    }
-                }
-            });
-        }
-
-        if ($request->has('destination') && $request->destination) {
-            // Handle the case where destination is already a numeric ID
-            $query->whereHas('segments', function ($query) use ($request) {
-                // Check if it's a numeric value (direct ID)
-                if (is_numeric($request->destination)) {
-                    $query->where('destination', $request->destination);
-                } else {
-                    // Try to find matching cities by name
-                    $cityIds = \App\Models\City::where('title', 'like', '%' . $request->destination . '%')
-                        ->pluck('id')
-                        ->toArray();
-
-                    if (!empty($cityIds)) {
-                        $query->whereIn('destination', $cityIds);
-                    }
-                }
-            });
-        }
-
-
-        if ($request->filled('trip_type')) {
-            $query->whereHas('section', function ($query) use ($request) {
-                $query->where('trip_type', $request->trip_type);
-            });
-        }
-
-
-
-
-
-        // Get the filtered airline groups with pagination
-        $airlineGroups = $query->paginate(10);
-
-        // Get all airlines and cities for the filter dropdowns
-        $airlines = Airline::all();
-        $cities = \App\Models\City::all(); // Fetch all cities for the dropdown
-
-        // Prepare data for the view
-        $data['title'] = 'All Booking';
-        $data['airlineGroups'] = $airlineGroups;
-        $data['airlines'] = $airlines;
-        $data['cities'] = $cities; // Pass the cities to the view
-
-        return view('my-bookings.index', $data);
-    }
-
-
-    public function myBookings2(Request $request)
-    {
-        // Get current date for comparison
-        $currentDate = now();
-
-        $query = AirlineGroup::with(['segments', 'airline'])
             ->where('total_seats', '>', 0)
             ->where('status', 'active');
 
@@ -190,6 +103,95 @@ class MyBookingController extends Controller
 
         return view('my-bookings.myBookings2', $data);
     }
+
+
+
+
+    // public function myBookings2(Request $request)
+    // {
+    //     // Get current date for comparison
+    //     $currentDate = now();
+
+    //     $query = AirlineGroup::with(['segments', 'airline'])
+    //         ->where('total_seats', '>', 0); // Filter for total_seats > 0
+
+    //     // Apply filters
+
+    //     if ($request->has('departure_date') && $request->departure_date) {
+    //         $query->whereDoesntHave('segments', function ($query) use ($request) {
+    //             $query->whereDate('departure_date', '<', $request->departure_date);
+    //         });
+    //     }
+
+
+    //     if ($request->has('airline') && $request->airline) {
+    //         $query->where('airline_id', $request->airline);
+    //     }
+
+    //     if ($request->has('origin') && $request->origin) {
+    //         // Handle the case where origin is already a numeric ID
+    //         $query->whereHas('segments', function ($query) use ($request) {
+    //             // Check if it's a numeric value (direct ID)
+    //             if (is_numeric($request->origin)) {
+    //                 $query->where('origin', $request->origin);
+    //             } else {
+    //                 // Try to find matching cities by name
+    //                 $cityIds = \App\Models\City::where('title', 'like', '%' . $request->origin . '%')
+    //                     ->pluck('id')
+    //                     ->toArray();
+
+    //                 if (!empty($cityIds)) {
+    //                     $query->whereIn('origin', $cityIds);
+    //                 }
+    //             }
+    //         });
+    //     }
+
+    //     if ($request->has('destination') && $request->destination) {
+    //         // Handle the case where destination is already a numeric ID
+    //         $query->whereHas('segments', function ($query) use ($request) {
+    //             // Check if it's a numeric value (direct ID)
+    //             if (is_numeric($request->destination)) {
+    //                 $query->where('destination', $request->destination);
+    //             } else {
+    //                 // Try to find matching cities by name
+    //                 $cityIds = \App\Models\City::where('title', 'like', '%' . $request->destination . '%')
+    //                     ->pluck('id')
+    //                     ->toArray();
+
+    //                 if (!empty($cityIds)) {
+    //                     $query->whereIn('destination', $cityIds);
+    //                 }
+    //             }
+    //         });
+    //     }
+
+
+    //     if ($request->filled('trip_type')) {
+    //         $query->whereHas('section', function ($query) use ($request) {
+    //             $query->where('trip_type', $request->trip_type);
+    //         });
+    //     }
+
+
+
+
+
+    //     // Get the filtered airline groups with pagination
+    //     $airlineGroups = $query->paginate(10);
+
+    //     // Get all airlines and cities for the filter dropdowns
+    //     $airlines = Airline::all();
+    //     $cities = \App\Models\City::all(); // Fetch all cities for the dropdown
+
+    //     // Prepare data for the view
+    //     $data['title'] = 'All Booking';
+    //     $data['airlineGroups'] = $airlineGroups;
+    //     $data['airlines'] = $airlines;
+    //     $data['cities'] = $cities; // Pass the cities to the view
+
+    //     return view('my-bookings.index', $data);
+    // }
 
     public function pendingBookings(Request $request)
     {
