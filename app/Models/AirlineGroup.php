@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Segment;
 use App\Models\Airline;
-use App\Models\section;
+use App\Models\Section;
 use App\Models\Agent; // Assuming your travel agents are stored in `capl_agents` and model is `Agent`
 use Illuminate\Console\View\Components\Secret;
 
