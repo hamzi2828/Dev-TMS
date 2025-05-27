@@ -19,7 +19,7 @@
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('create', \App\Models\AccountType::class)
                             <li class="menu-item {{ request () -> routeIs ('account-types.create') ? 'active' : '' }}">
                                 <a href="{{ route ('account-types.create') }}" class="menu-link">

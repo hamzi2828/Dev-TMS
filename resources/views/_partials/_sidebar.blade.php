@@ -19,9 +19,9 @@
         @include('_partials.menus.dashboard')
         @include('_partials.menus.accounts')
 
+        @include('_partials.menus.accounts-reporting')
         @include('_partials.menus.accounts-settings')
 
-        @include('_partials.menus.accounts-reporting')
 
                 {{-- @can('mainMenu', \App\Models\AirlineGroup::class) --}}
                 <li class="menu-item {{ request()->routeIs('airlineGroups.*') ? 'active open' : '' }}">
