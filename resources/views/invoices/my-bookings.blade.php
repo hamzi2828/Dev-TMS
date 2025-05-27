@@ -41,7 +41,7 @@
     <div class="container">
 
         <div class="logo">
-            {{-- <img src="{{ $data['booking']->airline->file }}" alt="{{ $data['booking']->airline->title }} Logo" style="width: 100px; height: auto;"> --}}
+            <img src="{{ $data['booking']->airline->file }}" alt="{{ $data['booking']->airline->title }} Logo" style="width: 100px; height: auto;">
         </div>
 
         <div class="title">Electronic Ticket Reservation</div>
@@ -103,7 +103,7 @@
             <span style="color: #666;">{{ \Carbon\Carbon::parse($segment->departure_date)->format('D d M Y') }}</span>
         </td>
         <td style="padding: 10px 8px;">
-            {{-- <img src="{{ asset('assets/flt2.png') }}" alt="flight" style="width: 50px; height: 30px; transform: rotate({{ $index === 1 ? '180' : '0' }}deg);"> --}}
+            <img src="{{ asset('assets/flt2.png') }}" alt="flight" style="width: 50px; height: 30px; transform: rotate({{ $index === 1 ? '180' : '0' }}deg);">
         </td>
         <td style="padding: 10px 8px;">
             <strong>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i') }}</strong><br>
