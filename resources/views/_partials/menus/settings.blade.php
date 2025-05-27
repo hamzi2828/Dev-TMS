@@ -238,7 +238,7 @@
                                 </a>
                             </li>
                         @endcan
-                        
+
                         @can('create', \App\Models\User::class)
                             <li class="menu-item {{ request () -> routeIs ('users.create') ? 'active' : '' }}">
                                 <a href="{{ route ('users.create') }}" class="menu-link">
