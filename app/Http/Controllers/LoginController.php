@@ -6,12 +6,15 @@
     use App\Http\Requests\LoginRequest;
     use App\Http\Requests\RegisterFormRequest;
     use App\Services\LoginService;
+    use App\Services\UserRoleService;
+    use App\Models\UserRole;
     use Illuminate\Contracts\View\View;
     use Illuminate\Database\QueryException;
     use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Log;
+    use App\Models\User;
 
     class LoginController extends Controller {
 
@@ -47,10 +50,15 @@
 
         public function registerUser ( RegisterFormRequest $request ): RedirectResponse {
             try {
-                dd($request->all());
                 $user_id = ( new LoginService() ) -> register ( $request );
-                if ( $user_id > 0 )
-                    return redirect () -> intended ( route ( 'login' ) );
+                if ( $user_id > 0 ) {
+                    // Assign role ID 23 to the registered user
+                    $userRole = UserRole ::create ( [
+                        'user_id' => $user_id,
+                        'role_id' => 23,
+                    ] );
+                    return redirect () -> intended ( route ( 'login' ) ) -> with ( 'success', 'Register successful, please login.' );
+                }
                 else
                     return redirect () -> back () -> with ( 'error', 'Invalid Credentials.' );
             }

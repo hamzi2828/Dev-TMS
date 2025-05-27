@@ -36,7 +36,7 @@ class LoginService {
                 'name' => $request->input('full_name'),
                 'company_name' => $request->input('company_name'),
                 'email' => $request->input('email'),
-                'mobile_number' => $request->input('mobile_number'),
+                'mobile' => $request->input('mobile_number'),
                 'address' => $request->input('address'),
                 'city' => $request->input('city'),
                 'country' => $request->input('country'),
