@@ -66,7 +66,7 @@
             <img src="{{ asset('assets/main_logo.png') }}" alt="logo" />
           </span>
         </span>
-        <h2 class="brand-text text-primary ms-1">Travel Management System</h2>
+        <h3 class="brand-text text-primary ms-1">Travel Management System</h3>
       </a>
       <!-- /Logo -->
       <div class="authentication-inner row m-0">
@@ -92,8 +92,8 @@
         <!-- Register -->
         <div class="d-flex col-12 col-xl-4 align-items-center authentication-bg p-sm-12 p-6">
           <div class="w-px-400 mx-auto mt-12 pt-5">
-            <h4 class="mb-1">Adventure starts here 🚀</h4>
-            <p class="mb-6">Make your app management easy and fun!</p>
+            <h4 class="mb-1">Become A Partner 🚀</h4>
+            <p class="mb-6">Make & manage your booking easy!</p>
 
             @include('_partials.errors.validation-errors')
             <form id="formAuthentication" class="mb-3" action="{{ route ('register') }}" method="post">
@@ -159,10 +159,11 @@
               <button type="submit" class="btn btn-primary d-grid w-100">Sign up</button>
             </form>
 
-            <p class="text-center">
-              <span>Already have an account?</span>
+            <p class="text-center mt-5">
+                <span style="font-size: 1.5rem;">Already have an account?</span>
+              <br>
               <a href="{{ route ('login') }}">
-                <span>Sign in instead</span>
+                <span style="font-size: 1.2rem;">Sign in instead</span>
               </a>
             </p>
 

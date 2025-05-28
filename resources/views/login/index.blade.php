@@ -98,7 +98,7 @@
                     <p>0300-0000000</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                    <button type="button" class="btn btn-primary" onclick="window.location.reload()">OK</button>
                 </div>
             </div>
         </div>
