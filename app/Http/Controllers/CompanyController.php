@@ -4,8 +4,8 @@
 
     use App\Http\Requests\CompanyFormRequest;
     use App\Models\Company;
-    use App\Services\CompanyService;
     use App\Services\AccountService;
+    use App\Services\CompanyService;
     use Illuminate\Contracts\View\View;
     use Illuminate\Database\QueryException;
     use Illuminate\Http\RedirectResponse;
@@ -27,28 +27,40 @@
             return view ( 'companies.create', compact ( 'title' ) );
         }
 
-        public function store ( CompanyFormRequest $request ): RedirectResponse {
-            $this -> authorize ( 'create', Company::class );
+        public function store(CompanyFormRequest $request): RedirectResponse {
+            $this->authorize('create', Company::class);
+
+            DB::beginTransaction();
+
             try {
-                DB ::beginTransaction ();
-                $company = ( new CompanyService() ) -> add ( $request );
-                $account_head = ( new AccountService() ) -> save ( $request -> merge ( [
+                // First create the account head
+                $account_head = (new AccountService())->save($request->merge([
                     "account-head-id" => "9",
                     "account-type-id" => "4",
-                    "name"            => $request -> title,
-                    "phone"           => $request -> contact,
-                ] ) );
-                DB ::commit ();
+                    "name" => $request->title,
+                    "phone" => $request->contact,
+                ]));
 
-                if ( $company )
-                    return redirect () -> route ( 'companies.create' ) -> with ( 'success', 'Company has been created.' );
-                else
-                    return redirect () -> back () -> with ( 'error', 'Please try again.' ) -> withInput ();
-            }
-            catch ( QueryException | \Exception $exception ) {
-                Log ::info ( $exception );
-                DB ::rollBack ();
-                return redirect () -> back () -> with ( 'error', $exception -> getMessage () ) -> withInput ();
+                // Add the account_head_id to the request
+                $request->merge(['account_head_id' => $account_head->id]);
+
+                // Create the company with the account_head_id
+                $company = (new CompanyService())->add($request);
+
+                DB::commit();
+
+                return redirect()
+                    ->route('companies.create')
+                    ->with('success', 'Company has been created successfully.');
+
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                Log::error('Error creating company: ' . $exception->getMessage());
+
+                return redirect()
+                    ->back()
+                    ->with('error', 'Failed to create company. ' . $exception->getMessage())
+                    ->withInput();
             }
         }
 

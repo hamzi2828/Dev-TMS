@@ -60,19 +60,31 @@
                             <div class="row">
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="basic_per_adult">Basic Fare Per Adult</label>
-                                    <input type="number" step="0.01" class="form-control" id="basic_per_adult" name="basic_per_adult" value="{{ $airlineGroup->basic_per_adult }}" onchange="calculateCost('adult')" required>
+                                    <input type="number" step="0.01" class="form-control" id="basic_per_adult"
+                                           name="basic_per_adult"
+                                           value="{{ old('basic_per_adult', $airlineGroup->basic_per_adult) }}"
+                                           onchange="calculateCost('adult')" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="tax_per_adult">Tax Per Adult</label>
-                                    <input type="number" step="0.01" class="form-control" id="tax_per_adult" name="tax_per_adult" value="{{ $airlineGroup->tax_per_adult }}" onchange="calculateCost('adult')" required>
+                                    <input type="number" step="0.01" class="form-control" id="tax_per_adult"
+                                           name="tax_per_adult"
+                                           value="{{ old('tax_per_adult', $airlineGroup->tax_per_adult) }}"
+                                           onchange="calculateCost('adult')" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="cost_per_adult">Cost Per Adult</label>
-                                    <input type="number" step="0.01" class="form-control" id="cost_per_adult" name="cost_per_adult" value="{{ $airlineGroup->cost_per_adult }}" readonly>
+                                    <input type="number" step="0.01" class="form-control" id="cost_per_adult"
+                                           name="cost_per_adult"
+                                           value="{{ old('cost_per_adult', $airlineGroup->cost_per_adult) }}"
+                                           readonly>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="sale_per_adult">Sale Per Adult</label>
-                                    <input type="number" step="0.01" class="form-control" name="sale_per_adult" value="{{ $airlineGroup->sale_per_adult }}" required>
+                                    <input type="number" step="0.01" class="form-control"
+                                           name="sale_per_adult"
+                                           value="{{ old('sale_per_adult', $airlineGroup->sale_per_adult) }}"
+                                           required>
                                 </div>
                             </div>
 
@@ -80,15 +92,24 @@
                             <div class="row">
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="basic_per_child">Basic Fare Per Child</label>
-                                    <input type="number" step="0.01" class="form-control" id="basic_per_child" name="basic_per_child" value="{{ $airlineGroup->basic_per_child }}" onchange="calculateCost('child')" required>
+                                    <input type="number" step="0.01" class="form-control" id="basic_per_child"
+                                           name="basic_per_child"
+                                           value="{{ old('basic_per_child', $airlineGroup->basic_per_child) }}"
+                                           onchange="calculateCost('child')" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="tax_per_child">Tax Per Child</label>
-                                    <input type="number" step="0.01" class="form-control" id="tax_per_child" name="tax_per_child" value="{{ $airlineGroup->tax_per_child }}" onchange="calculateCost('child')" required>
+                                    <input type="number" step="0.01" class="form-control" id="tax_per_child"
+                                           name="tax_per_child"
+                                           value="{{ old('tax_per_child', $airlineGroup->tax_per_child) }}"
+                                           onchange="calculateCost('child')" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="cost_per_child">Cost Per Child</label>
-                                    <input type="number" step="0.01" class="form-control" id="cost_per_child" name="cost_per_child" value="{{ $airlineGroup->cost_per_child }}" readonly>
+                                    <input type="number" step="0.01" class="form-control" id="cost_per_child"
+                                           name="cost_per_child"
+                                           value="{{ old('cost_per_child', $airlineGroup->cost_per_child) }}"
+                                           readonly>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="sale_per_child">Sale Per Child</label>
@@ -100,34 +121,45 @@
                             <div class="row">
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="basic_per_infant">Basic Fare Per Infant</label>
-                                    <input type="number" step="0.01" class="form-control" id="basic_per_infant" name="basic_per_infant" value="{{ $airlineGroup->basic_per_infant }}" onchange="calculateCost('infant')" required>
+                                    <input type="number" step="0.01" class="form-control" id="basic_per_infant"
+                                           name="basic_per_infant"
+                                           value="{{ old('basic_per_infant', $airlineGroup->basic_per_infant) }}"
+                                           onchange="calculateCost('infant')" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="tax_per_infant">Tax Per Infant</label>
-                                    <input type="number" step="0.01" class="form-control" id="tax_per_infant" name="tax_per_infant" value="{{ $airlineGroup->tax_per_infant }}" onchange="calculateCost('infant')" required>
+                                    <input type="number" step="0.01" class="form-control" id="tax_per_infant"
+                                           name="tax_per_infant"
+                                           value="{{ old('tax_per_infant', $airlineGroup->tax_per_infant) }}"
+                                           onchange="calculateCost('infant')" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="cost_per_infant">Cost Per Infant</label>
-                                    <input type="number" step="0.01" class="form-control" id="cost_per_infant" name="cost_per_infant" value="{{ $airlineGroup->cost_per_infant }}" readonly>
+                                    <input type="number" step="0.01" class="form-control" id="cost_per_infant"
+                                           name="cost_per_infant"
+                                           value="{{ old('cost_per_infant', $airlineGroup->cost_per_infant) }}"
+                                           readonly>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="sale_per_infant">Sale Per Infant</label>
-                                    <input type="number" step="0.01" class="form-control" name="sale_per_infant" value="{{ $airlineGroup->sale_per_infant }}" required>
+                                    <input type="number" step="0.01" class="form-control" name="sale_per_infant"
+                                           value="{{ old('sale_per_infant', $airlineGroup->sale_per_infant) }}"
+                                           required>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="total_seats">No. of Seats</label>
-                                    <input type="number" class="form-control" name="total_seats" value="{{ $airlineGroup->total_seats }}" required>
+                                    <input type="number" class="form-control" name="total_seats" value="{{ old('total_seats', $airlineGroup->total_seats) }}" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="admin_seats">Seats Allocation for Admin</label>
-                                    <input type="number" class="form-control" name="admin_seats" value="{{ $airlineGroup->admin_seats }}" required>
+                                    <input type="number" class="form-control" name="admin_seats" value="{{ old('admin_seats', $airlineGroup->admin_seats) }}" required>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="expire_datetime">Expire Date Time</label>
-                                    <input type="datetime-local" class="form-control" name="expire_datetime" value="{{ $airlineGroup->expire_datetime }}" required>
+                                    <input type="datetime-local" class="form-control" name="expire_datetime" value="{{ old('expire_datetime', $airlineGroup->expire_datetime) }}" required>
                                 </div>
                             </div>
 
