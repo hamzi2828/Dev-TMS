@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MyBooking;
 use App\Models\AirlineGroup;
+use App\Models\Agent;
 use App\Models\GeneralLedger;
 use App\Models\Passenger;
 use Illuminate\Support\Facades\DB;
@@ -267,6 +268,7 @@ class MyBookingController extends Controller
         try {
             // Eager load the relationships to avoid N+1 queries
             $booking = MyBooking::with(['airlineGroup.company'])->find($request->id);
+
             if (!$booking) {
                 throw new \Exception('Booking not found');
             }
@@ -292,18 +294,35 @@ class MyBookingController extends Controller
 
             // Get the company's account head ID
             $companyAccountHeadId = $booking->airlineGroup->company->account_head_id ?? null;
-            dd($companyAccountHeadId);
+
             if (!$companyAccountHeadId) {
                 throw new \Exception('Company account head ID not found');
             }
 
+            // Get the logged-in user's agent and their account head ID
+            $agent = Agent::with('user')->find(auth()->user()->agent_id);
+
+            if (!$agent) {
+                throw new \Exception('Agent not found for this user');
+            }
+
+            $userAccountHeadId = $agent->account_head_id ?? null;
+            if (!$userAccountHeadId) {
+                throw new \Exception('User account head ID not found');
+            }
+            if($booking->discount === null){
+                $netSale = $totalSale;
+            }else{
+                $netSale = $totalSale - $booking->discount;
+            }
+
             // Create debit entry for the total sale to head ID 199
             GeneralLedger::create([
-                'account_head_id' => 199, // The specified head ID for debit
-                'debit' => $totalSale,
+                'account_head_id' => 199,
+                'user_id' => auth()->user()->id,
+                'debit' => $totalCost,
                 'credit' => 0,
                 'transaction_date' => now(),
-                'voucher_number' => 'BK-' . $booking->id,
                 'description' => 'Booking confirmed - PNR: ' . $pnr,
                 'created_by' => auth()->id(),
             ]);
@@ -311,11 +330,31 @@ class MyBookingController extends Controller
             // Create credit entry for the total cost to company's account head
             GeneralLedger::create([
                 'account_head_id' => $companyAccountHeadId, // Company's account head ID
+                'user_id' => auth()->user()->id,
                 'debit' => 0,
                 'credit' => $totalCost,
                 'transaction_date' => now(),
-                'voucher_number' => 'BK-' . $booking->id,
                 'description' => 'Booking cost - PNR: ' . $pnr,
+                'created_by' => auth()->id(),
+            ]);
+
+            GeneralLedger::create([
+                'account_head_id' => $userAccountHeadId, // Logged-in user's account head ID
+                'user_id' => auth()->user()->id,
+                'debit' => 0,
+                'credit' => $netSale,
+                'transaction_date' => now(),
+                'description' => 'Booking profit - PNR: ' . $pnr,
+                'created_by' => auth()->id(),
+            ]);
+
+            GeneralLedger::create([
+                'account_head_id' => '434', // Logged-in user's account head ID
+                'user_id' => auth()->user()->id,
+                'debit' => $netSale,
+                'credit' => 0,
+                'transaction_date' => now(),
+                'description' => 'Booking profit - PNR: ' . $pnr,
                 'created_by' => auth()->id(),
             ]);
 

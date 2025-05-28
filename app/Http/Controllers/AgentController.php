@@ -30,16 +30,25 @@
         public function store ( AgentFormRequest $request ): RedirectResponse {
             $this -> authorize ( 'create', Agent::class );
             try {
-
                 DB ::beginTransaction ();
+                
+                // First create the agent
                 $agent = ( new AgentService() ) -> save ( $request );
 
+                // Create the account head
                 $account_head = ( new AccountService() ) -> save ( $request -> merge ( [
                     "account-head-id" => "17",
                     "account-type-id" => "5",
                     "name"            => $request -> title,
                     "phone"           => $request -> contact,
                 ] ) );
+
+                // Update the agent with the account head ID
+                if ($account_head && $account_head->id) {
+                    $agent->account_head_id = $account_head->id;
+                    $agent->save();
+                }
+
                 DB ::commit ();
 
 
