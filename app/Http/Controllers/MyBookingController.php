@@ -262,8 +262,8 @@ class MyBookingController extends Controller
     public function confirmBookings(Request $request)
     {
         $booking = MyBooking::find($request->id);
-        $airlineGroup = AirlineGroup::find($booking->airline_group_id);
-        dd($booking,$airlineGroup);
+        $totalCost = MyBooking::getBookingCost($request->id);
+        $totalSale = MyBooking::getBookingSale($request->id);
         $booking->status = 'confirmed';
         $booking->confirmed_by = auth()->user()->id;
         $pnr = $request->pnr;

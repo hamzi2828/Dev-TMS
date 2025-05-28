@@ -80,4 +80,37 @@ class MyBooking extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+    public static function getBookingCost($bookingId)
+    {
+        $booking = self::with('airlineGroup')->find($bookingId);
+
+
+        if (!$booking || !$booking->airlineGroup) {
+            return null;
+        }
+
+        $adultsCost = $booking->adults * $booking->airlineGroup->cost_per_adult;
+        $childrenCost = $booking->children * $booking->airlineGroup->cost_per_child;
+        $infantsCost = $booking->infants * $booking->airlineGroup->cost_per_infant;
+
+        return $adultsCost + $childrenCost + $infantsCost;
+    }
+
+
+    public static function getBookingSale($bookingId)
+    {
+        $booking = self::with('airlineGroup')->find($bookingId);
+
+        if (!$booking || !$booking->airlineGroup) {
+            return null;
+        }
+
+        $adultsSale = $booking->adults * $booking->airlineGroup->sale_per_adult;
+        $childrenSale = $booking->children * $booking->airlineGroup->sale_per_child;
+        $infantsSale = $booking->infants * $booking->airlineGroup->sale_per_infant;
+
+        return $adultsSale + $childrenSale + $infantsSale;
+    }
 }
