@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\AirlineGroup;
 use App\Models\MyBooking;
+use App\Models\AirlineGroup;
+use App\Models\GeneralLedger;
 use App\Models\Passenger;
 use Illuminate\Support\Facades\DB;
 use App\Models\Airline;
@@ -261,21 +262,51 @@ class MyBookingController extends Controller
 
     public function confirmBookings(Request $request)
     {
-        $booking = MyBooking::find($request->id);
-        $totalCost = MyBooking::getBookingCost($request->id);
-        $totalSale = MyBooking::getBookingSale($request->id);
-        $booking->status = 'confirmed';
-        $booking->confirmed_by = auth()->user()->id;
-        $pnr = $request->pnr;
+        DB::beginTransaction();
 
-        if (MyBooking::where('pnr', $pnr)->exists()) {
-            return redirect()->back()->with('error', 'PNR already exists');
+        try {
+            $booking = MyBooking::find($request->id);
+            if (!$booking) {
+                throw new \Exception('Booking not found');
+            }
+
+            $totalCost = MyBooking::getBookingCost($request->id);
+            $totalSale = MyBooking::getBookingSale($request->id);
+
+            if ($totalSale === null) {
+                throw new \Exception('Could not calculate total sale amount');
+            }
+
+            // Update booking status
+            $booking->status = 'confirmed';
+            $booking->confirmed_by = auth()->id();
+            $pnr = $request->pnr;
+
+            if (MyBooking::where('pnr', $pnr)->where('id', '!=', $booking->id)->exists()) {
+                throw new \Exception('PNR already exists');
+            }
+
+            $booking->pnr = $pnr;
+            $booking->save();
+
+            // Create debit entry for the total sale to head ID 16
+            GeneralLedger::create([
+                'account_head_id' => 199, // The specified head ID
+                'debit' => $totalSale,
+                'credit' => 0,
+                'transaction_date' => now(),
+                'voucher_number' => 'BK-' . $booking->id,
+                'description' => 'Booking confirmed - PNR: ' . $pnr,
+                'created_by' => auth()->id(),
+            ]);
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Booking confirmed successfully');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Error confirming booking: ' . $e->getMessage());
         }
-
-        $booking->pnr = $pnr;
-        $booking->save();
-
-        return redirect()->back()->with('success', 'Booking confirmed successfully');
     }
 
 
