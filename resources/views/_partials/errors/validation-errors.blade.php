@@ -21,10 +21,3 @@
     </div>
 @endif
 
-
-@if(session () -> has ('Register'))
-    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center mb-0" role="alert">
-        <strong></strong> {!! session('Register') !!}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif

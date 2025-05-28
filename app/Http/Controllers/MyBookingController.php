@@ -317,6 +317,18 @@ class MyBookingController extends Controller
             }
 
             // Create debit entry for the total sale to head ID 199
+            $ledgerData = [
+                'account_head_id' => 199,
+                'user_id' => auth()->user()->id,
+                'debit' => $totalCost,
+                'credit' => 0,
+                'transaction_date' => now(),
+                'description' => 'Booking confirmed - PNR: ' . $pnr,
+                'ledgerable_type' => get_class($booking),
+                'ledgerable_id' => $booking->id
+            ];
+
+            // Create the ledger entry
             GeneralLedger::create([
                 'account_head_id' => 199,
                 'user_id' => auth()->user()->id,
@@ -324,38 +336,44 @@ class MyBookingController extends Controller
                 'credit' => 0,
                 'transaction_date' => now(),
                 'description' => 'Booking confirmed - PNR: ' . $pnr,
-                'created_by' => auth()->id(),
+                'ledgerable_type' => get_class($booking),
+                'ledgerable_id' => $booking->id
             ]);
 
             // Create credit entry for the total cost to company's account head
             GeneralLedger::create([
-                'account_head_id' => $companyAccountHeadId, // Company's account head ID
+                'account_head_id' => $companyAccountHeadId,
                 'user_id' => auth()->user()->id,
                 'debit' => 0,
                 'credit' => $totalCost,
                 'transaction_date' => now(),
                 'description' => 'Booking cost - PNR: ' . $pnr,
-                'created_by' => auth()->id(),
+                'ledgerable_type' => get_class($booking),
+                'ledgerable_id' => $booking->id
             ]);
 
+            // Create entry for the net sale to user's account
             GeneralLedger::create([
-                'account_head_id' => $userAccountHeadId, // Logged-in user's account head ID
-                'user_id' => auth()->user()->id,
-                'debit' => 0,
-                'credit' => $netSale,
-                'transaction_date' => now(),
-                'description' => 'Booking profit - PNR: ' . $pnr,
-                'created_by' => auth()->id(),
-            ]);
-
-            GeneralLedger::create([
-                'account_head_id' => '434', // Logged-in user's account head ID
+                'account_head_id' => $userAccountHeadId,
                 'user_id' => auth()->user()->id,
                 'debit' => $netSale,
                 'credit' => 0,
                 'transaction_date' => now(),
-                'description' => 'Booking profit - PNR: ' . $pnr,
-                'created_by' => auth()->id(),
+                'description' => 'Booking net sale - PNR: ' . $pnr,
+                'ledgerable_type' => get_class($booking),
+                'ledgerable_id' => $booking->id
+            ]);
+
+            // Create entry for the net sale to account 434
+            GeneralLedger::create([
+                'account_head_id' => 434,
+                'user_id' => auth()->user()->id,
+                'debit' => 0,
+                'credit' => $netSale,
+                'transaction_date' => now(),
+                'description' => 'Booking net sale - PNR: ' . $pnr,
+                'ledgerable_type' => get_class($booking),
+                'ledgerable_id' => $booking->id
             ]);
 
             DB::commit();

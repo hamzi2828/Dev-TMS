@@ -66,7 +66,7 @@
             <img src="{{ asset('assets/main_logo.png') }}" alt="logo" />
           </span>
         </span>
-        <span class="app-brand-text demo text-heading fw-bold">Travel Management System</span>
+        <h2 class="brand-text text-primary ms-1">Travel Management System</h2>
       </a>
       <!-- /Logo -->
       <div class="authentication-inner row m-0">

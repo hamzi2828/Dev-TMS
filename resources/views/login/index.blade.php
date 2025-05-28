@@ -8,7 +8,7 @@
             <img src="{{ asset('assets/main_logo.png') }}" alt="logo" />
           </span>
         </span>
-        <span class="app-brand-text demo text-heading fw-bold">Travel Management System</span>
+        <h2 class="brand-text text-primary ms-1">Travel Management System</h2>
       </a>
       <!-- /Logo -->
       <div class="authentication-inner row m-0">
@@ -35,7 +35,7 @@
         <div class="d-flex col-12 col-xl-4 align-items-center authentication-bg p-sm-12 p-6 bg-white">
             <div class="w-px-400 mx-auto mt-12 pt-5">
                 <h4 class="mb-1">Welcome to {{ config('app.name') }}! 👋</h4>
-                <p class="mb-6">Please sign-in to your account and start the adventure</p>
+                <p class="mb-6">Please sign-in to your account  </p>
 
                 @include('_partials.errors.validation-errors')
                 <form id="formAuthentication" class="mb-3" action="{{ route ('authenticate') }}" method="post">
@@ -72,10 +72,11 @@
                 </div>
             </form>
 
-            <p class="text-center">
-                <span>New on our platform?</span>
+            <p class="text-center mt-5">
+                <span style="font-size: 1.5rem;">New on our platform?</span>
+                <br>
                 <a href="{{ route ('register') }}">
-                  <span>Create an account</span>
+                  <span style="font-size: 1.2rem;">Create an account</span>
                 </a>
               </p>
         </div>
@@ -83,4 +84,51 @@
       </div>
     </div>
     <!-- / Content -->
+
+    <!-- Registration Success Modal -->
+    @if(session('Register'))
+    <div class="modal fade show" id="registrationSuccessModal" tabindex="-1" style="display: block;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content d-flex align-items-center justify-content-center">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success" style="font-size: 1.5rem;">Registration Successful!</h5>
+                </div>
+                <div class="modal-body">
+                    <p>{{ session('Register') }}</p>
+                    <p>0300-0000000</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var modalElement = document.getElementById('registrationSuccessModal');
+            if (modalElement) {
+                var registrationModal = new bootstrap.Modal(modalElement);
+                registrationModal.show();
+
+                // Close modal when clicking outside
+                modalElement.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        registrationModal.hide();
+                    }
+                });
+
+                // Close modal when clicking OK button
+                var okButton = modalElement.querySelector('.btn-primary');
+                if (okButton) {
+                    okButton.addEventListener('click', function() {
+                        registrationModal.hide();
+                    });
+                }
+            }
+        });
+    </script>
+    @endpush
 </x-login>
