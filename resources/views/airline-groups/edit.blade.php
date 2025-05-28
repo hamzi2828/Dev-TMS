@@ -159,7 +159,13 @@
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="expire_datetime">Expire Date Time</label>
-                                    <input type="datetime-local" class="form-control" name="expire_datetime" value="{{ old('expire_datetime', $airlineGroup->expire_datetime) }}" required>
+                                    <input 
+                                        type="datetime-local" 
+                                        class="form-control" 
+                                        name="expire_datetime" 
+                                        value="{{ old('expire_datetime', $airlineGroup->expire_datetime ? \Carbon\Carbon::parse($airlineGroup->expire_datetime)->format('Y-m-d\TH:i') : '') }}" 
+                                        required
+                                    >
                                 </div>
                             </div>
 

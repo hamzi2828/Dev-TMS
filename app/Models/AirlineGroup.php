@@ -8,6 +8,7 @@ use App\Models\Segment;
 use App\Models\Airline;
 use App\Models\Section;
 use App\Models\Agent; // Assuming your travel agents are stored in `capl_agents` and model is `Agent`
+use App\Models\Company;
 use Illuminate\Console\View\Components\Secret;
 
 class AirlineGroup extends Model
@@ -64,5 +65,13 @@ class AirlineGroup extends Model
     public function section()
     {
         return $this->belongsTo(Section::class, 'sector_id');
+    }
+
+    /**
+     * Get the company that owns the airline group.
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
     }
 }

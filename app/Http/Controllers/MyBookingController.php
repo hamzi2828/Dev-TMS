@@ -265,7 +265,8 @@ class MyBookingController extends Controller
         DB::beginTransaction();
 
         try {
-            $booking = MyBooking::find($request->id);
+            // Eager load the relationships to avoid N+1 queries
+            $booking = MyBooking::with(['airlineGroup.company'])->find($request->id);
             if (!$booking) {
                 throw new \Exception('Booking not found');
             }
@@ -289,14 +290,32 @@ class MyBookingController extends Controller
             $booking->pnr = $pnr;
             $booking->save();
 
-            // Create debit entry for the total sale to head ID 16
+            // Get the company's account head ID
+            $companyAccountHeadId = $booking->airlineGroup->company->account_head_id ?? null;
+            dd($companyAccountHeadId);
+            if (!$companyAccountHeadId) {
+                throw new \Exception('Company account head ID not found');
+            }
+
+            // Create debit entry for the total sale to head ID 199
             GeneralLedger::create([
-                'account_head_id' => 199, // The specified head ID
+                'account_head_id' => 199, // The specified head ID for debit
                 'debit' => $totalSale,
                 'credit' => 0,
                 'transaction_date' => now(),
                 'voucher_number' => 'BK-' . $booking->id,
                 'description' => 'Booking confirmed - PNR: ' . $pnr,
+                'created_by' => auth()->id(),
+            ]);
+
+            // Create credit entry for the total cost to company's account head
+            GeneralLedger::create([
+                'account_head_id' => $companyAccountHeadId, // Company's account head ID
+                'debit' => 0,
+                'credit' => $totalCost,
+                'transaction_date' => now(),
+                'voucher_number' => 'BK-' . $booking->id,
+                'description' => 'Booking cost - PNR: ' . $pnr,
                 'created_by' => auth()->id(),
             ]);
 
