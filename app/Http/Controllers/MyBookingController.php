@@ -258,11 +258,14 @@ class MyBookingController extends Controller
 
         return view('my-bookings.completedBookings', $data);
     }
+
     public function confirmBookings(Request $request)
     {
         $booking = MyBooking::find($request->id);
+        $airlineGroup = AirlineGroup::find($booking->airline_group_id);
+        dd($booking,$airlineGroup);
         $booking->status = 'confirmed';
-
+        $booking->confirmed_by = auth()->user()->id;
         $pnr = $request->pnr;
 
         if (MyBooking::where('pnr', $pnr)->exists()) {

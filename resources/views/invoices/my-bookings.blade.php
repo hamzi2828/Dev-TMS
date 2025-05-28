@@ -41,12 +41,12 @@
     <div class="container">
 
         <div class="logo">
-            <img src="{{ $data['booking']->airline->file }}" alt="{{ $data['booking']->airline->title }} Logo" style="width: 100px; height: auto;">
+            {{-- <img src="{{ $data['booking']->airline->file }}" alt="{{ $data['booking']->airline->title }} Logo" style="width: 100px; height: auto;"> --}}
         </div>
 
         <div class="title">Electronic Ticket Reservation</div>
 
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
             <tr>
                 <td style="padding: 2px 0; font-weight: bold;">Booking Reference Number (PNR)</td>
                 <td style="padding: 2px 0;">{{ $data['booking']->pnr }}</td>
@@ -57,15 +57,15 @@
             </tr>
             <tr>
                 <td style="padding: 2px 0; font-weight: bold;">Issued By</td>
-                <td style="padding: 2px 0;">n/a</td>
+                <td style="padding: 2px 0;">{{ \App\Models\User::find($data['booking']->confirmed_by)->name ?? 'N/A' }}</td>
             </tr>
             <tr>
                 <td style="padding: 2px 0; font-weight: bold;">Agent Name</td>
-                <td style="padding: 2px 0;">n/a</td>
+                <td style="padding: 2px 0;">{{ \App\Models\Agent::find($data['booking']->user->agent_id)->name ?? 'N/A' }}</td>
             </tr>
             <tr>
-                <td style="padding: 2px 0; font-weight: bold;">Contact</td>
-                <td style="padding: 2px 0;">n/a</td>
+                <td style="padding: 2px 0; font-weight: bold;">Status</td>
+                <td style="padding: 2px 0;">Confirmed</td>
             </tr>
         </table>
 
@@ -103,7 +103,7 @@
             <span style="color: #666;">{{ \Carbon\Carbon::parse($segment->departure_date)->format('D d M Y') }}</span>
         </td>
         <td style="padding: 10px 8px;">
-            <img src="{{ asset('assets/flt2.png') }}" alt="flight" style="width: 50px; height: 30px; transform: rotate({{ $index === 1 ? '180' : '0' }}deg);">
+            {{-- <img src="{{ asset('assets/flt2.png') }}" alt="flight" style="width: 50px; height: 30px; transform: rotate({{ $index === 1 ? '180' : '0' }}deg);"> --}}
         </td>
         <td style="padding: 10px 8px;">
             <strong>{{ \Carbon\Carbon::parse($segment->arrival_time)->format('H:i') }}</strong><br>
@@ -133,7 +133,7 @@
             @foreach($data['booking']->passengers as $index => $passenger)
             <tr style="border-bottom: 1px solid #f2f2f2;">
                 <td style="padding: 6px 8px;">{{ $index + 1 }}</td>
-                <td style="padding: 6px 8px;">{{ $passenger->title }} {{ $passenger->given_name }} {{ $passenger->surname }}</td>
+                <td style="padding: 6px 8px;">{{ $passenger->title }} {{ $passenger->surname }} {{ $passenger->given_name }} </td>
                 <td style="padding: 6px 8px;">{{ $passenger->passport }}</td>
                 <td style="padding: 6px 8px; text-transform: capitalize;">{{ $passenger->passenger_type }}</td>
                 <td style="padding: 6px 8px; text-transform: capitalize;">{{ $segments->first()->meal }}</td>
@@ -141,7 +141,7 @@
             @endforeach
         </table>
 
-        <div style="font-size: 14px;">
+        <div style="font-size: 12px;">
             <p ><strong>Terms & Conditions</strong></p>
             <p style="padding-top: -10px;">1- Passenger should report at check-in counter at least 04:00 hours prior to flight.</p>
             <p style="padding-top: -10px;">2- Tickets are non-refundable and non-changeable any time.</p>

@@ -41,6 +41,12 @@ window.config = {
   enableMenuLocalStorage: true // Enable menu state with local storage support
 };
 
+// Template customizer is disabled
+window.templateCustomizer = {
+  // Disable the template customizer
+  showCustomizer: false
+};
+
 window.assetsPath = document.documentElement.getAttribute('data-assets-path');
 window.templateName = document.documentElement.getAttribute('data-template');
 

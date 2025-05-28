@@ -57,7 +57,7 @@
                         'user_id' => $user_id,
                         'role_id' => 23,
                     ] );
-                    return redirect () -> intended ( route ( 'login' ) ) -> with ( 'success', 'Register successful, please login.' );
+                    return redirect () -> intended ( route ( 'login' ) ) -> with ( 'Register', 'Register successful, please Contact Admin.' );
                 }
                 else
                     return redirect () -> back () -> with ( 'error', 'Invalid Credentials.' );

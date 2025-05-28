@@ -41,6 +41,7 @@ class LoginService {
                 'city' => $request->input('city'),
                 'country' => $request->input('country'),
                 'password' => Hash::make($request->input('password')),
+                'active' => 0,
             ]);
             return $user ? $user->id : 0;
         }
