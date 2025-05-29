@@ -45,71 +45,49 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
       // Expiry Date Mask
       if (multiStepsExDate) {
-        multiStepsExDate.addEventListener('input', event => {
-          multiStepsExDate.value = formatDate(event.target.value, {
-            date: true,
-            delimiter: '/',
-            datePattern: ['m', 'y']
-          });
-        });
-        registerCursorTracker({
-          input: multiStepsExDate,
-          delimiter: '/'
+        new Cleave(multiStepsExDate, {
+          date: true,
+          delimiter: '/',
+          datePattern: ['m', 'y']
         });
       }
 
       // CVV
       if (multiStepsCvv) {
-        multiStepsCvv.addEventListener('input', event => {
-          const cleanValue = event.target.value.replace(/\D/g, '');
-          multiStepsCvv.value = formatNumeral(cleanValue, {
-            numeral: true,
-            numeralPositiveOnly: true
-          });
+        new Cleave(multiStepsCvv, {
+          numeral: true,
+          numeralPositiveOnly: true
         });
       }
 
       // Mobile
       if (multiStepsMobile) {
-        multiStepsMobile.addEventListener('input', event => {
-          const cleanValue = event.target.value.replace(/\D/g, '');
-          multiStepsMobile.value = formatGeneral(cleanValue, {
-            blocks: [3, 3, 4],
-            delimiters: [' ', ' ']
-          });
-        });
-        registerCursorTracker({
-          input: multiStepsMobile,
-          delimiter: ' '
+        new Cleave(multiStepsMobile, {
+          phone: true,
+          phoneRegionCode: 'US'
         });
       }
 
       // Pincode
       if (multiStepsPincode) {
-        multiStepsPincode.addEventListener('input', event => {
-          multiStepsPincode.value = formatNumeral(event.target.value, {
-            delimiter: '',
-            numeral: true
-          });
+        new Cleave(multiStepsPincode, {
+          delimiter: '',
+          numeral: true
         });
       }
 
       // Credit Card
       if (multiStepsCard) {
-        multiStepsCard.addEventListener('input', event => {
-          multiStepsCard.value = formatCreditCard(event.target.value);
-          const cleanValue = event.target.value.replace(/\D/g, '');
-          let cardType = getCreditCardType(cleanValue);
-          if (cardType && cardType !== 'unknown' && cardType !== 'general') {
-            document.querySelector('.card-type').innerHTML =
-              `<img src="${assetsPath}img/icons/payments/${cardType}-cc.png" height="24"/>`;
-          } else {
-            document.querySelector('.card-type').innerHTML = '';
+        new Cleave(multiStepsCard, {
+          creditCard: true,
+          onCreditCardTypeChanged: function (type) {
+            if (type != '' && type != 'unknown') {
+              document.querySelector('.card-type').innerHTML =
+                '<img src="' + assetsPath + 'img/icons/payments/' + type + '-cc.png" height="28"/>';
+            } else {
+              document.querySelector('.card-type').innerHTML = '';
+            }
           }
-        });
-        registerCursorTracker({
-          input: multiStepsCard,
-          delimiter: ' '
         });
       }
 
@@ -173,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
             // Use this for enabling/changing valid/invalid class
             // eleInvalidClass: '',
             eleValidClass: '',
-            rowSelector: '.form-control-validation'
+            rowSelector: '.col-sm-6'
           }),
           autoFocus: new FormValidation.plugins.AutoFocus(),
           submitButton: new FormValidation.plugins.SubmitButton()
@@ -219,8 +197,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
               // ele is the field element
               switch (field) {
                 case 'multiStepsFirstName':
+                  return '.col-sm-6';
                 case 'multiStepsAddress':
-                  return '.form-control-validation';
+                  return '.col-md-12';
                 default:
                   return '.row';
               }
@@ -256,10 +235,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
               // ele is the field element
               switch (field) {
                 case 'multiStepsCard':
-                  return '.form-control-validation';
+                  return '.col-md-12';
 
                 default:
-                  return '.form-control-validation';
+                  return '.col-dm-6';
               }
             }
           }),

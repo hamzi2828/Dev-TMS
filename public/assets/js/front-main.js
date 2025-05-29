@@ -30,11 +30,24 @@ window.isDarkStyle = window.Helpers.isDarkStyle();
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
 
+  // Accordion active class
+  const accordionActiveFunction = function (e) {
+    if (e.type == 'show.bs.collapse' || e.type == 'show.bs.collapse') {
+      e.target.closest('.accordion-item').classList.add('active');
+    } else {
+      e.target.closest('.accordion-item').classList.remove('active');
+    }
+  };
+
+  const accordionTriggerList = [].slice.call(document.querySelectorAll('.accordion'));
+  const accordionList = accordionTriggerList.map(function (accordionTriggerEl) {
+    accordionTriggerEl.addEventListener('show.bs.collapse', accordionActiveFunction);
+    accordionTriggerEl.addEventListener('hide.bs.collapse', accordionActiveFunction);
+  });
+
+  // If layout is RTL add .dropdown-menu-end class to .dropdown-menu
   if (isRtl) {
-    // If layout is RTL add .dropdown-menu-end class to .dropdown-menu
     Helpers._addClass('dropdown-menu-end', document.querySelectorAll('#layout-navbar .dropdown-menu'));
-    // If layout is RTL add .dropdown-menu-end class to .dropdown-menu
-    Helpers._addClass('dropdown-menu-end', document.querySelectorAll('.dropdown-menu'));
   }
 
   // Navbar
@@ -74,6 +87,11 @@ window.isDarkStyle = window.Helpers.isDarkStyle();
     });
   });
 
+  // If layout is RTL add .dropdown-menu-end class to .dropdown-menu
+  if (isRtl) {
+    Helpers._addClass('dropdown-menu-end', document.querySelectorAll('.dropdown-menu'));
+  }
+
   // Mega dropdown
   const megaDropdown = document.querySelectorAll('.nav-link.mega-dropdown');
   if (megaDropdown) {
@@ -82,59 +100,79 @@ window.isDarkStyle = window.Helpers.isDarkStyle();
     });
   }
 
+  //Style Switcher (Light/Dark/System Mode)
+  let styleSwitcher = document.querySelector('.dropdown-style-switcher');
+  const activeStyle = document.documentElement.getAttribute('data-style');
+
   // Get style from local storage or use 'system' as default
   let storedStyle =
-    localStorage.getItem('templateCustomizer-' + templateName + '--Theme') || //if no template style then use Customizer style
-    (window.templateCustomizer?.settings?.defaultStyle ?? document.documentElement.getAttribute('data-bs-theme')); //!if there is no Customizer then use default style as light
+    localStorage.getItem('templateCustomizer-' + templateName + '--Style') || //if no template style then use Customizer style
+    (window.templateCustomizer?.settings?.defaultStyle ?? 'light'); //!if there is no Customizer then use default style as light
 
-  let styleSwitcher = document.querySelector('.dropdown-style-switcher');
-  const styleSwitcherIcon = styleSwitcher.querySelector('i');
+  // Set style on click of style switcher item if template customizer is enabled
+  if (window.templateCustomizer && styleSwitcher) {
+    let styleSwitcherItems = [].slice.call(styleSwitcher.children[1].querySelectorAll('.dropdown-item'));
+    styleSwitcherItems.forEach(function (item) {
+      item.classList.remove('active');
+      item.addEventListener('click', function () {
+        let currentStyle = this.getAttribute('data-theme');
+        if (currentStyle === 'light') {
+          window.templateCustomizer.setStyle('light');
+        } else if (currentStyle === 'dark') {
+          window.templateCustomizer.setStyle('dark');
+        } else {
+          window.templateCustomizer.setStyle('system');
+        }
+      });
+      setTimeout(() => {
+        if (item.getAttribute('data-theme') === activeStyle) {
+          // Add 'active' class to the item if it matches the activeStyle
+          item.classList.add('active');
+        }
+      }, 1000);
+    });
 
-  new bootstrap.Tooltip(styleSwitcherIcon, {
-    title: storedStyle.charAt(0).toUpperCase() + storedStyle.slice(1) + ' Mode',
-    fallbackPlacements: ['bottom']
-  });
+    // Update style switcher icon based on the stored style
+
+    const styleSwitcherIcon = styleSwitcher.querySelector('i');
+
+    if (storedStyle === 'light') {
+      styleSwitcherIcon.classList.add('ti-sun');
+      new bootstrap.Tooltip(styleSwitcherIcon, {
+        title: 'Light Mode',
+        fallbackPlacements: ['bottom']
+      });
+    } else if (storedStyle === 'dark') {
+      styleSwitcherIcon.classList.add('ti-moon-stars');
+      new bootstrap.Tooltip(styleSwitcherIcon, {
+        title: 'Dark Mode',
+        fallbackPlacements: ['bottom']
+      });
+    } else {
+      styleSwitcherIcon.classList.add('ti-device-desktop-analytics');
+      new bootstrap.Tooltip(styleSwitcherIcon, {
+        title: 'System Mode',
+        fallbackPlacements: ['bottom']
+      });
+    }
+  }
 
   // Run switchImage function based on the stored style
-  window.Helpers.switchImage(storedStyle);
+  switchImage(storedStyle);
 
   // Update light/dark image based on current style
-  window.Helpers.setTheme(window.Helpers.getPreferredTheme());
-
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    const storedTheme = window.Helpers.getStoredTheme();
-    if (storedTheme !== 'light' && storedTheme !== 'dark') {
-      window.Helpers.setTheme(window.Helpers.getPreferredTheme());
+  function switchImage(style) {
+    if (style === 'system') {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        style = 'dark';
+      } else {
+        style = 'light';
+      }
     }
-  });
-
-  function getScrollbarWidth() {
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.setProperty('--bs-scrollbar-width', `${scrollbarWidth}px`);
-  }
-  getScrollbarWidth();
-
-  //Style Switcher (Light/Dark/System Mode)
-  window.addEventListener('DOMContentLoaded', () => {
-    window.Helpers.showActiveTheme(window.Helpers.getPreferredTheme());
-    getScrollbarWidth();
-    document.querySelectorAll('[data-bs-theme-value]').forEach(toggle => {
-      toggle.addEventListener('click', () => {
-        const theme = toggle.getAttribute('data-bs-theme-value');
-        window.Helpers.setStoredTheme(templateName, theme);
-        window.Helpers.setTheme(theme);
-        window.Helpers.showActiveTheme(theme, true);
-        window.Helpers.syncCustomOptions(theme);
-        let currTheme = theme;
-        if (theme === 'system') {
-          currTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-        new bootstrap.Tooltip(styleSwitcherIcon, {
-          title: theme.charAt(0).toUpperCase() + theme.slice(1) + ' Mode',
-          fallbackPlacements: ['bottom']
-        });
-        window.Helpers.switchImage(currTheme);
-      });
+    const switchImagesList = [].slice.call(document.querySelectorAll('[data-app-' + style + '-img]'));
+    switchImagesList.map(function (imageEl) {
+      const setImage = imageEl.getAttribute('data-app-' + style + '-img');
+      imageEl.src = assetsPath + 'img/' + setImage; // Using window.assetsPath to get the exact relative path
     });
-  });
+  }
 })();

@@ -1,19 +1,17 @@
 /**
- * Typeahead
+ * Typeahead (jquery)
  */
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const isRtl = document.documentElement.dir === 'rtl';
-
+$(function () {
   // String Matcher function
-  const substringMatcher = strs => {
-    return (q, cb) => {
-      const matches = [];
-      const substrRegex = new RegExp(q, 'i');
-
-      strs.forEach(str => {
+  var substringMatcher = function (strs) {
+    return function findMatches(q, cb) {
+      var matches, substrRegex;
+      matches = [];
+      substrRegex = new RegExp(q, 'i');
+      $.each(strs, function (i, str) {
         if (substrRegex.test(str)) {
           matches.push(str);
         }
@@ -22,9 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cb(matches);
     };
   };
-
-  // Data
-  const states = [
+  var states = [
     'Alabama',
     'Alaska',
     'Arizona',
@@ -77,11 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
     'Wyoming'
   ];
 
-  // Set RTL if applicable
   if (isRtl) {
-    document.querySelectorAll('.typeahead').forEach(el => {
-      el.setAttribute('dir', 'rtl');
-    });
+    $('.typeahead').attr('dir', 'rtl');
   }
 
   // Basic
@@ -121,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var prefetchExample = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.whitespace,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    prefetch: `${assetsPath}json/typeahead.json`
+    prefetch: assetsPath + 'json/typeahead.json'
   });
 
   // Prefetch Example
@@ -138,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   );
 
-  // Render Default Suggestions
+  // Render default Suggestions
   function renderDefaults(q, sync) {
     if (q === '') {
       sync(prefetchExample.get('Alaska', 'New York', 'Washington'));
@@ -146,8 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
       prefetchExample.search(q, sync);
     }
   }
-
-  // Default Suggestions Example
+  // Default Suggestions
   // --------------------------------------------------------------------
   $('.typeahead-default-suggestions').typeahead(
     {
@@ -161,126 +153,116 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   );
 
-  // Initialize Bloodhound for custom template
-  const customTemplate = new Bloodhound({
+  var customTemplate = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    prefetch: `${assetsPath}json/typeahead-data-2.json`
+    prefetch: assetsPath + 'json/typeahead-data-2.json'
   });
 
-  // Select the input element for typeahead
-  const customTemplateInput = document.querySelector('.typeahead-custom-template');
-
-  // Initialize Typeahead with custom templates
-  if (customTemplateInput) {
-    $(customTemplateInput).typeahead(
-      {
-        highlight: true,
-        hint: !isRtl
-      },
-      {
-        name: 'best-movies',
-        display: 'value',
-        source: customTemplate,
-        templates: {
-          empty: `
-          <div class="empty-message px-3">
-            Unable to find any Best Picture winners that match the current query
-          </div>
-        `,
-          suggestion: data => `
-          <div>
-            <span class="fw-medium">${data.value}</span> – ${data.year}
-          </div>
-        `
-        }
+  // Custom Template
+  // --------------------------------------------------------------------
+  $('.typeahead-custom-template').typeahead(null, {
+    name: 'best-movies',
+    display: 'value',
+    source: customTemplate,
+    highlight: true,
+    hint: !isRtl,
+    templates: {
+      empty: [
+        '<div class="empty-message p-2">',
+        'unable to find any Best Picture winners that match the current query',
+        '</div>'
+      ].join('\n'),
+      suggestion: function (data) {
+        return '<div><span class="fw-medium">' + data.value + '</span> – ' + data.year + '</div>';
       }
-    );
-  }
+    }
+  });
 
-  // Teams Data
-  const teamsData = {
-    nba: [
-      { team: 'Boston Celtics' },
-      { team: 'Dallas Mavericks' },
-      { team: 'Brooklyn Nets' },
-      { team: 'Houston Rockets' },
-      { team: 'New York Knicks' },
-      { team: 'Memphis Grizzlies' },
-      { team: 'Philadelphia 76ers' },
-      { team: 'New Orleans Hornets' },
-      { team: 'Toronto Raptors' },
-      { team: 'San Antonio Spurs' },
-      { team: 'Chicago Bulls' },
-      { team: 'Denver Nuggets' },
-      { team: 'Cleveland Cavaliers' },
-      { team: 'Minnesota Timberwolves' },
-      { team: 'Detroit Pistons' },
-      { team: 'Portland Trail Blazers' },
-      { team: 'Indiana Pacers' },
-      { team: 'Oklahoma City Thunder' },
-      { team: 'Milwaukee Bucks' },
-      { team: 'Utah Jazz' },
-      { team: 'Atlanta Hawks' },
-      { team: 'Golden State Warriors' },
-      { team: 'Charlotte Bobcats' },
-      { team: 'Los Angeles Clippers' },
-      { team: 'Miami Heat' },
-      { team: 'Los Angeles Lakers' },
-      { team: 'Orlando Magic' },
-      { team: 'Phoenix Suns' },
-      { team: 'Washington Wizards' },
-      { team: 'Sacramento Kings' }
-    ],
-    nhl: [
-      { team: 'New Jersey Devils' },
-      { team: 'New York Islanders' },
-      { team: 'New York Rangers' },
-      { team: 'Philadelphia Flyers' },
-      { team: 'Pittsburgh Penguins' },
-      { team: 'Chicago Blackhawks' },
-      { team: 'Columbus Blue Jackets' },
-      { team: 'Detroit Red Wings' },
-      { team: 'Nashville Predators' },
-      { team: 'St. Louis Blues' },
-      { team: 'Boston Bruins' },
-      { team: 'Buffalo Sabres' },
-      { team: 'Montreal Canadiens' },
-      { team: 'Ottawa Senators' },
-      { team: 'Toronto Maple Leafs' },
-      { team: 'Calgary Flames' },
-      { team: 'Colorado Avalanche' },
-      { team: 'Edmonton Oilers' },
-      { team: 'Minnesota Wild' },
-      { team: 'Vancouver Canucks' },
-      { team: 'Carolina Hurricanes' },
-      { team: 'Florida Panthers' },
-      { team: 'Tampa Bay Lightning' },
-      { team: 'Washington Capitals' },
-      { team: 'Winnipeg Jets' },
-      { team: 'Anaheim Ducks' },
-      { team: 'Dallas Stars' },
-      { team: 'Los Angeles Kings' },
-      { team: 'Phoenix Coyotes' },
-      { team: 'San Jose Sharks' }
-    ]
-  };
+  var nbaTeams = [
+    { team: 'Boston Celtics' },
+    { team: 'Dallas Mavericks' },
+    { team: 'Brooklyn Nets' },
+    { team: 'Houston Rockets' },
+    { team: 'New York Knicks' },
+    { team: 'Memphis Grizzlies' },
+    { team: 'Philadelphia 76ers' },
+    { team: 'New Orleans Hornets' },
+    { team: 'Toronto Raptors' },
+    { team: 'San Antonio Spurs' },
+    { team: 'Chicago Bulls' },
+    { team: 'Denver Nuggets' },
+    { team: 'Cleveland Cavaliers' },
+    { team: 'Minnesota Timberwolves' },
+    { team: 'Detroit Pistons' },
+    { team: 'Portland Trail Blazers' },
+    { team: 'Indiana Pacers' },
+    { team: 'Oklahoma City Thunder' },
+    { team: 'Milwaukee Bucks' },
+    { team: 'Utah Jazz' },
+    { team: 'Atlanta Hawks' },
+    { team: 'Golden State Warriors' },
+    { team: 'Charlotte Bobcats' },
+    { team: 'Los Angeles Clippers' },
+    { team: 'Miami Heat' },
+    { team: 'Los Angeles Lakers' },
+    { team: 'Orlando Magic' },
+    { team: 'Phoenix Suns' },
+    { team: 'Washington Wizards' },
+    { team: 'Sacramento Kings' }
+  ];
+  var nhlTeams = [
+    { team: 'New Jersey Devils' },
+    { team: 'New York Islanders' },
+    { team: 'New York Rangers' },
+    { team: 'Philadelphia Flyers' },
+    { team: 'Pittsburgh Penguins' },
+    { team: 'Chicago Blackhawks' },
+    { team: 'Columbus Blue Jackets' },
+    { team: 'Detroit Red Wings' },
+    { team: 'Nashville Predators' },
+    { team: 'St. Louis Blues' },
+    { team: 'Boston Bruins' },
+    { team: 'Buffalo Sabres' },
+    { team: 'Montreal Canadiens' },
+    { team: 'Ottawa Senators' },
+    { team: 'Toronto Maple Leafs' },
+    { team: 'Calgary Flames' },
+    { team: 'Colorado Avalanche' },
+    { team: 'Edmonton Oilers' },
+    { team: 'Minnesota Wild' },
+    { team: 'Vancouver Canucks' },
+    { team: 'Carolina Hurricanes' },
+    { team: 'Florida Panthers' },
+    { team: 'Tampa Bay Lightning' },
+    { team: 'Washington Capitals' },
+    { team: 'Winnipeg Jets' },
+    { team: 'Anaheim Ducks' },
+    { team: 'Dallas Stars' },
+    { team: 'Los Angeles Kings' },
+    { team: 'Phoenix Coyotes' },
+    { team: 'San Jose Sharks' }
+  ];
 
-  // Function to create a Bloodhound instance
-  const createBloodhound = teamData => {
-    return new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('team'),
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      local: teamData
-    });
-  };
+  var nbaExample = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('team'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    local: nbaTeams
+  });
+  var nhlExample = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('team'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    local: nhlTeams
+  });
 
-  // Bloodhound Instances
-  const nbaExample = createBloodhound(teamsData.nba);
-  const nhlExample = createBloodhound(teamsData.nhl);
-
-  // Dataset Configurations
-  const datasets = [
+  // Multiple
+  // --------------------------------------------------------------------
+  $('.typeahead-multi-datasets').typeahead(
+    {
+      hint: !isRtl,
+      highlight: true,
+      minLength: 0
+    },
     {
       name: 'nba-teams',
       source: nbaExample,
@@ -297,18 +279,5 @@ document.addEventListener('DOMContentLoaded', () => {
         header: '<h5 class="league-name border-bottom mb-0 mx-3 mt-3 pb-2">NHL Teams</h5>'
       }
     }
-  ];
-
-  // Initialize Typeahead
-  const multiDatasetInput = document.querySelector('.typeahead-multi-datasets');
-  if (multiDatasetInput) {
-    $(multiDatasetInput).typeahead(
-      {
-        hint: !isRtl,
-        highlight: true,
-        minLength: 0
-      },
-      ...datasets
-    );
-  }
+  );
 });

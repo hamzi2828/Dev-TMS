@@ -92,7 +92,7 @@
   "Create Deal": "Create Deal",
   "Icons": "Icons",
   "Tabler": "Tabler",
-  "Font Awesome": "Font Awesome",
+  "Fontawesome": "Fontawesome",
   "User interface": "User interface",
   "Accordion": "Accordion",
   "Alerts": "Alerts",
@@ -170,8 +170,5 @@
   "Apps & Pages": "Apps & Pages",
   "Components": "Components",
   "Forms & Tables": "Forms & Tables",
-  "Charts & Maps": "Charts & Maps",
-  "Multi Level": "Multi Level",
-  "Level 2": "Level 2",
-  "Level 3": "Level 3"
+  "Charts & Maps": "Charts & Maps"
 }

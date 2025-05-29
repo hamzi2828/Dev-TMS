@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           trigger: new FormValidation.plugins.Trigger(),
           bootstrap5: new FormValidation.plugins.Bootstrap5({
             eleValidClass: '',
-            rowSelector: '.form-control-validation'
+            rowSelector: '.col-md-6'
           }),
           submitButton: new FormValidation.plugins.SubmitButton(),
           // Submit the form when all fields are valid

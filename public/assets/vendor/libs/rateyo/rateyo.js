@@ -26,7 +26,7 @@ return /******/ (function() { // webpackBootstrap
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   rateYo: function() { return /* reexport default from dynamic */ rateyo_src_jquery_rateyo__WEBPACK_IMPORTED_MODULE_0___default.a; }\n/* harmony export */ });\n/* harmony import */ var rateyo_src_jquery_rateyo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rateyo/src/jquery.rateyo */ \"./node_modules/rateyo/src/jquery.rateyo.js\");\n/* harmony import */ var rateyo_src_jquery_rateyo__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(rateyo_src_jquery_rateyo__WEBPACK_IMPORTED_MODULE_0__);\n\n\n\n//# sourceURL=webpack://Vuexy/./libs/rateyo/rateyo.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var rateyo_src_jquery_rateyo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rateyo/src/jquery.rateyo */ \"./node_modules/rateyo/src/jquery.rateyo.js\");\n/* harmony import */ var rateyo_src_jquery_rateyo__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(rateyo_src_jquery_rateyo__WEBPACK_IMPORTED_MODULE_0__);\n\n\n//# sourceURL=webpack://Vuexy/./libs/rateyo/rateyo.js?");
 
 /***/ }),
 

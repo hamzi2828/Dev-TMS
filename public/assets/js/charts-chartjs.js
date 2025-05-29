@@ -3,7 +3,7 @@
  */
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
+(function () {
   // Color Variables
   const purpleColor = '#836AF9',
     yellowColor = '#ffe800',
@@ -17,27 +17,20 @@ document.addEventListener('DOMContentLoaded', function (e) {
     blueLightColor = '#84D0FF',
     blueDarkColor = '#1D9FF2';
 
-  // overriding color variables for chartjs
-  let cardColor, headingColor, labelColor, borderColor, legendColor, info, danger, primary;
+  let cardColor, headingColor, labelColor, borderColor, legendColor;
 
   if (isDarkStyle) {
-    cardColor = window.Helpers.getCssVar('paper-bg', true);
-    headingColor = window.Helpers.getCssVar('heading-color', true);
-    labelColor = window.Helpers.getCssVar('secondary-color', true);
-    legendColor = window.Helpers.getCssVar('body-color', true);
-    borderColor = window.Helpers.getCssVar('border-color', true);
-    primary = window.Helpers.getCssVar('primary', true);
-    info = window.Helpers.getCssVar('info', true);
-    danger = window.Helpers.getCssVar('danger', true);
+    cardColor = config.colors_dark.cardColor;
+    headingColor = config.colors_dark.headingColor;
+    labelColor = config.colors_dark.textMuted;
+    legendColor = config.colors_dark.bodyColor;
+    borderColor = config.colors_dark.borderColor;
   } else {
-    cardColor = window.Helpers.getCssVar('paper-bg', true);
-    headingColor = window.Helpers.getCssVar('heading-color', true);
-    labelColor = window.Helpers.getCssVar('secondary-color', true);
-    legendColor = window.Helpers.getCssVar('body-color', true);
-    borderColor = window.Helpers.getCssVar('border-color', true);
-    primary = window.Helpers.getCssVar('primary', true);
-    info = window.Helpers.getCssVar('info', true);
-    danger = window.Helpers.getCssVar('danger', true);
+    cardColor = config.colors.cardColor;
+    headingColor = config.colors.headingColor;
+    labelColor = config.colors.textMuted;
+    legendColor = config.colors.bodyColor;
+    borderColor = config.colors.borderColor;
   }
 
   // Set height according to their data-height
@@ -142,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         datasets: [
           {
             data: [710, 350, 470, 580, 230, 460, 120],
-            backgroundColor: info,
+            backgroundColor: blueDarkColor,
             borderColor: 'transparent',
             maxBarThickness: 15
           }
@@ -215,32 +208,32 @@ document.addEventListener('DOMContentLoaded', function (e) {
           {
             data: [80, 150, 180, 270, 210, 160, 160, 202, 265, 210, 270, 255, 290, 360, 375],
             label: 'Europe',
-            borderColor: danger,
+            borderColor: config.colors.danger,
             tension: 0.5,
             pointStyle: 'circle',
-            backgroundColor: danger,
+            backgroundColor: config.colors.danger,
             fill: false,
             pointRadius: 1,
             pointHoverRadius: 5,
             pointHoverBorderWidth: 5,
             pointBorderColor: 'transparent',
             pointHoverBorderColor: cardColor,
-            pointHoverBackgroundColor: danger
+            pointHoverBackgroundColor: config.colors.danger
           },
           {
             data: [80, 125, 105, 130, 215, 195, 140, 160, 230, 300, 220, 170, 210, 200, 280],
             label: 'Asia',
-            borderColor: primary,
+            borderColor: config.colors.primary,
             tension: 0.5,
             pointStyle: 'circle',
-            backgroundColor: primary,
+            backgroundColor: config.colors.primary,
             fill: false,
             pointRadius: 1,
             pointHoverRadius: 5,
             pointHoverBorderWidth: 5,
             pointBorderColor: 'transparent',
             pointHoverBorderColor: cardColor,
-            pointHoverBackgroundColor: primary
+            pointHoverBackgroundColor: config.colors.primary
           },
           {
             data: [80, 99, 82, 90, 115, 115, 74, 75, 130, 155, 125, 90, 140, 130, 180],
@@ -300,15 +293,20 @@ document.addEventListener('DOMContentLoaded', function (e) {
             borderWidth: 1,
             borderColor: borderColor
           },
-          htmlLegend: {
-            containerID: 'legendContainer'
-          },
           legend: {
-            display: false
+            position: 'top',
+            align: 'start',
+            rtl: isRtl,
+            labels: {
+              usePointStyle: true,
+              padding: 35,
+              boxWidth: 6,
+              boxHeight: 6,
+              color: legendColor
+            }
           }
         }
-      },
-      plugins: [LegendUtils.htmlLegendPlugin]
+      }
     });
   }
 
@@ -443,10 +441,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           },
           legend: {
             rtl: isRtl,
-            position: 'bottom',
-            markers: {
-              size: '5px'
-            },
+            position: 'right',
             labels: {
               usePointStyle: true,
               padding: 25,
@@ -745,11 +740,17 @@ document.addEventListener('DOMContentLoaded', function (e) {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          htmlLegend: {
-            containerID: 'legendContainer1'
-          },
           legend: {
-            display: false
+            position: 'top',
+            rtl: isRtl,
+            align: 'start',
+            labels: {
+              usePointStyle: true,
+              padding: 35,
+              boxWidth: 6,
+              boxHeight: 6,
+              color: legendColor
+            }
           },
           tooltip: {
             // Updated default tooltip UI
@@ -784,8 +785,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
             }
           }
         }
-      },
-      plugins: [LegendUtils.htmlLegendPlugin]
+      }
     });
   }
 
@@ -801,7 +801,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         datasets: [
           {
             data: [10, 10, 80],
-            backgroundColor: [cyanColor, orangeLightColor, primary],
+            backgroundColor: [cyanColor, orangeLightColor, config.colors.primary],
             borderWidth: 0,
             pointStyle: 'rectRounded'
           }
@@ -916,7 +916,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 y: 330
               }
             ],
-            backgroundColor: primary,
+            backgroundColor: config.colors.primary,
             borderColor: 'transparent',
             pointBorderWidth: 2,
             pointHoverBorderWidth: 2,
@@ -1066,10 +1066,16 @@ document.addEventListener('DOMContentLoaded', function (e) {
         },
         plugins: {
           legend: {
-            display: false
-          },
-          htmlLegend: {
-            containerID: 'legendContainer2'
+            position: 'top',
+            rtl: isRtl,
+            align: 'start',
+            labels: {
+              usePointStyle: true,
+              padding: 25,
+              boxWidth: 6,
+              boxHeight: 6,
+              color: legendColor
+            }
           },
           tooltip: {
             // Updated default tooltip UI
@@ -1111,8 +1117,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
             }
           }
         }
-      },
-      plugins: [LegendUtils.htmlLegendPlugin]
+      }
     });
   }
-});
+})();

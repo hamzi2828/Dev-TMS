@@ -12,45 +12,33 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
     // Credit Card
     if (editCreditCardMaskEdit) {
-      editCreditCardMaskEdit.addEventListener('input', event => {
-        editCreditCardMaskEdit.value = formatCreditCard(event.target.value);
-        const cleanValue = event.target.value.replace(/\D/g, '');
-        let cardType = getCreditCardType(cleanValue);
-        if (cardType && cardType !== 'unknown' && cardType !== 'general') {
-          document.querySelector('.card-type-edit').innerHTML =
-            `<img src="${assetsPath}img/icons/payments/${cardType}-cc.png" height="28"/>`;
-        } else {
-          document.querySelector('.card-type-edit').innerHTML = '';
+      new Cleave(editCreditCardMaskEdit, {
+        creditCard: true,
+        onCreditCardTypeChanged: function (type) {
+          if (type != '' && type != 'unknown') {
+            document.querySelector('.card-type-edit').innerHTML =
+              '<img src="' + assetsPath + 'img/icons/payments/' + type + '-cc.png" height="28"/>';
+          } else {
+            document.querySelector('.card-type-edit').innerHTML = '';
+          }
         }
-      });
-      registerCursorTracker({
-        input: editCreditCardMaskEdit,
-        delimiter: ' '
       });
     }
 
     // Expiry Date MaskEdit
     if (editExpiryDateMaskEdit) {
-      editExpiryDateMaskEdit.addEventListener('input', event => {
-        editExpiryDateMaskEdit.value = formatDate(event.target.value, {
-          delimiter: '/',
-          datePattern: ['m', 'y']
-        });
-      });
-      registerCursorTracker({
-        input: editExpiryDateMaskEdit,
-        delimiter: '/'
+      new Cleave(editExpiryDateMaskEdit, {
+        date: true,
+        delimiter: '/',
+        datePattern: ['m', 'y']
       });
     }
 
     // CVV MaskEdit
     if (editCVVMaskEdit) {
-      editCVVMaskEdit.addEventListener('input', event => {
-        const cleanValue = event.target.value.replace(/\D/g, '');
-        editCVVMaskEdit.value = formatNumeral(cleanValue, {
-          numeral: true,
-          numeralPositiveOnly: true
-        });
+      new Cleave(editCVVMaskEdit, {
+        numeral: true,
+        numeralPositiveOnly: true
       });
     }
 
@@ -71,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.form-control-validation'
+          rowSelector: '.col-12'
         }),
         submitButton: new FormValidation.plugins.SubmitButton(),
         // Submit the form when all fields are valid

@@ -10,7 +10,7 @@
   const snowEditor = new Quill('#snow-editor', {
     bounds: '#snow-editor',
     modules: {
-      syntax: true,
+      formula: true,
       toolbar: '#snow-toolbar'
     },
     theme: 'snow'
@@ -68,13 +68,16 @@
         list: 'ordered'
       },
       {
+        list: 'bullet'
+      },
+      {
         indent: '-1'
       },
       {
         indent: '+1'
       }
     ],
-    [{ direction: 'rtl' }, { align: [] }],
+    [{ direction: 'rtl' }],
     ['link', 'image', 'video', 'formula'],
     ['clean']
   ];
@@ -82,7 +85,7 @@
     bounds: '#full-editor',
     placeholder: 'Type Something...',
     modules: {
-      syntax: true,
+      formula: true,
       toolbar: fullToolbar
     },
     theme: 'snow'

@@ -4,20 +4,14 @@
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
+(function () {
   const clipboardList = [].slice.call(document.querySelectorAll('.clipboard-btn'));
-
-  const notyf = new Notyf({
-    duration: 3000,
-    dismissible: true,
-    position: { x: 'right', y: 'top' }
-  });
   if (ClipboardJS) {
     clipboardList.map(function (clipboardEl) {
       const clipboard = new ClipboardJS(clipboardEl);
       clipboard.on('success', function (e) {
-        if (e.action === 'copy') {
-          notyf.success('Copied to Clipboard!!');
+        if (e.action == 'copy') {
+          toastr['success']('', 'Copied to Clipboard!!');
         }
       });
     });
@@ -26,4 +20,4 @@ document.addEventListener('DOMContentLoaded', function (e) {
       clipboardEl.setAttribute('disabled', true);
     });
   }
-});
+})();

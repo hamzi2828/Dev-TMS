@@ -6,22 +6,28 @@
 
 // Hour pie chart
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  let labelColor, headingColor, borderColor, fontFamily;
-  labelColor = config.colors.textMuted;
-  headingColor = config.colors.headingColor;
-  borderColor = config.colors.borderColor;
-  fontFamily = config.fontFamily;
+(function () {
+  let labelColor, headingColor, borderColor;
+
+  if (isDarkStyle) {
+    labelColor = config.colors_dark.textMuted;
+    headingColor = config.colors_dark.headingColor;
+    borderColor = config.colors_dark.borderColor;
+  } else {
+    labelColor = config.colors.textMuted;
+    headingColor = config.colors.headingColor;
+    borderColor = config.colors.borderColor;
+  }
 
   // Donut Chart Colors
   const chartColors = {
     donut: {
-      series1: 'color-mix(in sRGB, ' + config.colors.success + ' 80%, ' + config.colors.black + ')',
-      series2: 'color-mix(in sRGB, ' + config.colors.success + ' 90%, ' + config.colors.black + ')',
+      series1: '#209F59',
+      series2: '#24B364',
       series3: config.colors.success,
-      series4: 'color-mix(in sRGB, ' + config.colors.success + ' 80%, ' + config.colors.cardColor + ')',
-      series5: 'color-mix(in sRGB, ' + config.colors.success + ' 60%, ' + config.colors.cardColor + ')',
-      series6: 'color-mix(in sRGB, ' + config.colors.success + ' 40%, ' + config.colors.cardColor + ')'
+      series4: '#53D28C',
+      series5: '#7EDDA9',
+      series6: '#A9E9C5'
     }
   };
 
@@ -71,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               show: true,
               value: {
                 fontSize: '1.125rem',
-                fontFamily: fontFamily,
+                fontFamily: 'Public Sans',
                 color: headingColor,
                 fontWeight: 500,
                 offsetY: -20,
@@ -81,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               },
               name: {
                 offsetY: 20,
-                fontFamily: fontFamily
+                fontFamily: 'Public Sans'
               },
               total: {
                 show: true,
@@ -107,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
   const horizontalBarChartEl = document.querySelector('#horizontalBarChart'),
     horizontalBarChartConfig = {
       chart: {
-        height: 300,
+        height: 320,
         type: 'bar',
         toolbar: {
           show: false
@@ -116,10 +122,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
       plotOptions: {
         bar: {
           horizontal: true,
-          barHeight: '60%',
+          barHeight: '70%',
           distributed: true,
           startingShape: 'rounded',
-          borderRadiusApplication: 'end',
           borderRadius: 7
         }
       },
@@ -141,6 +146,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           bottom: -12
         }
       },
+
       colors: [
         config.colors.primary,
         config.colors.info,
@@ -155,10 +161,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
       dataLabels: {
         enabled: true,
         style: {
-          colors: [config.colors.white],
+          colors: ['#fff'],
           fontWeight: 400,
           fontSize: '13px',
-          fontFamily: fontFamily
+          fontFamily: 'Public Sans'
         },
         formatter: function (val, opts) {
           return horizontalBarChartConfig.labels[opts.dataPointIndex];
@@ -186,8 +192,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
         labels: {
           style: {
             colors: labelColor,
-            fontFamily: fontFamily,
-            fontSize: '13px'
+            fontSize: '13px',
+            fontFamily: 'Public Sans'
           },
           formatter: function (val) {
             return `${val}%`;
@@ -199,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         labels: {
           style: {
             colors: [labelColor],
-            fontFamily: fontFamily,
+            fontFamily: 'Public Sans',
             fontSize: '13px'
           }
         }
@@ -246,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               offsetY: -10,
               fontSize: '15px',
               fontWeight: 500,
-              fontFamily: fontFamily,
+              fontFamily: 'Public Sans',
               color: headingColor
             }
           },
@@ -288,29 +294,23 @@ document.addEventListener('DOMContentLoaded', function (e) {
   // datatable
 
   // Variable declaration for table
-  const dt_academy_course = document.querySelector('.datatables-academy-course'),
+  var dt_academy_course = $('.datatables-academy-course'),
     logoObj = {
-      angular:
-        '<span class="badge bg-label-danger rounded p-1_5"><i class="icon-base ti tabler-brand-angular icon-28px"></i></span>',
-      figma:
-        '<span class="badge bg-label-warning rounded p-1_5"><i class="icon-base ti tabler-brand-figma icon-28px"></i></span>',
-      react:
-        '<span class="badge bg-label-info rounded p-1_5"><i class="icon-base ti tabler-brand-react icon-28px"></i></span>',
-      art: '<span class="badge bg-label-success rounded p-1_5"><i class="icon-base ti tabler-color-swatch icon-28px"></i></span>',
-      fundamentals:
-        '<span class="badge bg-label-primary rounded p-1_5"><i class="icon-base ti tabler-diamond icon-28px"></i></span>'
+      angular: '<span class="badge bg-label-danger rounded p-1_5"><i class="ti ti-brand-angular ti-28px"></i></span>',
+      figma: '<span class="badge bg-label-warning rounded p-1_5"><i class="ti ti-brand-figma ti-28px"></i></span>',
+      react: '<span class="badge bg-label-info rounded p-1_5"><i class="ti ti-brand-react-native ti-28px"></i></span>',
+      art: '<span class="badge bg-label-success rounded p-1_5"><i class="ti ti-color-swatch ti-28px"></i></span>',
+      fundamentals: '<span class="badge bg-label-primary rounded p-1_5"><i class="ti ti-diamond ti-28px"></i></span>'
     };
 
-  if (dt_academy_course) {
-    let tableTitle = document.createElement('h5');
-    tableTitle.classList.add('card-title', 'mb-0', 'text-nowrap', 'text-md-start', 'text-center');
-    tableTitle.innerHTML = 'Course you are taking';
-    let dt_course = new DataTable(dt_academy_course, {
-      ajax: assetsPath + 'json/app-academy-dashboard.json',
+  // orders datatable
+  if (dt_academy_course.length) {
+    var dt_course = dt_academy_course.DataTable({
+      ajax: assetsPath + 'json/app-academy-dashboard.json', // JSON file to add data
       columns: [
         // columns according to JSON
+        { data: '' },
         { data: 'id' },
-        { data: 'id', orderable: false, render: DataTable.render.select() },
         { data: 'course name' },
         { data: 'time' },
         { data: 'progress' },
@@ -333,7 +333,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
           targets: 1,
           orderable: false,
           searchable: false,
-          responsivePriority: 3,
           checkboxes: true,
           render: function () {
             return '<input type="checkbox" class="dt-checkboxes form-check-input">';
@@ -343,190 +342,182 @@ document.addEventListener('DOMContentLoaded', function (e) {
           }
         },
         {
+          // order number
           targets: 2,
           responsivePriority: 2,
-          render: (data, type, full) => {
-            const { logo, course, user, image } = full;
-
-            const output = image
-              ? `<img src="${assetsPath}img/avatars/${image}" alt="Avatar" class="rounded-circle">`
-              : (() => {
-                  // Generate initials and random state for badge
-                  const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-                  const state = states[Math.floor(Math.random() * states.length)];
-                  const initials = (user.match(/\b\w/g) || []).reduce((acc, char) => acc + char.toUpperCase(), '');
-                  return `<span class="avatar-initial rounded-circle bg-label-${state}">${initials}</span>`;
-                })();
-
-            // Create full row output
-            return `
-                  <div class="d-flex align-items-center">
-                      <span class="me-4">${logoObj[logo]}</span>
-                      <div>
-                          <a class="text-heading text-truncate fw-medium mb-2 text-wrap" href="app-academy-course-details.html">
-                              ${course}
-                          </a>
-                          <div class="d-flex align-items-center mt-1">
-                              <div class="avatar-wrapper me-2">
-                                  <div class="avatar avatar-xs">
-                                      ${output}
-                                  </div>
-                              </div>
-                              <small class="text-nowrap text-heading">${user}</small>
-                          </div>
-                      </div>
-                  </div>
-              `;
+          render: function (data, type, full, meta) {
+            var $logo = full['logo'];
+            var $course = full['course'];
+            var $user = full['user'];
+            var $image = full['image'];
+            if ($image) {
+              // For Avatar image
+              var $output =
+                '<img src="' + assetsPath + 'img/avatars/' + $image + '" alt="Avatar" class="rounded-circle">';
+            } else {
+              // For Avatar badge
+              var stateNum = Math.floor(Math.random() * 6);
+              var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+              var $state = states[stateNum],
+                $name = full['user'],
+                $initials = $name.match(/\b\w/g) || [];
+              $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
+              $output = '<span class="avatar-initial rounded-circle bg-label-' + $state + '">' + $initials + '</span>';
+            }
+            // Creates full output for row
+            var $row_output =
+              '<div class="d-flex align-items-center">' +
+              '<span class="me-4">' +
+              logoObj[$logo] +
+              '</span>' +
+              '<div>' +
+              '<a class="text-heading text-truncate fw-medium mb-2 text-wrap" href="app-academy-course-details.html">' +
+              $course +
+              '</a>' +
+              '<div class="d-flex align-items-center mt-1">' +
+              '<div class="avatar-wrapper me-2">' +
+              '<div class="avatar avatar-xs">' +
+              $output +
+              '</div>' +
+              '</div>' +
+              '<small class="text-nowrap text-heading">' +
+              $user +
+              '</small>' +
+              '</div>' +
+              '</div>' +
+              '</div>';
+            return $row_output;
           }
         },
         {
           targets: 3,
           responsivePriority: 3,
-          render: data => {
-            const duration = moment.duration(data);
-            const hours = Math.floor(duration.asHours());
-            const minutes = Math.floor(duration.asMinutes()) - hours * 60;
-            const formattedTime = `${hours}h ${minutes}m`;
-
-            return `<span class="fw-medium text-nowrap text-heading">${formattedTime}</span>`;
+          render: function (data, type, full, meta) {
+            var duration = moment.duration(data);
+            var Hs = Math.floor(duration.asHours());
+            var minutes = Math.floor(duration.asMinutes()) - Hs * 60;
+            var formattedTime = Hs + 'h ' + minutes + 'm';
+            return '<span class="fw-medium text-nowrap text-heading">' + formattedTime + '</span>';
           }
         },
         {
+          // progress
           targets: 4,
-          render: (data, type, full) => {
-            const { status: statusNumber, number: averageNumber } = full;
+          render: function (data, type, full, meta) {
+            var $status_number = full['status'];
+            var $average_number = full['number'];
 
-            return `
-                  <div class="d-flex align-items-center gap-3">
-                      <p class="fw-medium mb-0 text-heading">${statusNumber}</p>
-                      <div class="progress w-100" style="height: 8px;">
-                          <div
-                              class="progress-bar"
-                              style="width: ${statusNumber}"
-                              aria-valuenow="${statusNumber}"
-                              aria-valuemin="0"
-                              aria-valuemax="100">
-                          </div>
-                      </div>
-                      <small>${averageNumber}</small>
-                  </div>
-              `;
+            return (
+              '<div class="d-flex align-items-center gap-3">' +
+              '<p class="fw-medium mb-0 text-heading">' +
+              $status_number +
+              '</p>' +
+              '<div class="progress w-100" style="height: 8px;">' +
+              '<div class="progress-bar" style="width: ' +
+              $status_number +
+              '" aria-valuenow="' +
+              $status_number +
+              '" aria-valuemin="0" aria-valuemax="100"></div>' +
+              '</div>' +
+              '<small>' +
+              $average_number +
+              '</small></div>'
+            );
           }
         },
         {
+          // status
           targets: 5,
-          render: (data, type, full) => {
-            const { user_number: userNumber, note, view } = full;
+          render: function (data, type, full, meta) {
+            var $user_number = full['user_number'];
+            var $note = full['note'];
+            var $view = full['view'];
 
-            return `
-                  <div class="d-flex align-items-center justify-content-between">
-                      <div class="d-flex align-items-center">
-                          <i class="icon-base ti tabler-users icon-lg me-1_5 text-primary"></i>
-                          <span>${userNumber}</span>
-                      </div>
-                      <div class="d-flex align-items-center">
-                          <i class="icon-base ti tabler-book icon-lg me-1_5 text-info"></i>
-                          <span>${note}</span>
-                      </div>
-                      <div class="d-flex align-items-center">
-                          <i class="icon-base ti tabler-video icon-lg me-1_5 text-danger"></i>
-                          <span>${view}</span>
-                      </div>
-                  </div>
-              `;
+            return (
+              '<div class="d-flex align-items-center justify-content-between">' +
+              '<div class="w-px-50 d-flex align-items-center">' +
+              '<i class="ti ti-users ti-lg me-2 text-primary"></i><span>' +
+              $user_number +
+              '</span></div>' +
+              '<div class="w-px-50 d-flex align-items-center">' +
+              '<i class="ti ti-book ti-lg me-2 text-info"></i><span>' +
+              $note +
+              '</span></div>' +
+              '<div class="w-px-50 d-flex align-items-center">' +
+              '<i class="ti ti-video ti-lg me-2 text-danger"></i><span>' +
+              $view +
+              '</span></div>' +
+              '</div>'
+            );
           }
         }
       ],
-      select: {
-        style: 'multi',
-        selector: 'td:nth-child(2)'
-      },
       order: [[2, 'desc']],
-      layout: {
-        topStart: {
-          rowClass: 'row card-header border-bottom mx-0 px-3 py-0',
-          features: [tableTitle]
-        },
-        topEnd: {
-          search: {
-            placeholder: 'Search Course',
-            text: '_INPUT_'
-          }
-        },
-        bottomStart: {
-          rowClass: 'row mx-3 justify-content-between',
-          features: ['info']
-        },
-        bottomEnd: 'paging'
-      },
+      dom:
+        '<"card-header py-sm-0"<"head-label text-center">f' +
+        '>t' +
+        '<"row mx-md-4 flex-column flex-md-row align-items-center"' +
+        '<"col-sm-6 col-12 text-center text-md-start pb-2 pb-xl-0 px-0"i>' +
+        '<"col-sm-6 col-12 d-flex justify-content-center justify-content-md-end px-0"p>' +
+        '>',
       lengthMenu: [5],
       language: {
+        sLengthMenu: '_MENU_',
+        search: '',
+        searchPlaceholder: 'Search Course',
         paginate: {
-          next: '<i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-18px"></i>',
-          previous: '<i class="icon-base ti tabler-chevron-left scaleX-n1-rtl icon-18px"></i>',
-          first: '<i class="icon-base ti tabler-chevrons-left scaleX-n1-rtl icon-18px"></i>',
-          last: '<i class="icon-base ti tabler-chevrons-right scaleX-n1-rtl icon-18px"></i>'
+          next: '<i class="ti ti-chevron-right ti-sm"></i>',
+          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
         }
       },
+      // Buttons with Dropdown
+
       // For responsive popup
       responsive: {
         details: {
-          display: DataTable.Responsive.display.modal({
+          display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
-              const data = row.data();
+              var data = row.data();
               return 'Details of ' + data['order'];
             }
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
-            const data = columns
-              .map(function (col) {
-                return col.title !== '' // Do not show row in modal popup if title is blank (for check box)
-                  ? `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
-                      <td>${col.title}:</td>
-                      <td>${col.data}</td>
-                    </tr>`
-                  : '';
-              })
-              .join('');
+            var data = $.map(columns, function (col, i) {
+              return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
+                ? '<tr data-dt-row="' +
+                    col.rowIndex +
+                    '" data-dt-column="' +
+                    col.columnIndex +
+                    '">' +
+                    '<td>' +
+                    col.title +
+                    ':' +
+                    '</td> ' +
+                    '<td>' +
+                    col.data +
+                    '</td>' +
+                    '</tr>'
+                : '';
+            }).join('');
 
-            if (data) {
-              const div = document.createElement('div');
-              div.classList.add('table-responsive');
-              const table = document.createElement('table');
-              div.appendChild(table);
-              table.classList.add('table');
-              table.classList.add('datatables-basic');
-              const tbody = document.createElement('tbody');
-              tbody.innerHTML = data;
-              table.appendChild(tbody);
-              return div;
-            }
-            return false;
+            return data ? $('<table class="table"/><tbody />').append(data) : false;
           }
         }
       }
     });
+    $('div.head-label').html('<h5 class="card-title mb-0 text-nowrap">Course you are taking</h5>');
   }
 
-  // Filter form control to default size
-  // ? setTimeout used for data-table initialization
-  setTimeout(() => {
-    const elementsToModify = [
-      { selector: '.dt-search .form-control', classToRemove: 'form-control-sm' },
-      { selector: '.dt-length .form-select', classToRemove: 'form-select-sm' },
-      { selector: '.dt-layout-table', classToRemove: 'row mt-2' },
-      { selector: '.dt-layout-full', classToRemove: 'col-md col-12', classToAdd: 'table-responsive' }
-    ];
+  // Delete Record
+  $('.datatables-orders tbody').on('click', '.delete-record', function () {
+    dt_course.row($(this).parents('tr')).remove().draw();
+  });
 
-    // Delete record
-    elementsToModify.forEach(({ selector, classToRemove, classToAdd }) => {
-      document.querySelectorAll(selector).forEach(element => {
-        classToRemove.split(' ').forEach(className => element.classList.remove(className));
-        if (classToAdd) {
-          element.classList.add(classToAdd);
-        }
-      });
-    });
-  }, 100);
-});
+  // Filter form control to default size
+  // ? setTimeout used for multilingual table initialization
+  setTimeout(() => {
+    $('.dataTables_filter .form-control').removeClass('form-control-sm');
+    $('.dataTables_length .form-select').removeClass('form-select-sm');
+  }, 300);
+})();

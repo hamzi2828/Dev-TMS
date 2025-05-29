@@ -4,29 +4,25 @@
 
 'use strict';
 
-// Datatable (js)
+// Datatable (jquery)
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  var dt_details_table = document.querySelector('.datatables-order-details');
+$(function () {
+  // Variable declaration for table
+
+  var dt_details_table = $('.datatables-order-details');
 
   // E-commerce Products datatable
-  if (dt_details_table) {
-    let tableTitle = document.createElement('h5');
-    tableTitle.classList.add('card-title', 'mb-0');
-    tableTitle.innerHTML = 'Order details';
-    let tableEdit = document.createElement('h6');
-    tableEdit.classList.add('m-0');
-    tableEdit.innerHTML = '<a href=" javascript:void(0)">Edit</a>';
-    var dt_products = new DataTable(dt_details_table, {
+  if (dt_details_table.length) {
+    var dt_products = dt_details_table.DataTable({
       ajax: assetsPath + 'json/ecommerce-order-details.json', // JSON file to add data
       columns: [
         // columns according to JSON
         { data: 'id' },
-        { data: 'id', orderable: false, render: DataTable.render.select() },
+        { data: 'id' },
         { data: 'product_name' },
         { data: 'price' },
         { data: 'qty' },
-        { data: 'id' }
+        { data: '' }
       ],
       columnDefs: [
         {
@@ -44,55 +40,62 @@ document.addEventListener('DOMContentLoaded', function (e) {
           // For Checkboxes
           targets: 1,
           orderable: false,
-          searchable: false,
-          responsivePriority: 3,
-          checkboxes: true,
-          render: function () {
-            return '<input type="checkbox" class="dt-checkboxes form-check-input">';
-          },
           checkboxes: {
             selectAllRender: '<input type="checkbox" class="form-check-input">'
-          }
+          },
+          render: function () {
+            return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
+          },
+          searchable: false
         },
         {
+          // Product name and product info
           targets: 2,
           responsivePriority: 1,
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            const name = full['product_name'];
-            const productBrand = full['product_info'];
-            const image = full['image'];
-            let output;
-
-            if (image) {
+            var $name = full['product_name'],
+              $product_brand = full['product_info'],
+              $image = full['image'];
+            if ($image) {
               // For Product image
-              output = `
-                <img src="${assetsPath}img/products/${image}" alt="product-${name}" class="rounded-2">
-              `;
+              var $output =
+                '<img src="' +
+                assetsPath +
+                'img/products/' +
+                $image +
+                '" alt="product-' +
+                $name +
+                '" class="rounded-2">';
             } else {
               // For Product badge
-              const stateNum = Math.floor(Math.random() * 6);
-              const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-              const state = states[stateNum];
-              const initials = (name.match(/\b\w/g) || []).slice(0, 2).join('').toUpperCase();
-
-              output = `<span class="avatar-initial rounded-2 bg-label-${state}">${initials}</span>`;
+              var stateNum = Math.floor(Math.random() * 6);
+              var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+              var $state = states[stateNum],
+                $name = full['product_name'],
+                $initials = $name.match(/\b\w/g) || [];
+              $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
+              $output = '<span class="avatar-initial rounded-2 bg-label-' + $state + '">' + $initials + '</span>';
             }
-
-            // Creates full output for Product name and product info
-            const rowOutput = `
-              <div class="d-flex justify-content-start align-items-center text-nowrap">
-                <div class="avatar-wrapper">
-                  <div class="avatar avatar-sm me-3">${output}</div>
-                </div>
-                <div class="d-flex flex-column">
-                  <h6 class="text-body mb-0">${name}</h6>
-                  <small>${productBrand}</small>
-                </div>
-              </div>`;
-
-            return rowOutput;
+            // Creates full output for Product name and product_brand
+            var $row_output =
+              '<div class="d-flex justify-content-start align-items-center text-nowrap">' +
+              '<div class="avatar-wrapper">' +
+              '<div class="avatar avatar-sm me-3">' +
+              $output +
+              '</div>' +
+              '</div>' +
+              '<div class="d-flex flex-column">' +
+              '<h6 class="text-heading mb-0">' +
+              $name +
+              '</h6>' +
+              '<small>' +
+              $product_brand +
+              '</small>' +
+              '</div>' +
+              '</div>';
+            return $row_output;
           }
         },
         {
@@ -101,9 +104,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            const price = full['price'];
-            const output = '<span>$' + price + '</span>';
-            return output;
+            var $price = full['price'];
+            var $output = '<span>$' + $price + '</span>';
+            return $output;
           }
         },
         {
@@ -112,9 +115,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            const qty = full['qty'];
-            const output = '<span class="text-body">' + qty + '</span>';
-            return output;
+            var $qty = full['qty'];
+            var $output = '<span class="text-body">' + $qty + '</span>';
+            return $output;
           }
         },
         {
@@ -123,83 +126,55 @@ document.addEventListener('DOMContentLoaded', function (e) {
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            const total = full['qty'] * full['price'];
-            const output = '<span class="text-body">' + total + '</span>';
-            return output;
+            var $total = full['qty'] * full['price'];
+            var $output = '<span class="text-body">' + $total + '</span>';
+            return $output;
           }
         }
       ],
-      order: [2, ''],
-      layout: {
-        topStart: {
-          rowClass: 'row card-header border-bottom mx-0 px-3',
-          features: [tableTitle]
-        },
-        topEnd: {
-          features: [tableEdit]
-        },
-        bottomStart: {
-          rowClass: 'mt-0',
-          features: []
-        },
-        bottomEnd: {}
-      },
+      order: [2, ''], //set any columns order asc/desc
+      dom: 't',
+      // For responsive popup
       responsive: {
         details: {
-          display: DataTable.Responsive.display.modal({
+          display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
               var data = row.data();
-              return 'Details of ' + data['product_name'];
+              return 'Details of ' + data['full_name'];
             }
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
-            const data = columns
-              .map(function (col) {
-                return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                  ? `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
-                      <td>${col.title}:</td>
-                      <td>${col.data}</td>
-                    </tr>`
-                  : '';
-              })
-              .join('');
+            var data = $.map(columns, function (col, i) {
+              return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
+                ? '<tr data-dt-row="' +
+                    col.rowIndex +
+                    '" data-dt-column="' +
+                    col.columnIndex +
+                    '">' +
+                    '<td>' +
+                    col.title +
+                    ':' +
+                    '</td> ' +
+                    '<td>' +
+                    col.data +
+                    '</td>' +
+                    '</tr>'
+                : '';
+            }).join('');
 
-            if (data) {
-              const div = document.createElement('div');
-              div.classList.add('table-responsive');
-              const table = document.createElement('table');
-              div.appendChild(table);
-              table.classList.add('table');
-              const tbody = document.createElement('tbody');
-              tbody.innerHTML = data;
-              table.appendChild(tbody);
-              return div;
-            }
-            return false;
+            return data ? $('<table class="table"/><tbody />').append(data) : false;
           }
         }
       }
     });
   }
   // Filter form control to default size
-  // ? setTimeout used for order-details table initialization
+  // ? setTimeout used for multilingual table initialization
   setTimeout(() => {
-    const elementsToModify = [
-      { selector: '.dt-layout-table', classToRemove: 'row mt-2' },
-      { selector: '.dt-layout-full', classToRemove: 'col-md col-12', classToAdd: 'table-responsive' }
-    ];
-
-    // Delete record
-    elementsToModify.forEach(({ selector, classToRemove, classToAdd }) => {
-      document.querySelectorAll(selector).forEach(element => {
-        classToRemove.split(' ').forEach(className => element.classList.remove(className));
-        if (classToAdd) {
-          element.classList.add(classToAdd);
-        }
-      });
-    });
-  }, 100);
+    $('.dataTables_filter .form-control').removeClass('form-control-sm');
+    $('.dataTables_length .form-select').removeClass('form-select-sm');
+  }, 300);
 });
 
 //sweet alert

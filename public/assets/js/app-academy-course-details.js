@@ -2,7 +2,7 @@
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
+(function () {
   // video
   const videoPlayer = new Plyr('#plyr-video-player');
   document.getElementsByClassName('plyr')[0].style.borderRadius = '6px';
@@ -24,4 +24,4 @@ document.addEventListener('DOMContentLoaded', function (e) {
   window.onscroll = function () {
     TopSticky();
   };
-});
+})();

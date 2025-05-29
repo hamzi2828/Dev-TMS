@@ -1,27 +1,35 @@
-/* Help center
-******************************************************************************* */
-/* (C) */
 .user-profile-header-banner img {
-  block-size: 250px;
-  inline-size: 100%;
+  width: 100%;
   object-fit: cover;
+  height: 250px;
 }
 
 .user-profile-header {
-  margin-block-start: -2rem;
+  margin-top: -2rem;
 }
 .user-profile-header .user-profile-img {
   border: 5px solid;
-  border-color: var(--bs-paper-bg);
-  inline-size: 120px;
+  width: 120px;
 }
 
-/* Responsive style */
+.light-style .user-profile-header .user-profile-img {
+  border-color: #fff;
+}
+
+.dark-style .user-profile-header .user-profile-img {
+  border-color: #2f3349;
+}
+
+.dataTables_wrapper .card-header .dataTables_filter label {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
 @media (max-width: 767.98px) {
   .user-profile-header-banner img {
-    block-size: 150px;
+    height: 150px;
   }
   .user-profile-header .user-profile-img {
-    inline-size: 100px;
+    width: 100px;
   }
 }

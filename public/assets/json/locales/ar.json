@@ -91,8 +91,7 @@
   "Property Listing": "قائمة العقارات",
   "Create Deal": "إنشاء صفقة",
   "Icons": "الرموز",
-  "Tabler": "طاولة",
-  "Font Awesome": "الخط رائع",
+  "Fontawesome": "الخطوط الرائعة",
   "User interface": "واجهة المستخدم",
   "Accordion": "الأكورديون",
   "Alerts": "التنبيهات",
@@ -171,7 +170,5 @@
   "Components": "المكونات",
   "Forms & Tables": "النماذج والجداول",
   "Charts & Maps": "الرسوم البيانية والخرائط",
-  "Multi Level": "متعدد المستويات",
-  "Level 2": "المستوى 2",
-  "Level 3": "المستوى 3"
+  "Tabler": "طاولة"
 }

@@ -15,16 +15,9 @@
 
   // Phone Number Input Mask
   if (phoneMask) {
-    phoneMask.addEventListener('input', event => {
-      const cleanValue = event.target.value.replace(/\D/g, '');
-      phoneMask.value = formatGeneral(cleanValue, {
-        blocks: [3, 3, 4],
-        delimiters: [' ', ' ']
-      });
-    });
-    registerCursorTracker({
-      input: phoneMask,
-      delimiter: ' '
+    new Cleave(phoneMask, {
+      phone: true,
+      phoneRegionCode: 'US'
     });
   }
 
@@ -116,7 +109,7 @@
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.form-control-validation'
+          rowSelector: '.col-sm-6'
         }),
         autoFocus: new FormValidation.plugins.AutoFocus(),
         submitButton: new FormValidation.plugins.SubmitButton()
@@ -169,9 +162,9 @@
             // field is the field name & ele is the field element
             switch (field) {
               case 'plAddress':
-                return '.form-control-validation';
+                return '.col-lg-12';
               default:
-                return '.form-control-validation';
+                return '.col-sm-6';
             }
           }
         }),
@@ -209,7 +202,7 @@
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.form-control-validation'
+          rowSelector: '.col-sm-6'
         }),
         autoFocus: new FormValidation.plugins.AutoFocus(),
         submitButton: new FormValidation.plugins.SubmitButton()
@@ -229,7 +222,7 @@
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.form-control-validation'
+          rowSelector: '.col-md-12'
         }),
         autoFocus: new FormValidation.plugins.AutoFocus(),
         submitButton: new FormValidation.plugins.SubmitButton()
@@ -250,7 +243,7 @@
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.form-control-validation'
+          rowSelector: '.col-md-12'
         }),
         autoFocus: new FormValidation.plugins.AutoFocus(),
         submitButton: new FormValidation.plugins.SubmitButton()

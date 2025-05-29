@@ -1,18 +1,21 @@
 /**
- * App Invoice List (js)
+ * App Invoice List (jquery)
  */
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function () {
-  const dt_invoice_table = document.querySelector('.invoice-list-table');
+$(function () {
+  // Variable declaration for table
+  var dt_invoice_table = $('.invoice-list-table');
 
-  if (dt_invoice_table) {
-    const dt_invoice = new DataTable(dt_invoice_table, {
-      ajax: assetsPath + 'json/invoice-list.json',
+  // Invoice datatable
+  if (dt_invoice_table.length) {
+    var dt_invoice = dt_invoice_table.DataTable({
+      ajax: assetsPath + 'json/invoice-list.json', // JSON file to add data
       columns: [
+        // columns according to JSON
         { data: 'invoice_id' },
-        { data: 'invoice_id', orderable: false, render: DataTable.render.select() },
+        { data: 'invoice_id' },
         { data: 'invoice_id' },
         { data: 'invoice_status' },
         { data: 'issued_date' },
@@ -24,129 +27,149 @@ document.addEventListener('DOMContentLoaded', function () {
       ],
       columnDefs: [
         {
+          // For Responsive
           className: 'control',
           responsivePriority: 2,
           searchable: false,
           targets: 0,
-          render: function () {
+          render: function (data, type, full, meta) {
             return '';
           }
         },
         {
+          // For Checkboxes
           targets: 1,
           orderable: false,
-          searchable: false,
-          responsivePriority: 4,
+          checkboxes: {
+            selectAllRender: '<input type="checkbox" class="form-check-input">'
+          },
           render: function () {
-            return '<input type="checkbox" class="dt-checkboxes form-check-input">';
-          }
+            return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
+          },
+          searchable: false
         },
         {
+          // Invoice ID
           targets: 2,
-          render: function (data, type, full) {
-            return `<a href="app-invoice-preview.html">#${full['invoice_id']}</a>`;
+          render: function (data, type, full, meta) {
+            var $invoice_id = full['invoice_id'];
+            // Creates full output for row
+            var $row_output = '<a href="app-invoice-preview.html">#' + $invoice_id + '</a>';
+            return $row_output;
           }
         },
         {
-          // Invoice Status with tooltip
+          // Invoice status
           targets: 3,
-          render: function (data, type, full) {
-            const invoiceStatus = full['invoice_status'];
-            const balance = full['balance'];
-            const dueDate = full['due_date'];
-
-            const roleBadgeObj = {
-              Sent: '<span class="badge badge-center rounded-pill bg-label-success w-px-30 h-px-30 display-flex align-items-center justify-content-center"><i class="icon-base ti tabler-check icon-16px"></i></span>',
+          render: function (data, type, full, meta) {
+            var $invoice_status = full['invoice_status'],
+              $due_date = full['due_date'],
+              $balance = full['balance'];
+            var roleBadgeObj = {
+              Sent: '<span class="badge badge-center rounded-pill bg-label-secondary w-px-30 h-px-30 d-flex align-items-center justify-content-center"><i class="ti ti-circle-check ti-xs"></i></span>',
               Draft:
-                '<span class="badge badge-center rounded-pill bg-label-primary w-px-30 h-px-30 display-flex align-items-center justify-content-center"><i class="icon-base  ti tabler-folder icon-16px "></i></span>',
+                '<span class="badge badge-center rounded-pill bg-label-primary w-px-30 h-px-30 d-flex align-items-center justify-content-center"><i class="ti ti-device-floppy ti-xs"></i></span>',
               'Past Due':
-                '<span class="badge badge-center rounded-pill bg-label-danger w-px-30 h-px-30 display-flex align-items-center justify-content-center"><i class="icon-base  ti tabler-info-circle icon-16px "></i></span>',
+                '<span class="badge badge-center rounded-pill bg-label-danger w-px-30 h-px-30 d-flex align-items-center justify-content-center"><i class="ti ti-info-circle ti-xs"></i></span>',
               'Partial Payment':
-                '<span class="badge badge-center rounded-pill bg-label-secondary w-px-30 h-px-30 display-flex align-items-center justify-content-center"><i class="icon-base  ti tabler-mail icon-16px"></i></span>',
-              Paid: '<span class="badge badge-center rounded-pill bg-label-warning w-px-30 h-px-30 display-flex align-items-center justify-content-center"><i class="icon-base  ti tabler-chart-pie-2 icon-16px"></i></span>',
+                '<span class="badge badge-center rounded-pill bg-label-success w-px-30 h-px-30 d-flex align-items-center justify-content-center"><i class="ti ti-circle-half-2 ti-xs"></i></span>',
+              Paid: '<span class="badge badge-center rounded-pill bg-label-warning w-px-30 h-px-30 d-flex align-items-center justify-content-center"><i class="ti ti-chart-pie ti-xs"></i></span>',
               Downloaded:
-                '<span class="badge badge-center rounded-pill bg-label-info w-px-30 h-px-30 display-flex align-items-center justify-content-center"><i class="icon-base  ti tabler-arrow-down icon-16px"></i></span>'
+                '<span class="badge badge-center rounded-pill bg-label-info w-px-30 h-px-30 d-flex align-items-center justify-content-center"><i class="ti ti-arrow-down-circle ti-xs"></i></span>'
             };
-
-            // Sanitize tooltip content by escaping double quotes
-            const tooltipContent = `
-              ${invoiceStatus}<br>
-              <span class="fw-medium">Balance:</span> ${balance}<br>
-              <span class="fw-medium">Due Date:</span> ${dueDate}
-            `.replace(/"/g, '&quot;');
-
-            return `
-              <span class="d-inline-block" data-bs-toggle="tooltip" data-bs-html="true" title="${tooltipContent}">
-                ${roleBadgeObj[invoiceStatus] || ''}
-              </span>
-            `;
+            return (
+              "<span class='d-inline-block' data-bs-toggle='tooltip' data-bs-html='true' title='<span>" +
+              $invoice_status +
+              '<br> <span class="fw-medium">Balance:</span> ' +
+              $balance +
+              '<br> <span class="fw-medium">Due Date:</span> ' +
+              $due_date +
+              "</span>'>" +
+              roleBadgeObj[$invoice_status] +
+              '</span>'
+            );
           }
         },
         {
+          // Client name and Service
           targets: 4,
-          responsivePriority: 2,
-          render: function (data, type, full) {
-            const name = full['client_name'];
-            const service = full['service'];
-            const image = full['avatar_image'];
-            const randNum = Math.floor(Math.random() * 11) + 1;
-            const userImg = `${randNum}.png`;
-            let output;
-
-            if (image === true) {
-              output = `<img src="${assetsPath}img/avatars/${userImg}" alt="Avatar" class="rounded-circle">`;
+          responsivePriority: 4,
+          render: function (data, type, full, meta) {
+            var $name = full['client_name'],
+              $service = full['service'],
+              $image = full['avatar_image'],
+              $rand_num = Math.floor(Math.random() * 11) + 1,
+              $user_img = $rand_num + '.png';
+            if ($image === true) {
+              // For Avatar image
+              var $output =
+                '<img src="' + assetsPath + 'img/avatars/' + $user_img + '" alt="Avatar" class="rounded-circle">';
             } else {
-              const stateNum = Math.floor(Math.random() * 6);
-              const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-              const state = states[stateNum];
-              const initials = (name.match(/\b\w/g) || [])
-                .slice(0, 2)
-                .map(letter => letter.toUpperCase())
-                .join('');
-              output = `<span class="avatar-initial rounded-circle bg-label-${state}">${initials}</span>`;
+              // For Avatar badge
+              var stateNum = Math.floor(Math.random() * 6),
+                states = ['success', 'danger', 'warning', 'info', 'primary', 'secondary'],
+                $state = states[stateNum],
+                $name = full['client_name'],
+                $initials = $name.match(/\b\w/g) || [];
+              $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
+              $output = '<span class="avatar-initial rounded-circle bg-label-' + $state + '">' + $initials + '</span>';
             }
-
-            return `
-              <div class="d-flex justify-content-start align-items-center">
-                <div class="avatar-wrapper">
-                  <div class="avatar avatar-sm me-3">
-                    ${output}
-                  </div>
-                </div>
-                <div class="d-flex flex-column">
-                  <a href="pages-profile-user.html" class="text-heading text-truncate"><span class="fw-medium">${name}</span></a>
-                  <small class="text-truncate">${service}</small>
-                </div>
-              </div>
-            `;
+            // Creates full output for row
+            var $row_output =
+              '<div class="d-flex justify-content-start align-items-center">' +
+              '<div class="avatar-wrapper">' +
+              '<div class="avatar avatar-sm me-3">' +
+              $output +
+              '</div>' +
+              '</div>' +
+              '<div class="d-flex flex-column">' +
+              '<a href="pages-profile-user.html" class="text-heading text-truncate"><span class="fw-medium">' +
+              $name +
+              '</span></a>' +
+              '<small class="text-truncate">' +
+              $service +
+              '</small>' +
+              '</div>' +
+              '</div>';
+            return $row_output;
           }
         },
         {
+          // Total Invoice Amount
           targets: 5,
-          render: function (data, type, full) {
-            const total = full['total'];
-            return `<span class="d-none">${total}</span>$${total}`;
+          render: function (data, type, full, meta) {
+            var $total = full['total'];
+            return '<span class="d-none">' + $total + '</span>$' + $total;
           }
         },
         {
+          // Due Date
           targets: 6,
-          render: function (data, type, full) {
-            const dueDate = new Date(full['due_date']);
-            return `
-              <span class="d-none">${dueDate.toISOString().slice(0, 10).replace(/-/g, '')}</span>
-              ${dueDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-            `;
+          render: function (data, type, full, meta) {
+            var $due_date = new Date(full['due_date']);
+            // Creates full output for row
+            var $row_output =
+              '<span class="d-none">' +
+              moment($due_date).format('YYYYMMDD') +
+              '</span>' +
+              moment($due_date).format('DD MMM YYYY');
+            $due_date;
+            return $row_output;
           }
         },
         {
+          // Client Balance/Status
           targets: 7,
           orderable: false,
-          render: function (data, type, full) {
-            const balance = full['balance'];
-            if (balance === 0) {
-              return '<span class="badge bg-label-success text-capitalized"> Paid </span>';
+          render: function (data, type, full, meta) {
+            var $balance = full['balance'];
+            if ($balance === 0) {
+              var $badge_class = 'bg-label-success';
+              return '<span class="badge ' + $badge_class + '" text-capitalized> Paid </span>';
             } else {
-              return `<span class="d-none">${balance}</span><span class="text-heading">${balance}</span>`;
+              return (
+                '<span class="d-none">' + $balance + '</span>' + '<span class="text-heading">' + $balance + '</span>'
+              );
             }
           }
         },
@@ -155,17 +178,18 @@ document.addEventListener('DOMContentLoaded', function () {
           visible: false
         },
         {
+          // Actions
           targets: -1,
           title: 'Actions',
           searchable: false,
           orderable: false,
-          render: function () {
+          render: function (data, type, full, meta) {
             return (
               '<div class="d-flex align-items-center">' +
-              '<a href="javascript:;" data-bs-toggle="tooltip" class="btn btn-icon btn-text-secondary rounded-pill waves-effect delete-record" data-bs-placement="top" title="Delete"><i class="icon-base ti tabler-trash icon-22px"></i></a>' +
-              '<a href="app-invoice-preview.html" data-bs-toggle="tooltip" class="btn btn-icon btn-text-secondary rounded-pill waves-effect" data-bs-placement="top" title="Preview Invoice"><i class="icon-base ti tabler-eye icon-22px"></i></a>' +
+              '<a href="javascript:;" data-bs-toggle="tooltip" class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill" data-bs-placement="top" title="Delete"><i class="ti ti-trash mx-2 ti-md"></i></a>' +
+              '<a href="app-invoice-preview.html" data-bs-toggle="tooltip" class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill" data-bs-placement="top" title="Preview Invoice"><i class="ti ti-eye mx-2 ti-md"></i></a>' +
               '<div class="dropdown">' +
-              '<a href="javascript:;" class="btn dropdown-toggle hide-arrow btn-icon btn-text-secondary rounded-pill waves-effect p-0" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical icon-22px"></i></a>' +
+              '<a href="javascript:;" class="btn dropdown-toggle hide-arrow btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill p-0" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical ti-md"></i></a>' +
               '<div class="dropdown-menu dropdown-menu-end">' +
               '<a href="javascript:;" class="dropdown-item">Download</a>' +
               '<a href="app-invoice-edit.html" class="dropdown-item">Edit</a>' +
@@ -176,244 +200,114 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         }
       ],
-      select: {
-        style: 'multi',
-        selector: 'td:nth-child(2)'
-      },
       order: [[2, 'desc']],
-      displayLength: 10,
-      layout: {
-        topStart: {
-          rowClass: 'row m-3 my-0 justify-content-between',
-          features: [
-            {
-              pageLength: {
-                menu: [10, 25, 50, 100],
-                text: 'Show_MENU_'
-              },
-              buttons: [
-                {
-                  text: '<i class="icon-base  ti tabler-plus icon-16px me-md-2"></i><span class="d-md-inline-block d-none">Create Invoice</span>',
-                  className: 'btn btn-primary',
-                  action: function () {
-                    window.location = 'app-invoice-add.html';
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        topEnd: {
-          rowClass: 'row m-3 my-0 justify-content-between',
-          features: [
-            {
-              search: {
-                placeholder: 'Search Invoice',
-                text: '_INPUT_'
-              }
-            }
-          ]
-        },
-        bottomStart: {
-          rowClass: 'row mx-3 justify-content-between',
-          features: ['info']
-        },
-        bottomEnd: 'paging'
-      },
+      dom:
+        '<"row mx-1"' +
+        '<"col-12 col-md-6 d-flex align-items-center justify-content-center justify-content-md-start gap-2"l<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start"B>>' +
+        '<"col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-5 gap-md-4 mt-n6 mt-md-0"f<"invoice_status mb-6 mb-md-0">>' +
+        '>t' +
+        '<"row mx-1"' +
+        '<"col-sm-12 col-md-6"i>' +
+        '<"col-sm-12 col-md-6"p>' +
+        '>',
       language: {
+        sLengthMenu: 'Show _MENU_',
+        search: '',
+        searchPlaceholder: 'Search Invoice',
         paginate: {
-          next: '<i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-18px"></i>',
-          previous: '<i class="icon-base ti tabler-chevron-left scaleX-n1-rtl icon-18px"></i>',
-          first: '<i class="icon-base ti tabler-chevrons-left scaleX-n1-rtl icon-18px"></i>',
-          last: '<i class="icon-base ti tabler-chevrons-right scaleX-n1-rtl icon-18px"></i>'
+          next: '<i class="ti ti-chevron-right ti-sm"></i>',
+          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
         }
       },
+      // Buttons with Dropdown
+      buttons: [
+        {
+          text: '<i class="ti ti-plus ti-xs me-md-2"></i><span class="d-md-inline-block d-none">Create Invoice</span>',
+          className: 'btn btn-primary waves-effect waves-light',
+          action: function (e, dt, button, config) {
+            window.location = 'app-invoice-add.html';
+          }
+        }
+      ],
+      // For responsive popup
       responsive: {
         details: {
-          display: DataTable.Responsive.display.modal({
+          display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
-              const data = row.data();
-              return 'Details of ' + data['client_name'];
+              var data = row.data();
+              return 'Details of ' + data['full_name'];
             }
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
-            const data = columns
-              .map(function (col) {
-                return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                  ? `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
-                      <td>${col.title}:</td>
-                      <td>${col.data}</td>
-                    </tr>`
-                  : '';
-              })
-              .join('');
+            var data = $.map(columns, function (col, i) {
+              return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
+                ? '<tr data-dt-row="' +
+                    col.rowIndex +
+                    '" data-dt-column="' +
+                    col.columnIndex +
+                    '">' +
+                    '<td>' +
+                    col.title +
+                    ':' +
+                    '</td> ' +
+                    '<td>' +
+                    col.data +
+                    '</td>' +
+                    '</tr>'
+                : '';
+            }).join('');
 
-            if (data) {
-              const div = document.createElement('div');
-              div.classList.add('table-responsive');
-              const table = document.createElement('table');
-              div.appendChild(table);
-              table.classList.add('table');
-              const tbody = document.createElement('tbody');
-              tbody.innerHTML = data;
-              table.appendChild(tbody);
-              return div;
-            }
-            return false;
+            return data ? $('<table class="table"/><tbody />').append(data) : false;
           }
         }
       },
       initComplete: function () {
-        // Ensure the container for the Invoice Status filter is created
-        let invoiceStatusContainer = document.querySelector('.invoice_status');
-        if (!invoiceStatusContainer) {
-          // Create the container if it doesn't exist
-          invoiceStatusContainer = document.createElement('div');
-          invoiceStatusContainer.className = 'invoice_status';
-
-          // Append it to a suitable location in your DataTable's layout
-          // Example: Appending to the filter area (adjust as needed)
-          const filterArea = document.querySelector('.dt-layout-end');
-          if (filterArea) {
-            filterArea.appendChild(invoiceStatusContainer);
-          }
-        }
-
-        // Adding role filter once the table is initialized
+        // Adding role filter once table initialized
         this.api()
           .columns(8)
           .every(function () {
-            const column = this;
+            var column = this;
+            var select = $(
+              '<select id="UserRole" class="form-select"><option value=""> Invoice Status </option></select>'
+            )
+              .appendTo('.invoice_status')
+              .on('change', function () {
+                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                column.search(val ? '^' + val + '$' : '', true, false).draw();
+              });
 
-            // Create the dropdown for "Invoice Status"
-            const select = document.createElement('select');
-            select.id = 'UserRole';
-            select.className = 'form-select';
-            select.innerHTML = '<option value=""> Invoice Status </option>';
-
-            // Append the dropdown to the invoice status container
-            invoiceStatusContainer.appendChild(select);
-
-            // Add change event listener to filter the column based on selected value
-            select.addEventListener('change', function () {
-              const val = select.value ? `^${select.value}$` : '';
-              column.search(val, true, false).draw();
-            });
-
-            // Populate the dropdown with unique values from the column data
             column
               .data()
               .unique()
               .sort()
-              .each(function (d) {
-                const option = document.createElement('option');
-                option.value = d;
-                option.className = 'text-capitalize';
-                option.textContent = d;
-                select.appendChild(option);
+              .each(function (d, j) {
+                select.append('<option value="' + d + '" class="text-capitalize">' + d + '</option>');
               });
           });
       }
     });
+  }
 
-    function deleteRecord(event) {
-      let row = document.querySelector('.dtr-expanded');
-      if (event) {
-        row = event.target.parentElement.closest('tr');
-      }
-      if (row) {
-        dt_invoice.row(row).remove().draw();
-      }
-    }
-
-    function bindDeleteEvent() {
-      const invoiceTable = document.querySelector('.invoice-list-table');
-      const modal = document.querySelector('.dtr-bs-modal');
-
-      if (invoiceTable && invoiceTable.classList.contains('collapsed')) {
-        if (modal) {
-          modal.addEventListener('click', function (event) {
-            if (event.target.parentElement.classList.contains('delete-record')) {
-              deleteRecord();
-              const closeButton = modal.querySelector('.btn-close');
-              if (closeButton) closeButton.click(); // Simulates a click on the close button
-            }
-          });
-        }
-      } else {
-        const tableBody = invoiceTable?.querySelector('tbody');
-        if (tableBody) {
-          tableBody.addEventListener('click', function (event) {
-            if (event.target.parentElement.classList.contains('delete-record')) {
-              deleteRecord(event);
-            }
-          });
-        }
-      }
-    }
-
-    // Initial event binding
-    bindDeleteEvent();
-
-    // Re-bind events when modal is shown or hidden
-    document.addEventListener('show.bs.modal', function (event) {
-      if (event.target.classList.contains('dtr-bs-modal')) {
-        bindDeleteEvent();
-      }
-    });
-
-    document.addEventListener('hide.bs.modal', function (event) {
-      if (event.target.classList.contains('dtr-bs-modal')) {
-        bindDeleteEvent();
-      }
-    });
-
-    // Initialize tooltips on each table draw
-    dt_invoice.on('draw', function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-      tooltipTriggerList.forEach(tooltipTriggerEl => {
-        new bootstrap.Tooltip(tooltipTriggerEl, {
-          boundary: document.body
-        });
+  // On each datatable draw, initialize tooltip
+  dt_invoice_table.on('draw.dt', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl, {
+        boundary: document.body
       });
     });
-  }
+  });
+
+  // Delete Record
+  $('.invoice-list-table tbody').on('click', '.delete-record', function () {
+    dt_invoice.row($(this).parents('tr')).remove().draw();
+  });
 
   // Filter form control to default size
   // ? setTimeout used for multilingual table initialization
   setTimeout(() => {
-    const elementsToModify = [
-      { selector: '.dt-buttons .btn', classToRemove: 'btn-secondary' },
-      { selector: '.dt-buttons', classToRemove: 'btn-secondary' },
-      { selector: '.dt-buttons.btn-group', classToAdd: 'mb-0' },
-      { selector: '.dt-search .form-control', classToRemove: 'form-control-sm' },
-      { selector: '.dt-length .form-select', classToRemove: 'form-select-sm' },
-      { selector: '.dt-length', classToAdd: 'me-0 mb-md-6 mb-6' },
-      {
-        selector: '.dt-layout-end',
-        classToRemove: 'justify-content-between ms-auto',
-        classToAdd: 'justify-content-md-between justify-content-center d-flex flex-wrap gap-4 mb-sm-0 mb-4 mt-0'
-      },
-      {
-        selector: '.dt-layout-start',
-        classToRemove: 'd-md-flex me-auto justify-content-between',
-        classToAdd: 'col-12 col-md-6 d-flex justify-content-center justify-content-md-start gap-2'
-      },
-      { selector: '.dt-layout-table', classToRemove: 'row mt-2' },
-      { selector: '.dt-layout-full', classToRemove: 'col-md col-12', classToAdd: 'table-responsive' }
-    ];
-
-    // Delete record
-    elementsToModify.forEach(({ selector, classToRemove, classToAdd }) => {
-      document.querySelectorAll(selector).forEach(element => {
-        if (classToRemove) {
-          classToRemove.split(' ').forEach(className => element.classList.remove(className));
-        }
-        if (classToAdd) {
-          classToAdd.split(' ').forEach(className => element.classList.add(className));
-        }
-      });
-    });
-  }, 100);
+    $('.dataTables_filter .form-control').removeClass('form-control-sm');
+    $('.dataTables_length .form-select').removeClass('form-select-sm');
+  }, 300);
 });

@@ -4,7 +4,7 @@
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
+(function () {
   const invoiceItemPriceList = document.querySelectorAll('.invoice-item-price'),
     invoiceItemQtyList = document.querySelectorAll('.invoice-item-qty'),
     date = new Date(),
@@ -14,28 +14,20 @@ document.addEventListener('DOMContentLoaded', function (e) {
   // Price
   if (invoiceItemPriceList) {
     invoiceItemPriceList.forEach(function (invoiceItemPrice) {
-      if (invoiceItemPrice) {
-        invoiceItemPrice.addEventListener('input', event => {
-          invoiceItemPrice.value = formatNumeral(event.target.value, {
-            delimiter: '',
-            numeral: true
-          });
-        });
-      }
+      new Cleave(invoiceItemPrice, {
+        delimiter: '',
+        numeral: true
+      });
     });
   }
 
   // Qty
   if (invoiceItemQtyList) {
     invoiceItemQtyList.forEach(function (invoiceItemQty) {
-      if (invoiceItemQty) {
-        invoiceItemQty.addEventListener('input', event => {
-          invoiceItemQty.value = formatNumeral(event.target.value, {
-            delimiter: '',
-            numeral: true
-          });
-        });
-      }
+      new Cleave(invoiceItemQty, {
+        delimiter: '',
+        numeral: true
+      });
     });
   }
 
@@ -52,8 +44,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
       defaultDate: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5)
     });
   }
+})();
 
-  // repeater (jquery)
+// repeater (jquery)
+$(function () {
   var applyChangesBtn = $('.btn-apply-changes'),
     discount,
     tax1,

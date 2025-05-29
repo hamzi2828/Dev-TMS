@@ -388,18 +388,129 @@ class MyBookingController extends Controller
 
     public function cancelBookings(Request $request)
     {
+        DB::beginTransaction();
+
+        try {
+            // Find the booking with necessary relationships
+            $booking = MyBooking::with(['airlineGroup.company'])->find($request->id);
+
+    if ($booking->status === 'confirmed') {
+
+            // Update booking status
+            $booking->status = 'cancelled';
+            $booking->save();
+
+            // Update airline group seats
+            $airlineGroup = AirlineGroup::find($booking->airline_group_id);
+            $totalSeats = $booking->adults + $booking->children;
+            $airlineGroup->used_seats = $airlineGroup->used_seats - $totalSeats;
+            $airlineGroup->save();
+
+            // Get the original booking financial values
+            $totalCost = MyBooking::getBookingCost($request->id);
+            $totalSale = MyBooking::getBookingSale($request->id);
+
+            if ($totalSale === null) {
+                throw new \Exception('Could not calculate total sale amount');
+            }
+
+            // Calculate net sale
+            if ($booking->discount === null) {
+                $netSale = $totalSale;
+            } else {
+                $netSale = $totalSale - $booking->discount;
+            }
+
+            // Get the company's account head ID
+            $companyAccountHeadId = $booking->airlineGroup->company->account_head_id ?? null;
+
+            if (!$companyAccountHeadId) {
+                throw new \Exception('Company account head ID not found');
+            }
+
+            // Get the logged-in user's agent and their account head ID
+            $agent = Agent::with('user')->find(auth()->user()->agent_id);
+
+            if (!$agent) {
+                throw new \Exception('Agent not found for this user');
+            }
+
+            $userAccountHeadId = $agent->account_head_id ?? null;
+            if (!$userAccountHeadId) {
+                throw new \Exception('User account head ID not found');
+            }
+
+            // Create reverse entries - exact opposite of the confirmation entries
+
+            // 1. Reverse the debit entry for account head 199
+            GeneralLedger::create([
+                'account_head_id' => 199,
+                'user_id' => auth()->user()->id,
+                'debit' => 0,
+                'credit' => $totalCost,  // Opposite of original entry
+                'transaction_date' => now(),
+                'description' => 'Booking cancelled - PNR: ' . $booking->pnr,
+                'ledgerable_type' => get_class($booking),
+                'ledgerable_id' => $booking->id
+            ]);
+
+            // 2. Reverse the credit entry for company's account head
+            GeneralLedger::create([
+                'account_head_id' => $companyAccountHeadId,
+                'user_id' => auth()->user()->id,
+                'debit' => $totalCost,  // Opposite of original entry
+                'credit' => 0,
+                'transaction_date' => now(),
+                'description' => 'Booking cost reversed - PNR: ' . $booking->pnr,
+                'ledgerable_type' => get_class($booking),
+                'ledgerable_id' => $booking->id
+            ]);
+
+            // 3. Reverse the debit entry for user's account
+            GeneralLedger::create([
+                'account_head_id' => $userAccountHeadId,
+                'user_id' => auth()->user()->id,
+                'debit' => 0,
+                'credit' => $netSale,  // Opposite of original entry
+                'transaction_date' => now(),
+                'description' => 'Booking net sale reversed - PNR: ' . $booking->pnr,
+                'ledgerable_type' => get_class($booking),
+                'ledgerable_id' => $booking->id
+            ]);
+
+            // 4. Reverse the credit entry for account 434
+            GeneralLedger::create([
+                'account_head_id' => 434,
+                'user_id' => auth()->user()->id,
+                'debit' => $netSale,  // Opposite of original entry
+                'credit' => 0,
+                'transaction_date' => now(),
+                'description' => 'Booking net sale reversed - PNR: ' . $booking->pnr,
+                'ledgerable_type' => get_class($booking),
+                'ledgerable_id' => $booking->id
+            ]);
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Booking cancelled successfully');
+
+    }else{
         $booking = MyBooking::find($request->id);
         $booking->status = 'cancelled';
         $booking->save();
-
         $airlineGroup = AirlineGroup::find($booking->airline_group_id);
         $totalSeats = $booking->adults + $booking->children;
         $airlineGroup->used_seats = $airlineGroup->used_seats - $totalSeats;
         $airlineGroup->save();
-
-
         return redirect()->back()->with('success', 'Booking cancelled successfully');
     }
+
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Error cancelling booking: ' . $e->getMessage());
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */

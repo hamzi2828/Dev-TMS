@@ -1,36 +1,37 @@
 <x-login :title="$title">
-    <!-- Content -->
     <div class="authentication-wrapper authentication-cover">
-      <!-- Logo -->
-      <a href="/" class="app-brand auth-cover-brand">
-        <span class="app-brand-logo demo">
-          <span class="text-primary">
-            <img src="{{ asset('assets/main_logo.png') }}" alt="logo" />
-          </span>
-        </span>
-        <h2 class="brand-text text-primary ms-1">Travel Management System</h2>
-      </a>
-      <!-- /Logo -->
-      <div class="authentication-inner row m-0">
-        <!-- /Left Text -->
-        <div class="d-none d-xl-flex col-xl-8 p-0">
-          <div class="auth-cover-bg d-flex justify-content-center align-items-center">
-            <img
-              src="{{ asset('assets/img/illustrations/auth-login-illustration-light.png') }}"
-              alt="auth-login-cover"
-              class="my-5 auth-illustration"
-              data-app-light-img="illustrations/auth-login-illustration-light.png"
-              data-app-dark-img="illustrations/auth-login-illustration-dark.png" />
-            <img
-              src="{{ asset('assets/img/illustrations/bg-shape-image-light.png') }}"
-              alt="auth-login-cover"
-              class="platform-bg"
-              data-app-light-img="illustrations/bg-shape-image-light.png"
-              data-app-dark-img="illustrations/bg-shape-image-dark.png" />
-          </div>
-        </div>
-        <!-- /Left Text -->
+        <!-- Logo -->
+        <a href="/" class="app-brand auth-cover-brand">
+            <span class="app-brand-logo demo">
+              <span class="text-primary">
+                <img src="{{ asset('assets/main_logo.png') }}" alt="logo" />
+              </span>
+            </span>
+            <h2 class="brand-text text-primary ms-1">Travel Management System</h2>
+          </a>
+        <!-- /Logo -->
+        <div class="authentication-inner row m-0">
+          <!-- /Left Text -->
+          <div class="d-none d-lg-flex col-lg-8 p-0">
+            <div class="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center">
+              <img
+                src="{{ asset('assets/img/illustrations/auth-login-illustration-light.png') }}"
+                alt="auth-login-cover"
+                class="my-5 auth-illustration"
+                data-app-light-img="illustrations/auth-login-illustration-light.png"
+                data-app-dark-img="illustrations/auth-login-illustration-dark.png" />
 
+              <img
+                src="{{ asset('assets/img/illustrations/bg-shape-image-light.png') }}"
+                alt="auth-login-cover"
+                class="platform-bg"
+                data-app-light-img="illustrations/bg-shape-image-light.png"
+                data-app-dark-img="illustrations/bg-shape-image-dark.png" />
+            </div>
+          </div>
+          <!-- /Left Text -->
+
+          <!-- Login -->
         <!-- Login -->
         <div class="d-flex col-12 col-xl-4 align-items-center authentication-bg p-sm-12 p-6 bg-white">
             <div class="w-px-400 mx-auto mt-12 pt-5">
@@ -81,11 +82,12 @@
               </p>
         </div>
         <!-- /Login -->
+          <!-- /Login -->
+        </div>
       </div>
-    </div>
-    <!-- / Content -->
 
-    <!-- Registration Success Modal -->
+
+          <!-- Registration Success Modal -->
     @if(session('Register'))
     <div class="modal fade show" id="registrationSuccessModal" tabindex="-1" style="display: block;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
@@ -105,30 +107,7 @@
     </div>
     @endif
 
-    @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var modalElement = document.getElementById('registrationSuccessModal');
-            if (modalElement) {
-                var registrationModal = new bootstrap.Modal(modalElement);
-                registrationModal.show();
-
-                // Close modal when clicking outside
-                modalElement.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        registrationModal.hide();
-                    }
-                });
-
-                // Close modal when clicking OK button
-                var okButton = modalElement.querySelector('.btn-primary');
-                if (okButton) {
-                    okButton.addEventListener('click', function() {
-                        registrationModal.hide();
-                    });
-                }
-            }
-        });
-    </script>
-    @endpush
 </x-login>
+
+
+

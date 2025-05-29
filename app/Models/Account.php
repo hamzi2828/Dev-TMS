@@ -41,10 +41,7 @@
                 $start_date = Carbon ::createFromFormat ( 'Y-m-d', request ( 'start-date' ) );
                 $end_date   = Carbon ::createFromFormat ( 'Y-m-d', request ( 'end-date' ) );
 
-                $relation -> whereBetween ( 'transaction_date', [
-                    $start_date,
-                    $end_date
-                ] );
+                $relation -> whereRaw ( "transaction_date < ? and transaction_date >= ?", [$end_date, $start_date ->copy ()->subDay ()] );
 
             }
             return $relation;

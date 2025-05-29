@@ -1,42 +1,51 @@
-/* Logistics Overview
-******************************************************************************* */
-/* (C) */
-/* Vehicles overview progress labels */
 .vehicles-progress-labels .vehicles-progress-label {
   position: relative;
-  padding-block-end: 15px;
+  padding-bottom: 15px;
 }
 .vehicles-progress-labels .vehicles-progress-label::after {
-  position: absolute;
-  display: inline-block;
-  background-color: var(--bs-border-color);
-  block-size: 10px;
   content: "";
-  inline-size: 2px;
-  inset-block-end: 0;
-  inset-inline-start: 0;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: inline-block;
+  height: 10px;
+  width: 2px;
+}
+[dir=rtl] .vehicles-progress-labels .vehicles-progress-label::after {
+  left: unset;
+  right: 0;
 }
 
-/* Vehicles overview progress */
-.vehicles-overview-progress {
-  --bs-snackbar-bg: #22303e;
-}
-.vehicles-overview-progress .snackbar {
-  background-color: var(--bs-snackbar-bg);
+.vehicles-overview-progress .bg-gray-900 {
+  color: #fff;
 }
 
-/* Shipment statistics chart legend */
 #shipmentStatisticsChart .apexcharts-legend-series,
 #carrierPerformance .apexcharts-legend-series {
-  border: 1px solid var(--bs-border-color);
-  border-radius: var(--bs-border-radius);
-  block-size: 70%;
-  padding-block: 4px;
-  padding-inline: 12px;
+  padding: 4px 12px;
   padding-inline-start: 17px;
+  border-radius: 0.375rem;
+  height: 83%;
 }
 
-/* Dark theme */
-[data-bs-theme=dark] .vehicles-overview-progress {
-  --bs-snackbar-bg: #e6e6f1;
+.light-style .vehicles-progress-labels .vehicles-progress-label::after {
+  background-color: #e6e6e8;
+}
+.light-style .vehicles-overview-progress .snackbar {
+  background-color: #2f2b3d;
+}
+.light-style #shipmentStatisticsChart .apexcharts-legend-series,
+.light-style #carrierPerformance .apexcharts-legend-series {
+  border: 1px solid #e6e6e8;
+}
+
+.dark-style .vehicles-progress-labels .vehicles-progress-label::after {
+  background-color: #44485e;
+}
+.dark-style .vehicles-overview-progress .snackbar {
+  background-color: #f7f4ff;
+}
+.dark-style #shipmentStatisticsChart .apexcharts-legend-series,
+.dark-style #carrierPerformance .apexcharts-legend-series {
+  border: 1px solid #44485e;
 }

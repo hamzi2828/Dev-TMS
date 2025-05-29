@@ -1,4 +1,3 @@
-/* (C) */
 .kanban-container {
   position: relative;
   box-sizing: border-box;
@@ -147,4 +146,18 @@
 
 .drag_handler_icon:after {
   bottom: 6px;
+}
+
+.light-style .kanban-board {
+  background: #e6e6e8;
+}
+.light-style .kanban-item {
+  background: #fff;
+}
+
+.dark-style .kanban-board {
+  background: #44485e;
+}
+.dark-style .kanban-item {
+  background: #2f3349;
 }

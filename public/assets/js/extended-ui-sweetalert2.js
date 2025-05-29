@@ -90,13 +90,13 @@
         showCloseButton: true,
         showCancelButton: true,
         focusConfirm: false,
-        confirmButtonText: '<i class="icon-base ti tabler-thumb-up"></i> Great!',
+        confirmButtonText: '<i class="ti ti-thumb-up"></i> Great!',
         confirmButtonAriaLabel: 'Thumbs up, great!',
-        cancelButtonText: '<i class="icon-base ti tabler-thumb-down"></i>',
+        cancelButtonText: '<i class="ti ti-thumb-down"></i>',
         cancelButtonAriaLabel: 'Thumbs down',
         customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-label-secondary'
+          confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+          cancelButton: 'btn btn-label-secondary waves-effect waves-light'
         },
         buttonsStyling: false
       });
@@ -457,8 +457,8 @@
         confirmButtonText: 'Look up',
         showLoaderOnConfirm: true,
         customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-label-danger'
+          confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+          cancelButton: 'btn btn-label-danger waves-effect waves-light'
         },
         preConfirm: login => {
           return fetch('//api.github.com/users/' + login)
@@ -499,8 +499,8 @@
         showCancelButton: true,
         confirmButtonText: 'Yes, delete it!',
         customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-label-secondary'
+          confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+          cancelButton: 'btn btn-label-secondary waves-effect waves-light'
         },
         buttonsStyling: false
       }).then(function (result) {
@@ -528,8 +528,8 @@
         showCancelButton: true,
         confirmButtonText: 'Yes, delete it!',
         customClass: {
-          confirmButton: 'btn btn-primary',
-          cancelButton: 'btn btn-label-secondary'
+          confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+          cancelButton: 'btn btn-label-secondary waves-effect waves-light'
         },
         buttonsStyling: false
       }).then(function (result) {

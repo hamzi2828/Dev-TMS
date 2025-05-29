@@ -1,7 +1,4 @@
-/* Pickr */
-/* ******************************************************************************* */
-/* (C) */
-/*! Pickr 1.9.1 MIT | https://github.com/Simonwep/pickr */
+/*! Pickr 1.9.0 MIT | https://github.com/Simonwep/pickr */
 .pickr {
   position: relative;
   overflow: visible;
@@ -390,16 +387,17 @@
   background-size: 100%, 50%;
 }
 
-.pcr-app[data-theme=classic] .pcr-selection .pcr-color-preview {
-  margin-inline-end: 0.75em;
+[dir=rtl] .pcr-app[data-theme=classic] .pcr-selection .pcr-color-preview {
+  margin-right: inherit;
+  margin-left: 0.75em;
+}
+[dir=rtl] .pcr-app[data-theme=classic] .pcr-selection .pcr-color-chooser,
+[dir=rtl] .pcr-app[data-theme=classic] .pcr-selection .pcr-color-opacity {
+  margin-left: inherit;
+  margin-right: 0.75em;
 }
 
-.pcr-app[data-theme=classic] .pcr-selection .pcr-color-chooser,
-.pcr-app[data-theme=classic] .pcr-selection .pcr-color-opacity {
-  margin-inline: 0.45em;
-}
-
-/*! Pickr 1.9.1 MIT | https://github.com/Simonwep/pickr */
+/*! Pickr 1.9.0 MIT | https://github.com/Simonwep/pickr */
 .pickr {
   position: relative;
   overflow: visible;
@@ -792,19 +790,14 @@
   background-size: 100%, 0.25em;
 }
 
-.pcr-app[data-theme=monolith] .pcr-selection .pcr-color-preview .pcr-last-color {
-  border-radius: 0;
-  border-end-start-radius: 0.15em;
-  border-start-start-radius: 0.15em;
+[dir=rtl] .pcr-app[data-theme=monolith] .pcr-selection .pcr-color-preview .pcr-last-color {
+  border-radius: 0 0.15em 0.15em 0;
+}
+[dir=rtl] .pcr-app[data-theme=monolith] .pcr-selection .pcr-color-preview .pcr-current-color {
+  border-radius: 0.15em 0 0 0.15em;
 }
 
-.pcr-app[data-theme=monolith] .pcr-selection .pcr-color-preview .pcr-current-color {
-  border-radius: 0;
-  border-end-end-radius: 0.15em;
-  border-start-end-radius: 0.15em;
-}
-
-/*! Pickr 1.9.1 MIT | https://github.com/Simonwep/pickr */
+/*! Pickr 1.9.0 MIT | https://github.com/Simonwep/pickr */
 .pickr {
   position: relative;
   overflow: visible;
@@ -1213,27 +1206,22 @@
   background-size: 100%, 0.25em;
 }
 
-.pcr-app[data-theme=nano] .pcr-selection .pcr-color-preview {
-  margin-inline: 0.6em;
+[dir=rtl] .pcr-app[data-theme=nano] .pcr-selection .pcr-color-preview {
+  margin-right: 0.6em;
 }
 
-/* Update as per the customizer settings */
-.pcr-app {
-  z-index: 999999999;
-  background: var(--bs-paper-bg);
+.light-style .pcr-app .pcr-interaction input:focus {
+  box-shadow: 0 0.1875rem 0.75rem 0 rgba(47, 43, 61, 0.14);
 }
-.pcr-app .pcr-interaction input.pcr-type.active, .pcr-app .pcr-interaction input.pcr-save {
-  background: var(--bs-primary);
+
+.dark-style .pcr-app {
+  background: #2f3349 !important;
 }
-.pcr-app .pcr-interaction input.pcr-result {
-  border: 1px solid var(--bs-border-color);
-  background: var(--bs-body-bg);
-  color: var(--bs-base-color);
+.dark-style .pcr-app .pcr-type:not(.active),
+.dark-style .pcr-app .pcr-result {
+  background: #2f3349 !important;
+  color: #fff !important;
 }
-.pcr-app .pcr-interaction input:focus {
-  box-shadow: 0 0 0 1px rgba(var(--bs-paper-bg-rgb), 0.85), 0 0 0 3px rgba(var(--bs-primary-rgb), 0.75);
-}
-.pcr-app .pcr-type:not(.active) {
-  background: var(--bs-body-bg);
-  color: var(--bs-body-color);
+.dark-style .pcr-app .pcr-interaction input:focus {
+  box-shadow: 0 0.1875rem 0.75rem 0 rgba(19, 17, 32, 0.2);
 }

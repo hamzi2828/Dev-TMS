@@ -4,21 +4,24 @@
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  let cardColor, shadeColor, labelColor, headingColor, barBgColor, borderColor, fontFamily;
+(function () {
+  let cardColor, shadeColor, labelColor, headingColor, barBgColor, borderColor;
 
   if (isDarkStyle) {
+    cardColor = config.colors_dark.cardColor;
+    labelColor = config.colors_dark.textMuted;
+    headingColor = config.colors_dark.headingColor;
     shadeColor = 'dark';
     barBgColor = '#3d4157';
+    borderColor = config.colors_dark.borderColor;
   } else {
+    cardColor = config.colors.cardColor;
+    labelColor = config.colors.textMuted;
+    headingColor = config.colors.headingColor;
+    shadeColor = '';
     barBgColor = '#efeef0';
-    shadeColor = 'light';
+    borderColor = config.colors.borderColor;
   }
-  cardColor = config.colors.cardColor;
-  labelColor = config.colors.textMuted;
-  headingColor = config.colors.headingColor;
-  borderColor = config.colors.borderColor;
-  fontFamily = config.fontFamily;
 
   // Donut Chart Colors
   const chartColors = {
@@ -48,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       plotOptions: {
         bar: {
           barHeight: '100%',
-          columnWidth: '7px',
+          columnWidth: '30px',
           startingShape: 'rounded',
           endingShape: 'rounded',
           borderRadius: 4,
@@ -73,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       },
       series: [
         {
-          data: [75, 65, 25, 55, 60, 40, 88]
+          data: [60, 50, 20, 45, 50, 30, 70]
         }
       ],
       legend: {
@@ -218,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
   const salesLastYearEl = document.querySelector('#salesLastYear'),
     salesLastYearConfig = {
       chart: {
-        height: 80,
+        height: 90,
         type: 'area',
         parentHeightOffset: 0,
         toolbar: {
@@ -239,11 +242,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
       fill: {
         type: 'gradient',
         gradient: {
-          shadeIntensity: 1,
-          opacityFrom: 0.4,
-          gradientToColors: [config.colors.cardColor],
-          opacityTo: 0.1,
-          stops: [0, 100]
+          shade: shadeColor,
+          shadeIntensity: 0.8,
+          opacityFrom: 0.6,
+          opacityTo: 0.25
         }
       },
       dataLabels: {
@@ -255,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       },
       series: [
         {
-          data: [200, 55, 380, 230]
+          data: [200, 55, 400, 250]
         }
       ],
       xaxis: {
@@ -327,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       },
       series: [
         {
-          data: [0, 40, 15, 65, 40, 90]
+          data: [0, 25, 10, 40, 25, 55]
         }
       ],
       tooltip: {
@@ -361,14 +363,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
         fillColor: config.colors.info,
         strokeColors: 'transparent',
         strokeWidth: 3.2,
-        offsetX: -1,
         discrete: [
           {
             seriesIndex: 0,
             dataPointIndex: 5,
             fillColor: cardColor,
             strokeColor: config.colors.info,
-            size: 4.5,
+            size: 5,
             shape: 'circle'
           }
         ],
@@ -408,21 +409,20 @@ document.addEventListener('DOMContentLoaded', function (e) {
       series: [
         {
           name: 'PRODUCT A',
-          data: [5, 3, 6, 4, 3]
+          data: [4, 3, 6, 4, 3]
         },
         {
           name: 'PRODUCT B',
-          data: [-4, -5, -4, -3, -4]
+          data: [-3, -4, -3, -2, -3]
         }
       ],
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: '45%',
+          columnWidth: '30%',
           barHeight: '100%',
           borderRadius: 5,
           startingShape: 'rounded',
-          borderRadiusApplication: 'around',
           endingShape: 'rounded'
         }
       },
@@ -434,7 +434,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       },
       stroke: {
         curve: 'smooth',
-        width: 4,
+        width: 1,
         lineCap: 'round',
         colors: [cardColor]
       },
@@ -444,12 +444,11 @@ document.addEventListener('DOMContentLoaded', function (e) {
       colors: [config.colors.primary, config.colors.success],
       grid: {
         show: false,
-        strokeDashArray: 5,
         padding: {
-          top: -61,
-          right: -80,
+          top: -41,
+          right: -10,
           left: -8,
-          bottom: -56
+          bottom: -26
         }
       },
       xaxis: {
@@ -816,11 +815,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
       fill: {
         type: 'gradient',
         gradient: {
-          shadeIntensity: 1,
-          opacityFrom: 0.4,
-          gradientToColors: [config.colors.cardColor],
-          opacityTo: 0.15,
-          stops: [0, 100]
+          shade: shadeColor,
+          shadeIntensity: 0.8,
+          opacityFrom: 0.6,
+          opacityTo: 0.1
         }
       },
       dataLabels: {
@@ -890,11 +888,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
       fill: {
         type: 'gradient',
         gradient: {
-          shadeIntensity: 1,
-          opacityFrom: 0.4,
-          gradientToColors: [config.colors.cardColor],
-          opacityTo: 0.15,
-          stops: [0, 100]
+          shade: shadeColor,
+          shadeIntensity: 0.8,
+          opacityFrom: 0.6,
+          opacityTo: 0.1
         }
       },
       dataLabels: {
@@ -963,11 +960,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
       fill: {
         type: 'gradient',
         gradient: {
-          shadeIntensity: 1,
-          opacityFrom: 0.4,
-          gradientToColors: [config.colors.cardColor],
-          opacityTo: 0.15,
-          stops: [0, 100]
+          shade: shadeColor,
+          shadeIntensity: 0.8,
+          opacityFrom: 0.6,
+          opacityTo: 0.1
         }
       },
       dataLabels: {
@@ -1038,11 +1034,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
       fill: {
         type: 'gradient',
         gradient: {
-          shadeIntensity: 1,
-          opacityFrom: 0.4,
-          gradientToColors: [config.colors.cardColor],
-          opacityTo: 0.15,
-          stops: [0, 100]
+          shade: shadeColor,
+          shadeIntensity: 0.8,
+          opacityFrom: 0.6,
+          opacityTo: 0.1
         }
       },
       dataLabels: {
@@ -1054,7 +1049,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       },
       series: [
         {
-          data: [300, 350, 330, 380, 340, 390, 380]
+          data: [300, 350, 330, 380, 340, 400, 380]
         }
       ],
       xaxis: {
@@ -1112,11 +1107,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
       fill: {
         type: 'gradient',
         gradient: {
-          shadeIntensity: 1,
-          opacityFrom: 0.4,
-          gradientToColors: [config.colors.cardColor],
-          opacityTo: 0.1,
-          stops: [0, 100]
+          shade: shadeColor,
+          shadeIntensity: 0.8,
+          opacityFrom: 0.6,
+          opacityTo: 0.1
         }
       },
       dataLabels: {
@@ -1128,7 +1122,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       },
       series: [
         {
-          data: [500, 160, 930, 670]
+          data: [400, 200, 650, 500]
         }
       ],
       xaxis: {
@@ -1194,10 +1188,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
       plotOptions: {
         bar: {
           barHeight: '100%',
-          columnWidth: '11px',
+          columnWidth: '25px',
           startingShape: 'rounded',
           endingShape: 'rounded',
-          borderRadius: 5
+          borderRadius: 6
         }
       },
       colors: [config.colors.warning],
@@ -1207,7 +1201,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           top: -30,
           left: -18,
           bottom: -13,
-          right: -18
+          right: -10
         }
       },
       dataLabels: {
@@ -1236,7 +1230,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           },
           show: true
         }
@@ -1357,7 +1351,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           columnWidth: '30%',
           startingShape: 'rounded',
           endingShape: 'rounded',
-          borderRadius: 5,
+          borderRadius: 7,
           distributed: true
         }
       },
@@ -1370,7 +1364,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           top: -20,
           bottom: -12,
           left: -10,
-          right: 40
+          right: 0
         }
       },
       colors: [
@@ -1405,7 +1399,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           }
         }
       },
@@ -1556,7 +1550,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               show: true,
               value: {
                 fontSize: '1.5rem',
-                fontFamily: fontFamily,
+                fontFamily: 'Public Sans',
                 color: headingColor,
                 fontWeight: 500,
                 offsetY: -15,
@@ -1566,7 +1560,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               },
               name: {
                 offsetY: 20,
-                fontFamily: fontFamily
+                fontFamily: 'Public Sans'
               },
               total: {
                 show: true,
@@ -1574,7 +1568,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 color: config.colors.success,
                 fontSize: '.8125rem',
                 label: 'Total',
-                fontFamily: fontFamily,
+                fontFamily: 'Public Sans',
                 formatter: function (w) {
                   return '184';
                 }
@@ -1588,4 +1582,4 @@ document.addEventListener('DOMContentLoaded', function (e) {
     const generatedLeadsChart = new ApexCharts(generatedLeadsChartEl, generatedLeadsChartConfig);
     generatedLeadsChart.render();
   }
-});
+})();

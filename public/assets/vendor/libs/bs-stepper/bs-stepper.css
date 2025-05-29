@@ -1,4 +1,3 @@
-/* (C) */
 /*!
  * bsStepper v1.7.0 (https://github.com/Johann-S/bs-stepper)
  * Copyright 2018 - 2019 Johann-S <johann.servoire@gmail.com>
@@ -188,183 +187,107 @@
 }
 
 
-/* Default Styles */
 .bs-stepper {
   border-radius: 0.375rem;
-  background-color: var(--bs-paper-bg);
-  /* stepper content padding */
-  /* Remove borders from wizard modern */
 }
 .bs-stepper .line {
   flex: 0;
-  margin: 0;
+  min-width: auto;
+  min-height: auto;
   background-color: transparent;
-  min-block-size: auto;
-  min-inline-size: auto;
+  margin: 0;
 }
 .bs-stepper .bs-stepper-header {
-  border-block-end: 1px solid var(--bs-border-color);
-  padding-block: 1.5rem;
-  padding-inline: 1.5rem;
-}
-:dir(rtl) .bs-stepper .bs-stepper-header .line .icon-base {
-  transform: rotate(180deg);
-}
-.bs-stepper .bs-stepper-header .step {
-  /* stepper circle / pill styles */
+  padding: 1.5rem 1.5rem;
 }
 .bs-stepper .bs-stepper-header .step .step-trigger {
-  flex-wrap: nowrap;
   padding: 0;
-  font-weight: 500;
+  flex-wrap: nowrap;
   gap: 0.5rem;
+  font-weight: 500;
 }
 .bs-stepper .bs-stepper-header .step .step-trigger .bs-stepper-label {
-  display: inline-grid;
-  overflow: hidden;
   margin: 0;
-  color: var(--bs-heading-color);
-  font-size: 0.9375rem;
-  font-weight: 500;
-  line-height: 1.375rem;
-  max-inline-size: 224px;
-  text-align: start;
+  max-width: 224px;
+  overflow: hidden;
   text-overflow: ellipsis;
+  text-align: start;
+  display: inline-grid;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
 }
 .bs-stepper .bs-stepper-header .step .step-trigger .bs-stepper-label .bs-stepper-title {
-  color: var(--bs-heading-color);
   font-weight: 500;
 }
 .bs-stepper .bs-stepper-header .step .step-trigger .bs-stepper-label .bs-stepper-subtitle {
-  color: var(--bs-body-color);
   font-size: 0.8125rem;
   font-weight: 400;
 }
 .bs-stepper .bs-stepper-header .step .step-trigger:hover {
   background-color: transparent;
 }
-.bs-stepper .bs-stepper-header .step .step-trigger:focus {
-  color: var(--bs-heading-color);
-}
 @media (max-width: 991.98px) {
   .bs-stepper .bs-stepper-header .step .step-trigger {
-    padding-block: 0.625rem;
-    padding-inline: 0;
+    padding: 0.625rem 0;
   }
-}
-.bs-stepper .bs-stepper-header .step.active .bs-stepper-circle {
-  background-color: var(--bs-primary);
-  box-shadow: 0 0.125rem 0.375rem 0 rgba(var(--bs-primary-rgb), 0.3);
-  color: var(--bs-primary-contrast);
-}
-.bs-stepper .bs-stepper-header .step.active .bs-stepper-icon svg {
-  fill: var(--bs-primary);
-}
-.bs-stepper .bs-stepper-header .step.active .bs-stepper-icon i {
-  color: var(--bs-primary);
-}
-.bs-stepper .bs-stepper-header .step:not(.active) .bs-stepper-circle {
-  background-color: rgba(var(--bs-base-color-rgb), 0.06);
-  color: var(--bs-heading-color);
-}
-.bs-stepper .bs-stepper-header .step.crossed .step-trigger {
-  /* stepper icons color */
-}
-.bs-stepper .bs-stepper-header .step.crossed .step-trigger .bs-stepper-label .bs-stepper-subtitle,
-.bs-stepper .bs-stepper-header .step.crossed .step-trigger .bs-stepper-title {
-  color: var(--bs-secondary-color);
-}
-.bs-stepper .bs-stepper-header .step.crossed .step-trigger .bs-stepper-circle {
-  background-color: var(--bs-primary-bg-subtle);
-  color: var(--bs-primary);
-}
-.bs-stepper .bs-stepper-header .step.crossed .step-trigger .bs-stepper-icon svg {
-  fill: var(--bs-primary);
-}
-.bs-stepper .bs-stepper-header .step.crossed .step-trigger .bs-stepper-icon .icon-base {
-  color: var(--bs-primary);
-}
-.bs-stepper .bs-stepper-header .step.crossed + .line .icon-base {
-  color: var(--bs-body-color);
 }
 .bs-stepper .bs-stepper-header .step .bs-stepper-circle {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 0.375rem;
-  block-size: 2.375rem;
+  width: 2.375rem;
+  height: 2.375rem;
   font-size: 1.125rem;
   font-weight: 500;
-  inline-size: 2.375rem;
 }
-.bs-stepper .bs-stepper-header .step .bs-stepper-circle .icon-base {
+.bs-stepper .bs-stepper-header .step .bs-stepper-circle i {
   font-size: 1.375rem;
 }
 .bs-stepper .bs-stepper-content {
-  padding-block: 1.5rem;
-  padding-inline: 1.5rem;
-}
-:dir(rtl) .bs-stepper .bs-stepper-content .btn-next .icon-base:not(.tabler-check),
-:dir(rtl) .bs-stepper .bs-stepper-content .btn-prev .icon-base:not(.tabler-check) {
-  transform: rotate(180deg);
+  padding: 1.5rem 1.5rem;
 }
 .bs-stepper.vertical .bs-stepper-header {
-  border-block-end: none;
-  min-inline-size: 18rem;
-}
-@media (max-width: 991.98px) {
-  .bs-stepper.vertical .bs-stepper-header {
-    border-block-end: 1px solid var(--bs-border-color);
-  }
+  min-width: 18rem;
 }
 .bs-stepper.vertical .bs-stepper-header .step .step-trigger {
-  padding-block: 0.6rem;
-  padding-inline: 0;
+  padding: 0.6rem 0;
 }
 .bs-stepper.vertical .bs-stepper-header .step:first-child .step-trigger {
-  padding-block-start: 0;
+  padding-top: 0;
 }
 .bs-stepper.vertical .bs-stepper-header .step:last-child .step-trigger {
-  padding-block-end: 0;
+  padding-bottom: 0;
 }
 .bs-stepper.vertical .bs-stepper-header .line {
   position: relative;
-  min-block-size: 1px;
+  min-height: 1px;
 }
 .bs-stepper.vertical .bs-stepper-content {
-  inline-size: 100%;
+  width: 100%;
 }
 .bs-stepper.vertical .bs-stepper-content .content:not(.active) {
   display: none;
 }
 .bs-stepper.vertical.wizard-icons .step {
-  padding-block: 0.75rem;
-  padding-inline: 0;
   text-align: center;
+  padding: 0.75rem 0;
 }
 .bs-stepper.wizard-icons .bs-stepper-header {
   justify-content: center;
 }
-.bs-stepper.wizard-icons .bs-stepper-header .step .step-trigger {
-  flex-direction: column;
+.bs-stepper.wizard-icons .bs-stepper-header .step-trigger {
   padding: 1.25rem;
+  flex-direction: column;
   gap: 0.5rem;
 }
-.bs-stepper.wizard-icons .bs-stepper-header .step .step-trigger .bs-stepper-icon svg {
-  block-size: 3.75rem;
-  fill: var(--bs-heading-color);
-  inline-size: 3.75rem;
+.bs-stepper.wizard-icons .bs-stepper-header .step-trigger .bs-stepper-icon svg {
+  height: 3.75rem;
+  width: 3.75rem;
 }
-.bs-stepper.wizard-icons .bs-stepper-header .step .step-trigger .bs-stepper-icon .icon-base {
-  fill: var(--bs-heading-color);
+.bs-stepper.wizard-icons .bs-stepper-header .step-trigger .bs-stepper-icon i {
   font-size: 1.6rem;
-}
-.bs-stepper.wizard-icons .bs-stepper-header .step.active .step-trigger .bs-stepper-icon svg {
-  fill: var(--bs-primary);
-}
-.bs-stepper.wizard-icons .bs-stepper-header .step.active .step-trigger .bs-stepper-label,
-.bs-stepper.wizard-icons .bs-stepper-header .step.active .step-trigger .bs-stepper-icon .icon-base {
-  color: var(--bs-primary);
 }
 @media (min-width: 992px) {
   .bs-stepper.wizard-icons .bs-stepper-header {
@@ -372,31 +295,14 @@
     gap: 1rem;
   }
 }
-.bs-stepper.wizard-icons .step.crossed .step-trigger .bs-stepper-label {
-  color: var(--bs-primary);
-}
-.bs-stepper.wizard-icons .step.crossed .step-trigger .bs-stepper-icon svg {
-  fill: var(--bs-primary);
-}
-.bs-stepper.wizard-icons .step.crossed .step-trigger .bs-stepper-icon .icon-base {
-  color: var(--bs-primary);
-}
-.bs-stepper.wizard-icons .step.crossed + .line .icon-base {
-  color: var(--bs-primary);
-}
-.bs-stepper.wizard-modern {
-  background-color: transparent;
-}
 .bs-stepper.wizard-modern .bs-stepper-header {
-  border-block-end: none;
+  border-bottom: none !important;
 }
 .bs-stepper.wizard-modern .bs-stepper-content {
   border-radius: 0.375rem;
-  background-color: var(--bs-paper-bg);
-  box-shadow: var(--bs-box-shadow);
 }
-.bs-stepper:not(.wizard-modern) {
-  box-shadow: var(--bs-box-shadow);
+.bs-stepper.wizard-modern.vertical .bs-stepper-header {
+  border-right: none !important;
 }
 @media (min-width: 992px) {
   .bs-stepper:not(.vertical):not(.wizard-icons) .bs-stepper-header {
@@ -404,7 +310,174 @@
   }
 }
 
-/* Media Queries */
+@media (max-width: 991.98px) {
+  [dir=rtl] .bs-stepper.wizard-icons .bs-stepper-header .step-trigger {
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 991.98px) {
+  html:not([dir=rtl]) .bs-stepper.wizard-icons .bs-stepper-header .step-trigger {
+    padding-left: 0;
+  }
+}
+
+#wizard-create-app.vertical .bs-stepper-header {
+  min-width: 15rem;
+}
+
+.light-style .bs-stepper {
+  background-color: #fff;
+}
+.light-style .bs-stepper:not(.wizard-modern) {
+  box-shadow: 0 0.1875rem 0.75rem 0 rgba(47, 43, 61, 0.14);
+}
+.light-style .bs-stepper .bs-stepper-header {
+  border-bottom: 1px solid #e6e6e8;
+}
+.light-style .bs-stepper .bs-stepper-header .line i {
+  color: #6d6b77;
+}
+.light-style .bs-stepper .bs-stepper-header .bs-stepper-title,
+.light-style .bs-stepper .bs-stepper-header .bs-stepper-label {
+  color: #444050;
+}
+.light-style .bs-stepper .bs-stepper-header .bs-stepper-label .bs-stepper-subtitle {
+  color: #6d6b77;
+}
+.light-style .bs-stepper .bs-stepper-header .step:not(.active) .bs-stepper-circle {
+  background-color: rgba(47, 43, 61, 0.06);
+  color: #444050;
+}
+.light-style .bs-stepper .bs-stepper-header .step.crossed .step-trigger .bs-stepper-label .bs-stepper-subtitle,
+.light-style .bs-stepper .bs-stepper-header .step.crossed .step-trigger .bs-stepper-title {
+  color: #acaab1;
+}
+.light-style .bs-stepper .step-trigger:focus {
+  color: #444050;
+}
+.light-style .bs-stepper.vertical .bs-stepper-header {
+  border-bottom: none;
+}
+@media (max-width: 991.98px) {
+  .light-style .bs-stepper.vertical .bs-stepper-header {
+    border-right: none !important;
+    border-left: none !important;
+    border-bottom: 1px solid #e6e6e8;
+  }
+}
+.light-style .bs-stepper.wizard-modern {
+  background-color: transparent;
+}
+.light-style .bs-stepper.wizard-modern .bs-stepper-content {
+  background-color: #fff;
+  box-shadow: 0 0.1875rem 0.75rem 0 rgba(47, 43, 61, 0.14);
+}
+.light-style .bs-stepper.wizard-icons .bs-stepper-header .bs-stepper-icon svg {
+  fill: #444050;
+}
+.light-style .bs-stepper.wizard-icons .bs-stepper-header .bs-stepper-icon i {
+  fill: #444050;
+}
+.light-style .bs-stepper.wizard-icons .bs-stepper-header .bs-stepper-label {
+  color: #444050;
+}
+
+[dir=rtl] .light-style .bs-stepper.vertical .bs-stepper-header {
+  border-left: 1px solid #e6e6e8;
+}
+
+html:not([dir=rtl]) .light-style .bs-stepper.vertical .bs-stepper-header {
+  border-right: 1px solid #e6e6e8;
+}
+
+.dark-style .bs-stepper {
+  background-color: #2f3349;
+}
+.dark-style .bs-stepper .bs-stepper-header {
+  border-bottom: 1px solid #44485e;
+}
+.dark-style .bs-stepper .bs-stepper-header .line i {
+  color: #acabc1;
+}
+.dark-style .bs-stepper .bs-stepper-header .bs-stepper-label,
+.dark-style .bs-stepper .bs-stepper-header .bs-stepper-title {
+  color: #cfcde4;
+}
+.dark-style .bs-stepper .bs-stepper-header .bs-stepper-label .bs-stepper-subtitle {
+  color: #acabc1;
+}
+.dark-style .bs-stepper .bs-stepper-header .step:not(.active) .bs-stepper-circle {
+  background-color: rgba(225, 222, 245, 0.06);
+  color: #cfcde4;
+}
+.dark-style .bs-stepper .bs-stepper-header .step.crossed .step-trigger .bs-stepper-label .bs-stepper-subtitle,
+.dark-style .bs-stepper .bs-stepper-header .step.crossed .step-trigger .bs-stepper-title {
+  color: #76778e;
+}
+.dark-style .bs-stepper .step-trigger:focus {
+  color: #cfcde4;
+}
+.dark-style .bs-stepper.vertical .bs-stepper-header {
+  border-bottom: none;
+}
+@media (max-width: 991.98px) {
+  .dark-style .bs-stepper.vertical .bs-stepper-header {
+    border-right: none !important;
+    border-left: none !important;
+    border-bottom: 1px solid #44485e;
+  }
+}
+.dark-style .bs-stepper.wizard-modern {
+  background-color: transparent;
+}
+.dark-style .bs-stepper.wizard-modern .bs-stepper-content {
+  background-color: #2f3349;
+  box-shadow: 0 0.1875rem 0.75rem 0 rgba(19, 17, 32, 0.2);
+}
+.dark-style .bs-stepper.wizard-icons .bs-stepper-header .bs-stepper-icon i {
+  color: #cfcde4;
+}
+.dark-style .bs-stepper.wizard-icons .bs-stepper-header .bs-stepper-icon svg {
+  fill: #cfcde4;
+}
+.dark-style .bs-stepper.wizard-icons .bs-stepper-header .bs-stepper-label {
+  color: #cfcde4;
+}
+
+[dir=rtl] .dark-style .bs-stepper.vertical .bs-stepper-header {
+  border-left: 1px solid #44485e;
+}
+
+html:not([dir=rtl]) .dark-style .bs-stepper.vertical .bs-stepper-header {
+  border-right: 1px solid #44485e;
+}
+
+[dir=rtl] .bs-stepper .bs-stepper-content .btn-next:not(.btn-submit) i,
+[dir=rtl] .bs-stepper .bs-stepper-content .btn-prev i {
+  transform: rotate(180deg);
+}
+[dir=rtl] .bs-stepper.vertical.wizard-icons .bs-stepper-header .line:before {
+  right: 50%;
+}
+[dir=rtl] .bs-stepper.wizard-modern.vertical .bs-stepper-header {
+  border-left: none !important;
+}
+@media (min-width: 992px) {
+  [dir=rtl] .bs-stepper .bs-stepper-header .line i {
+    transform: rotate(180deg);
+  }
+}
+@media (max-width: 991.98px) {
+  [dir=rtl] .bs-stepper .bs-stepper-header .step .step-trigger .bs-stepper-label {
+    margin-left: 0;
+    margin-right: 1rem;
+  }
+  [dir=rtl] .bs-stepper.wizard-icons .bs-stepper-header .line:before {
+    margin-right: 0.75rem;
+  }
+}
+
 @media (max-width: 991.98px) {
   .bs-stepper .bs-stepper-header {
     flex-direction: column;
@@ -414,13 +487,13 @@
     flex-direction: row;
   }
   .bs-stepper .bs-stepper-header .step .step-trigger .bs-stepper-label {
-    margin-inline-start: 0.35rem;
+    margin-left: 0.35rem;
   }
   .bs-stepper .bs-stepper-header .step:first-child .step-trigger {
-    padding-block-start: 0;
+    padding-top: 0;
   }
   .bs-stepper .bs-stepper-header .step:last-child .step-trigger {
-    padding-block-end: 0;
+    padding-bottom: 0;
   }
   .bs-stepper.vertical {
     flex-direction: column;
@@ -428,27 +501,22 @@
   .bs-stepper.vertical .bs-stepper-header {
     align-items: flex-start;
   }
-  .bs-stepper.vertical.wizard-icons .bs-stepper-header .line::before {
-    inset-inline-start: 0.75rem;
-    margin-inline-start: 0;
+  .bs-stepper.vertical.wizard-icons .bs-stepper-header .line:before {
+    left: 0.75rem;
+    margin-left: 0;
   }
-  .bs-stepper.wizard-icons .bs-stepper-header .step .step-trigger {
-    flex-direction: row;
-    padding-inline-start: 0;
-  }
-  .bs-stepper:not(.vertical) .bs-stepper-header .line .icon-base {
+  .bs-stepper:not(.vertical) .bs-stepper-header .line i {
     display: none;
   }
+  .bs-stepper.wizard-icons .bs-stepper-header .step:not(:first-child) .bs-stepper-icon svg {
+    margin-top: 0.5rem;
+  }
 }
-/* Styles for Modal example Create App wizard */
-#wizard-create-app.vertical .bs-stepper-header {
-  min-inline-size: 15rem;
-}
-
 @media (max-width: 520px) {
-  /* To set minus margin in mobile screen
-  as that affects border */
   .bs-stepper-header {
     margin: 0;
   }
+}
+#wizard-create-app.vertical .bs-stepper-header {
+  min-width: 15rem;
 }

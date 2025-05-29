@@ -10,16 +10,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
     // Phone Number Input Mask
     if (phoneMask) {
-      phoneMask.addEventListener('input', event => {
-        const cleanValue = event.target.value.replace(/\D/g, '');
-        phoneMask.value = formatGeneral(cleanValue, {
-          blocks: [3, 3, 4],
-          delimiters: [' ', ' ']
-        });
-      });
-      registerCursorTracker({
-        input: phoneMask,
-        delimiter: ' '
+      new Cleave(phoneMask, {
+        phone: true,
+        phoneRegionCode: 'US'
       });
     }
 
@@ -40,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.form-control-validation'
+          rowSelector: '.col-12'
         }),
         submitButton: new FormValidation.plugins.SubmitButton(),
         // Submit the form when all fields are valid

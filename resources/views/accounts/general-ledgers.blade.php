@@ -17,19 +17,19 @@
                                         {!! $account_heads !!}
                                     </select>
                                 </div>
-                                
+
                                 <div class="form-group col-md-3 mb-1">
                                     <label class="mb-25" for="start-date">Start Date</label>
                                     <input type="text" class="form-control flatpickr-basic" id="start-date"
                                            name="start-date" value="{{ request ('start-date') }}">
                                 </div>
-                                
+
                                 <div class="form-group col-md-3 mb-1">
                                     <label class="mb-25" for="end-date">End Date</label>
                                     <input type="text" class="form-control flatpickr-basic" id="end-date"
                                            name="end-date" value="{{ request ('end-date') }}">
                                 </div>
-                                
+
                                 <div class="form-group col-2 mt-3">
                                     <button type="submit"
                                             class="btn w-100 mt-2 btn-primary d-block">Search
@@ -37,7 +37,7 @@
                                 </div>
                             </div>
                         </form>
-                        
+
                         <div class="row mt-3">
                             <div class="col-12 d-flex justify-content-end">
                                 <a href="javascript:void(0)" onclick="downloadExcel('General Ledger')"
@@ -45,7 +45,7 @@
                                     <i class="tf-icons ti ti-file-spreadsheet me-1"></i>
                                     Download Excel
                                 </a>
-                                
+
                                 <a href="{{ route ('invoices.general-ledger', request () -> all ()) }}"
                                    target="_blank"
                                    class="btn btn-dark mb-1 btn-xs">
@@ -54,7 +54,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="table-responsive">
                         <table class="table w-100 table-hover" id="excel-table">
                             <thead class="table-light">

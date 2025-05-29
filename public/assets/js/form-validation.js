@@ -227,10 +227,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
               case 'formValidationHobbies':
               case 'formValidationBio':
               case 'formValidationGender':
+                return '.col-md-6';
               case 'formValidationPlan':
+                return '.col-xl-3';
               case 'formValidationSwitch':
               case 'formValidationCheckbox':
-                return '.form-control-validation';
+                return '.col-12';
               default:
                 return '.row';
             }

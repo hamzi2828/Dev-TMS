@@ -3,7 +3,7 @@
  */
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
+(function () {
   const suspendUser = document.querySelector('.suspend-user');
 
   // Suspend User javascript
@@ -86,4 +86,4 @@ document.addEventListener('DOMContentLoaded', function (e) {
       };
     });
   }
-});
+})();

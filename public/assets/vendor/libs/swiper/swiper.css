@@ -1,6 +1,5 @@
-/* (C) */
 /**
- * Swiper 11.1.15
+ * Swiper 11.0.7
  * Most modern mobile touch slider and framework with hardware accelerated transitions
  * https://swiperjs.com
  *
@@ -8,7 +7,7 @@
  *
  * Released under the MIT License
  *
- * Released on: November 18, 2024
+ * Released on: February 27, 2024
  */
 /* FONT_START */
 @font-face {
@@ -738,7 +737,7 @@ button.swiper-pagination-bullet {
   pointer-events: auto;
 }
 
-.swiper.swiper-cube {
+.swiper-cube {
   overflow: visible;
 }
 
@@ -810,7 +809,7 @@ button.swiper-pagination-bullet {
 }
 
 /* Cube slide shadows end */
-.swiper.swiper-flip {
+.swiper-flip {
   overflow: visible;
 }
 
@@ -848,7 +847,7 @@ button.swiper-pagination-bullet {
   transition-property: transform, opacity, height;
 }
 
-.swiper.swiper-cards {
+.swiper-cards {
   overflow: visible;
 }
 
@@ -860,32 +859,25 @@ button.swiper-pagination-bullet {
 }
 
 .swiper {
-  --swiper-theme-color: var(--bs-primary);
-  inline-size: 100%;
+  width: 100%;
+  overflow: hidden !important;
 }
 .swiper .swiper-slide {
-  color: var(--bs-white);
+  color: #fff;
 }
-
-@media (max-width: 575.98px) {
-  .swiper#swiper-multiple-slides {
-    block-size: 11rem;
-  }
+.swiper .swiper-pagination-bullet.swiper-pagination-bullet-active.bg-transparent {
+  background: transparent !important;
 }
 
 .swiper-button-prev,
 .swiper-button-next {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 .swiper-button-prev.swiper-button-white,
 .swiper-button-next.swiper-button-white {
-  color: var(--bs-white);
-}
-:dir(rtl) .swiper-button-prev,
-:dir(rtl) .swiper-button-next {
-  transform: scaleX(-1);
+  color: #fff;
 }
 .swiper-button-prev.custom-icon,
 .swiper-button-next.custom-icon {
@@ -896,10 +888,9 @@ button.swiper-pagination-bullet {
 .swiper-button-next.custom-icon::after {
   font-size: 2rem;
 }
-
-.swiper-pagination-bullet.swiper-pagination-bullet-active,
-.swiper-pagination.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
-  background: var(--bs-primary);
+[dir=rtl] .swiper-button-prev.custom-icon,
+[dir=rtl] .swiper-button-next.custom-icon {
+  transform: scaleX(-1) rotate(180deg);
 }
 
 .swiper-pagination-bullet {
@@ -915,12 +906,45 @@ button.swiper-pagination-bullet {
   background: rgba(0, 0, 0, 0.3);
 }
 
-:dir(rtl) .swiper-button-next {
-  inset-inline: 10px auto;
+.swiper-pagination-white .swiper-pagination-bullet {
+  background: #fff !important;
 }
-:dir(rtl) .swiper-button-prev {
-  inset-inline: auto 10px;
+.swiper-pagination-white .swiper-pagination-bullet-active {
+  background: #fff !important;
 }
-:dir(rtl) .swiper-vertical > .swiper-pagination-bullets {
-  inset-inline: 10px auto;
+
+.swiper-scrollbar-white {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+.swiper-scrollbar-white .swiper-scrollbar-drag {
+  background: #fff !important;
+}
+
+.dark-style .swiper-3d .swiper-pagination-bullet {
+  background-color: #fff;
+}
+.dark-style .swiper-3d .swiper-button-prev.swiper-button-black,
+.dark-style .swiper-3d .swiper-button-next.swiper-button-black {
+  --swiper-navigation-color: $white;
+}
+
+[dir=rtl] .swiper-button-next {
+  right: auto;
+  left: 10px;
+}
+[dir=rtl] .swiper-button-prev {
+  right: 10px;
+  left: auto;
+}
+[dir=rtl] .swiper-vertical > .swiper-pagination-bullets {
+  right: auto;
+  left: 10px;
+}
+[dir=rtl] .swiper-vertical > .swiper-pagination-progressbar {
+  right: 0;
+  left: auto;
+}
+[dir=rtl] .swiper-vertical > .swiper-scrollbar {
+  right: auto;
+  left: 3px;
 }

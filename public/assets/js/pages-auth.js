@@ -1,15 +1,15 @@
 /**
  *  Pages Authentication
  */
+
 'use strict';
+const formAuthentication = document.querySelector('#formAuthentication');
 
-document.addEventListener('DOMContentLoaded', function () {
-  (() => {
-    const formAuthentication = document.querySelector('#formAuthentication');
-
+document.addEventListener('DOMContentLoaded', function (e) {
+  (function () {
     // Form validation for Add new record
-    if (formAuthentication && typeof FormValidation !== 'undefined') {
-      FormValidation.formValidation(formAuthentication, {
+    if (formAuthentication) {
+      const fv = FormValidation.formValidation(formAuthentication, {
         fields: {
           username: {
             validators: {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 message: 'Please enter your email'
               },
               emailAddress: {
-                message: 'Please enter a valid email address'
+                message: 'Please enter valid email address'
               }
             }
           },
@@ -60,8 +60,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 message: 'Please confirm password'
               },
               identical: {
-                compare: () => formAuthentication.querySelector('[name="password"]').value,
-                message: 'The password and its confirmation do not match'
+                compare: function () {
+                  return formAuthentication.querySelector('[name="password"]').value;
+                },
+                message: 'The password and its confirm are not the same'
               },
               stringLength: {
                 min: 6,
@@ -72,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
           terms: {
             validators: {
               notEmpty: {
-                message: 'Please agree to terms & conditions'
+                message: 'Please agree terms & conditions'
               }
             }
           }
@@ -81,14 +83,15 @@ document.addEventListener('DOMContentLoaded', function () {
           trigger: new FormValidation.plugins.Trigger(),
           bootstrap5: new FormValidation.plugins.Bootstrap5({
             eleValidClass: '',
-            rowSelector: '.form-control-validation'
+            rowSelector: '.mb-6'
           }),
           submitButton: new FormValidation.plugins.SubmitButton(),
+
           defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
           autoFocus: new FormValidation.plugins.AutoFocus()
         },
         init: instance => {
-          instance.on('plugins.message.placed', e => {
+          instance.on('plugins.message.placed', function (e) {
             if (e.element.parentElement.classList.contains('input-group')) {
               e.element.parentElement.insertAdjacentElement('afterend', e.messageElement);
             }
@@ -97,16 +100,14 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    // Two Steps Verification for numeral input mask
-    const numeralMaskElements = document.querySelectorAll('.numeral-mask');
+    //  Two Steps Verification
+    const numeralMask = document.querySelectorAll('.numeral-mask');
 
-    // Format function for numeral mask
-    const formatNumeral = value => value.replace(/\D/g, ''); // Only keep digits
-
-    if (numeralMaskElements.length > 0) {
-      numeralMaskElements.forEach(numeralMaskEl => {
-        numeralMaskEl.addEventListener('input', event => {
-          numeralMaskEl.value = formatNumeral(event.target.value);
+    // Verification masking
+    if (numeralMask.length) {
+      numeralMask.forEach(e => {
+        new Cleave(e, {
+          numeral: true
         });
       });
     }

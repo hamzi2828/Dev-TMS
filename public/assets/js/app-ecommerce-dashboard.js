@@ -4,15 +4,22 @@
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  let cardColor, labelColor, headingColor, borderColor, legendColor, fontFamily;
+(function () {
+  let cardColor, labelColor, headingColor, borderColor, legendColor;
 
-  cardColor = config.colors.cardColor;
-  labelColor = config.colors.textMuted;
-  legendColor = config.colors.bodyColor;
-  headingColor = config.colors.headingColor;
-  borderColor = config.colors.borderColor;
-  fontFamily = config.fontFamily;
+  if (isDarkStyle) {
+    cardColor = config.colors_dark.cardColor;
+    labelColor = config.colors_dark.textMuted;
+    legendColor = config.colors_dark.bodyColor;
+    headingColor = config.colors_dark.headingColor;
+    borderColor = config.colors_dark.borderColor;
+  } else {
+    cardColor = config.colors.cardColor;
+    labelColor = config.colors.textMuted;
+    legendColor = config.colors.bodyColor;
+    headingColor = config.colors.headingColor;
+    borderColor = config.colors.borderColor;
+  }
 
   // Donut Chart Colors
   const chartColors = {
@@ -210,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       },
       series: [
         {
-          data: [0, 40, 15, 65, 40, 90]
+          data: [0, 25, 10, 40, 25, 55]
         }
       ],
       tooltip: {
@@ -244,14 +251,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
         fillColor: config.colors.info,
         strokeColors: 'transparent',
         strokeWidth: 3.2,
-        offsetX: -1,
         discrete: [
           {
             seriesIndex: 0,
             dataPointIndex: 5,
             fillColor: cardColor,
             strokeColor: config.colors.info,
-            size: 4.5,
+            size: 5,
             shape: 'circle'
           }
         ],
@@ -261,10 +267,26 @@ document.addEventListener('DOMContentLoaded', function (e) {
       },
       responsive: [
         {
-          breakpoint: 768,
+          breakpoint: 1442,
           options: {
             chart: {
-              height: 110
+              height: 100
+            }
+          }
+        },
+        {
+          breakpoint: 1025,
+          options: {
+            chart: {
+              height: 86
+            }
+          }
+        },
+        {
+          breakpoint: 769,
+          options: {
+            chart: {
+              height: 93
             }
           }
         }
@@ -330,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               show: true,
               value: {
                 fontSize: '1.5rem',
-                fontFamily: 'fontFamily',
+                fontFamily: 'Public Sans',
                 color: headingColor,
                 fontWeight: 500,
                 offsetY: -15,
@@ -340,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               },
               name: {
                 offsetY: 20,
-                fontFamily: 'fontFamily'
+                fontFamily: 'Public Sans'
               },
               total: {
                 show: true,
@@ -348,7 +370,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 color: config.colors.success,
                 fontSize: '.8125rem',
                 label: 'Total',
-                fontFamily: 'fontFamily',
+                fontFamily: 'Public Sans',
                 formatter: function (w) {
                   return '184';
                 }
@@ -418,11 +440,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
         bar: {
           horizontal: false,
           columnWidth: '40%',
-          borderRadius: 7,
+          borderRadius: 9,
           startingShape: 'rounded',
-          endingShape: 'rounded',
-          borderRadiusApplication: 'around',
-          borderRadiusWhenStacked: 'last'
+          endingShape: 'rounded'
         }
       },
       colors: [config.colors.primary, config.colors.warning],
@@ -440,12 +460,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
         horizontalAlign: 'right',
         position: 'top',
         fontSize: '13px',
-        fontFamily: fontFamily,
+        fontFamily: 'Public Sans',
         markers: {
-          size: 6,
-          offsetY: 0,
-          shape: 'circle',
-          strokeWidth: 0
+          height: 12,
+          width: 12,
+          radius: 12,
+          offsetX: -5,
+          offsetY: 2
         },
         labels: {
           colors: headingColor
@@ -459,7 +480,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
         show: false,
         padding: {
           bottom: -8,
-          right: 0,
           top: 20
         }
       },
@@ -469,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             fontSize: '13px',
             colors: labelColor,
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           }
         },
         axisTicks: {
@@ -485,7 +505,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             fontSize: '13px',
             colors: labelColor,
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           }
         },
         min: -200,
@@ -510,6 +530,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
               bar: {
                 columnWidth: '50%'
               }
+            },
+            chart: {
+              height: 422
             }
           }
         },
@@ -518,8 +541,21 @@ document.addEventListener('DOMContentLoaded', function (e) {
           options: {
             plotOptions: {
               bar: {
-                columnWidth: '40%'
+                columnWidth: '50%'
               }
+            }
+          }
+        },
+        {
+          breakpoint: 1025,
+          options: {
+            plotOptions: {
+              bar: {
+                columnWidth: '50%'
+              }
+            },
+            chart: {
+              height: 390
             }
           }
         },
@@ -550,6 +586,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
               bar: {
                 columnWidth: '73%'
               }
+            },
+            chart: {
+              height: 360
             },
             xaxis: {
               labels: {
@@ -767,17 +806,17 @@ document.addEventListener('DOMContentLoaded', function (e) {
   }
 
   // Variable declaration for table
-  const dt_invoice_table = document.querySelector('.datatable-invoice');
+  var dt_invoice_table = $('.datatable-invoice');
 
   // Invoice datatable
   // --------------------------------------------------------------------
-  if (dt_invoice_table) {
-    const dt_invoice = new DataTable(dt_invoice_table, {
-      ajax: assetsPath + 'json/invoice-list.json',
+  if (dt_invoice_table.length) {
+    var dt_invoice = dt_invoice_table.DataTable({
+      ajax: assetsPath + 'json/invoice-list.json', // JSON file to add data
       columns: [
         // columns according to JSON
         { data: 'invoice_id' },
-        { data: 'invoice_id', orderable: false, render: DataTable.render.select() },
+        { data: 'invoice_id' },
         { data: 'invoice_id' },
         { data: 'invoice_status' },
         { data: 'total' },
@@ -787,342 +826,216 @@ document.addEventListener('DOMContentLoaded', function (e) {
       ],
       columnDefs: [
         {
+          // For Responsive
           className: 'control',
           responsivePriority: 2,
           searchable: false,
           targets: 0,
-          render: function () {
+          render: function (data, type, full, meta) {
             return '';
           }
         },
         {
+          // For Checkboxes
           targets: 1,
           orderable: false,
-          searchable: false,
-          responsivePriority: 4,
+          checkboxes: {
+            selectAllRender: '<input type="checkbox" class="form-check-input">'
+          },
           render: function () {
-            return '<input type="checkbox" class="dt-checkboxes form-check-input">';
-          }
+            return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
+          },
+          searchable: false
         },
         {
+          // Invoice ID
           targets: 2,
-          render: function (data, type, full) {
-            return `<a href="app-invoice-preview.html">#${full['invoice_id']}</a>`;
+          render: function (data, type, full, meta) {
+            var $invoice_id = full['invoice_id'];
+            // Creates full output for row
+            var $row_output = '<a href="app-invoice-preview.html">#' + $invoice_id + '</a>';
+            return $row_output;
           }
         },
         {
-          // Invoice Status with tooltip
+          // Invoice status
           targets: 3,
-          render: function (data, type, full) {
-            const invoiceStatus = full['invoice_status'];
-            const balance = full['balance'];
-            const dueDate = full['due_date'];
-            const roleBadgeObj = {
-              Sent: '<span class="badge p-1_5 rounded-pill bg-label-secondary"><i class="icon-base icon-16px ti tabler-circle-check"></i></span>',
+          render: function (data, type, full, meta) {
+            var $invoice_status = full['invoice_status'],
+              $due_date = full['due_date'],
+              $balance = full['balance'];
+            var roleBadgeObj = {
+              Sent: '<span class="badge badge-center d-flex align-items-center justify-content-center rounded-pill bg-label-secondary w-px-30 h-px-30"><i class="ti ti-circle-check ti-xs"></i></span>',
               Draft:
-                '<span class="badge p-1_5 rounded-pill bg-label-primary"><i class="icon-base icon-16px ti tabler-device-floppy"></i></span>',
+                '<span class="badge badge-center d-flex align-items-center justify-content-center rounded-pill bg-label-primary w-px-30 h-px-30"><i class="ti ti-device-floppy ti-xs"></i></span>',
               'Past Due':
-                '<span class="badge p-1_5 rounded-pill bg-label-danger"><i class="icon-base icon-16px ti tabler-info-circle"></i></span>',
+                '<span class="badge badge-center d-flex align-items-center justify-content-center rounded-pill bg-label-danger w-px-30 h-px-30"><i class="ti ti-info-circle ti-xs"></i></span>',
               'Partial Payment':
-                '<span class="badge p-1_5 rounded-pill bg-label-success"><i class="icon-base icon-16px ti tabler-circle-half-2"></i></span>',
-              Paid: '<span class="badge p-1_5 rounded-pill bg-label-warning"><i class="icon-base icon-16px ti tabler-chart-pie"></i></span>',
+                '<span class="badge badge-center d-flex align-items-center justify-content-center rounded-pill bg-label-success w-px-30 h-px-30"><i class="ti ti-circle-half-2 ti-xs"></i></span>',
+              Paid: '<span class="badge badge-center d-flex align-items-center justify-content-center rounded-pill bg-label-warning w-px-30 h-px-30"><i class="ti ti-chart-pie ti-xs"></i></span>',
               Downloaded:
-                '<span class="badge p-1_5 rounded-pill bg-label-info"><i class="icon-base icon-16px ti tabler-arrow-down-circle"></i></span>'
+                '<span class="badge badge-center d-flex align-items-center justify-content-center rounded-pill bg-label-info w-px-30 h-px-30"><i class="ti ti-arrow-down-circle ti-xs"></i></span>'
             };
-
-            // Sanitize tooltip content by escaping double quotes
-            const tooltipContent = `
-              ${invoiceStatus}<br>
-              <span class="fw-medium">Balance:</span> ${balance}<br>
-              <span class="fw-medium">Due Date:</span> ${dueDate}
-            `.replace(/"/g, '&quot;');
-
-            return `
-              <span class="d-inline-block" data-bs-toggle="tooltip" data-bs-html="true" title="<span>${tooltipContent}">
-                ${roleBadgeObj[invoiceStatus] || ''}
-</span>
-              </span>
-            `;
+            return (
+              "<span class='d-inline-block' data-bs-toggle='tooltip' data-bs-html='true' title='<span>" +
+              $invoice_status +
+              '<br> <span class="fw-medium">Balance:</span> ' +
+              $balance +
+              '<br> <span class="fw-medium">Due Date:</span> ' +
+              $due_date +
+              "</span>'>" +
+              roleBadgeObj[$invoice_status] +
+              '</span>'
+            );
           }
         },
         {
+          // Total Invoice Amount
           targets: 4,
-          render: function (data, type, full) {
-            const total = full['total'];
-            return `<span class="d-none">${total}</span>$${total}`;
+          render: function (data, type, full, meta) {
+            var $total = full['total'];
+            return '$' + $total;
           }
         },
         {
-          targets: 5,
-          render: function (data, type, full) {
-            const dueDate = new Date(full['due_date']);
-            return `
-              <span class="d-none">${dueDate.toISOString().slice(0, 10).replace(/-/g, '')}</span>
-              ${dueDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-            `;
-          }
-        },
-        {
-          targets: 6,
-          visible: false
-        },
-        {
+          // Actions
           targets: -1,
           title: 'Actions',
           searchable: false,
           orderable: false,
-          render: function () {
+          render: function (data, type, full, meta) {
             return (
               '<div class="d-flex align-items-center">' +
-              '<a href="javascript:;" data-bs-toggle="tooltip" class="btn btn-icon delete-record" data-bs-placement="top" title="Delete"><i class="icon-base ti tabler-trash icon-md"></i></a>' +
-              '<a href="app-invoice-preview.html" data-bs-toggle="tooltip" class="btn btn-icon" data-bs-placement="top" title="Preview Invoice"><i class="icon-base ti tabler-eye icon-md"></i></a>' +
-              '<div class="dropdown">' +
-              '<a href="javascript:;" class="btn dropdown-toggle hide-arrow btn-icon p-0" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical icon-md"></i></a>' +
-              '<div class="dropdown-menu dropdown-menu-end">' +
-              '<a href="javascript:;" class="dropdown-item">Download</a>' +
-              '<a href="app-invoice-edit.html" class="dropdown-item">Edit</a>' +
-              '<a href="javascript:;" class="dropdown-item">Duplicate</a>' +
+              '<a href="javascript:;" class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill delete-record" data-bs-toggle="tooltip" title="Delete record"><i class="ti ti-trash ti-md"></i></a>' +
+              '<a href="app-invoice-preview.html" class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill" data-bs-toggle="tooltip" title="Preview"><i class="ti ti-eye ti-md"></i></a>' +
+              '<div class="d-inline-block">' +
+              '<a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical ti-md"></i></a>' +
+              '<ul class="dropdown-menu dropdown-menu-end m-0">' +
+              '<li><a href="javascript:;" class="dropdown-item">Details</a></li>' +
+              '<li><a href="javascript:;" class="dropdown-item">Archive</a></li>' +
+              '<div class="dropdown-divider"></div>' +
+              '<li><a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a></li>' +
+              '</ul>' +
               '</div>' +
               '</div>'
             );
           }
+        },
+        {
+          // Invoice Status
+          targets: -2,
+          visible: false
         }
       ],
-      select: {
-        style: 'multi',
-        selector: 'td:nth-child(2)'
-      },
-      order: [[2, 'desc']],
+      order: [[1, 'desc']],
+      dom:
+        '<"row"' +
+        '<"col-12 col-md-6 d-flex align-items-center justify-content-center justify-content-md-start gap-2"l<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start"B>>' +
+        '<"col-12 col-md-6 d-flex align-items-center justify-content-end flex-column flex-md-row pe-5 gap-md-4 mt-n5 mt-md-0"f<"invoice_status mb-6 mb-md-0">>' +
+        '>t' +
+        '<"row"' +
+        '<"col-sm-12 col-md-6"i>' +
+        '<"col-sm-12 col-md-6"p>' +
+        '>',
       displayLength: 6,
-      layout: {
-        topStart: {
-          rowClass: 'row m-3 justify-content-between',
-          features: [
-            {
-              pageLength: {
-                menu: [6, 10, 25, 50, 100],
-                text: 'Show_MENU_'
-              },
-              buttons: [
-                {
-                  text: '<i class="icon-base icon-16px ti tabler-plus me-md-2"></i><span class="d-md-inline-block d-none">Create Invoice</span>',
-                  className: 'btn btn-primary',
-                  action: function () {
-                    window.location = 'app-invoice-add.html';
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        topEnd: {
-          rowClass: 'row mx-3 justify-content-between',
-          features: [
-            {
-              search: {
-                placeholder: 'Search Invoice',
-                text: '_INPUT_'
-              }
-            }
-          ]
-        },
-        bottomStart: {
-          rowClass: 'row mx-3 justify-content-between',
-          features: ['info']
-        },
-        bottomEnd: 'paging'
-      },
+      lengthMenu: [6, 10, 25, 50, 75, 100],
       language: {
+        sLengthMenu: 'Show _MENU_',
+        search: '',
+        searchPlaceholder: 'Search Invoice',
         paginate: {
-          next: '<i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-18px"></i>',
-          previous: '<i class="icon-base ti tabler-chevron-left scaleX-n1-rtl icon-18px"></i>',
-          first: '<i class="icon-base ti tabler-chevrons-left scaleX-n1-rtl icon-18px"></i>',
-          last: '<i class="icon-base ti tabler-chevrons-right scaleX-n1-rtl icon-18px"></i>'
+          next: '<i class="ti ti-chevron-right ti-sm"></i>',
+          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
         }
       },
+      // Buttons with Dropdown
+      buttons: [
+        {
+          text: '<i class="ti ti-plus ti-xs me-md-2"></i><span class="d-md-inline-block d-none">Create Invoice</span>',
+          className: 'btn btn-primary waves-effect waves-light',
+          action: function (e, dt, button, config) {
+            window.location = 'app-invoice-add.html';
+          }
+        }
+      ],
+      // For responsive popup
       responsive: {
         details: {
-          display: DataTable.Responsive.display.modal({
+          display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
-              const data = row.data();
-              return 'Details of ' + data['client_name'];
+              var data = row.data();
+              return 'Details of ' + data['full_name'];
             }
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
-            const data = columns
-              .map(function (col) {
-                return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                  ? `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
-                      <td>${col.title}:</td>
-                      <td>${col.data}</td>
-                    </tr>`
-                  : '';
-              })
-              .join('');
+            var data = $.map(columns, function (col, i) {
+              return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
+                ? '<tr data-dt-row="' +
+                    col.rowIndex +
+                    '" data-dt-column="' +
+                    col.columnIndex +
+                    '">' +
+                    '<td>' +
+                    col.title +
+                    ':' +
+                    '</td> ' +
+                    '<td>' +
+                    col.data +
+                    '</td>' +
+                    '</tr>'
+                : '';
+            }).join('');
 
-            if (data) {
-              const div = document.createElement('div');
-              div.classList.add('table-responsive');
-              const table = document.createElement('table');
-              div.appendChild(table);
-              table.classList.add('table');
-              const tbody = document.createElement('tbody');
-              tbody.innerHTML = data;
-              table.appendChild(tbody);
-              return div;
-            }
-            return false;
+            return data ? $('<table class="table"/><tbody />').append(data) : false;
           }
         }
       },
       initComplete: function () {
-        // Ensure the container for the Invoice Status filter is created
-        let invoiceStatusContainer = document.querySelector('.invoice_status');
-        if (!invoiceStatusContainer) {
-          // Create the container if it doesn't exist
-          invoiceStatusContainer = document.createElement('div');
-          invoiceStatusContainer.className = 'invoice_status';
-
-          // Append it to a suitable location in your DataTable's layout
-          // Example: Appending to the filter area (adjust as needed)
-          const filterArea = document.querySelector('.dt-layout-end');
-          if (filterArea) {
-            filterArea.appendChild(invoiceStatusContainer);
-          }
-        }
-
-        // Adding role filter once the table is initialized
+        // Adding role filter once table initialized
         this.api()
           .columns(6)
           .every(function () {
-            const column = this;
+            var column = this;
+            var select = $(
+              '<select id="UserRole" class="form-select"><option value=""> Select Status </option></select>'
+            )
+              .appendTo('.invoice_status')
+              .on('change', function () {
+                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                column.search(val ? '^' + val + '$' : '', true, false).draw();
+              });
 
-            // Create the dropdown for "Invoice Status"
-            const select = document.createElement('select');
-            select.id = 'UserRole';
-            select.className = 'form-select';
-            select.innerHTML = '<option value=""> Invoice Status </option>';
-
-            // Append the dropdown to the invoice status container
-            invoiceStatusContainer.appendChild(select);
-
-            // Add change event listener to filter the column based on selected value
-            select.addEventListener('change', function () {
-              const val = select.value ? `^${select.value}$` : '';
-              column.search(val, true, false).draw();
-            });
-
-            // Populate the dropdown with unique values from the column data
             column
               .data()
               .unique()
               .sort()
-              .each(function (d) {
-                const option = document.createElement('option');
-                option.value = d;
-                option.className = 'text-capitalize';
-                option.textContent = d;
-                select.appendChild(option);
+              .each(function (d, j) {
+                select.append('<option value="' + d + '" class="text-capitalize">' + d + '</option>');
               });
           });
       }
     });
-    function deleteRecord(event) {
-      let row = document.querySelector('.dtr-expanded');
-      if (event) {
-        row = event.target.parentElement.closest('tr');
-      }
-      if (row) {
-        dt_invoice.row(row).remove().draw();
-      }
-    }
-    function bindDeleteEvent() {
-      const invoiceTable = document.querySelector('.invoice-list-table');
-      const modal = document.querySelector('.dtr-bs-modal');
-
-      if (invoiceTable && invoiceTable.classList.contains('collapsed')) {
-        if (modal) {
-          modal.addEventListener('click', function (event) {
-            if (event.target.parentElement.classList.contains('delete-record')) {
-              deleteRecord();
-              const closeButton = modal.querySelector('.btn-close');
-              if (closeButton) closeButton.click(); // Simulates a click on the close button
-            }
-          });
-        }
-      } else {
-        const tableBody = invoiceTable?.querySelector('tbody');
-        if (tableBody) {
-          tableBody.addEventListener('click', function (event) {
-            if (event.target.parentElement.classList.contains('delete-record')) {
-              deleteRecord(event);
-            }
-          });
-        }
-      }
-    }
-
-    // Initial event binding
-    bindDeleteEvent();
-
-    // Re-bind events when modal is shown or hidden
-    document.addEventListener('show.bs.modal', function (event) {
-      if (event.target.classList.contains('dtr-bs-modal')) {
-        bindDeleteEvent();
-      }
-    });
-
-    document.addEventListener('hide.bs.modal', function (event) {
-      if (event.target.classList.contains('dtr-bs-modal')) {
-        bindDeleteEvent();
-      }
-    });
-    // On each datatable draw, initialize tooltip
-    dt_invoice.on('draw', function () {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-      tooltipTriggerList.forEach(tooltipTriggerEl => {
-        new bootstrap.Tooltip(tooltipTriggerEl, {
-          boundary: document.body
-        });
-      });
-    });
   }
 
+  // On each datatable draw, initialize tooltip
+  dt_invoice_table.on('draw.dt', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl, {
+        boundary: document.body
+      });
+    });
+  });
+
+  // Delete Record
+  $('.datatable-invoice tbody').on('click', '.delete-record', function () {
+    dt_invoice.row($(this).parents('tr')).remove().draw();
+  });
   // Filter form control to default size
   // ? setTimeout used for multilingual table initialization
   setTimeout(() => {
-    const elementsToModify = [
-      { selector: '.dt-buttons .btn', classToRemove: 'btn-secondary' },
-      { selector: '.dt-buttons', classToRemove: 'btn-secondary' },
-      { selector: '.dt-buttons.btn-group', classToAdd: 'mb-0' },
-      { selector: '.dt-search .form-control', classToRemove: 'form-control-sm' },
-      { selector: '.dt-length .form-select', classToRemove: 'form-select-sm' },
-      { selector: '.dt-length', classToAdd: 'me-0 mb-md-6 mb-6' },
-      {
-        selector: '.dt-layout-end',
-        classToRemove: 'justify-content-between ms-auto',
-        classToAdd: 'justify-content-md-between justify-content-center d-flex flex-wrap gap-4 mb-sm-0 mb-4 mt-0'
-      },
-      {
-        selector: '.dt-layout-start',
-        classToRemove: 'd-md-flex me-auto justify-content-between',
-        classToAdd: 'col-12 col-md-6 d-flex justify-content-center justify-content-md-start gap-2'
-      },
-      { selector: '.dt-layout-table', classToRemove: 'row mt-2' },
-      { selector: '.dt-layout-full', classToRemove: 'col-md col-12', classToAdd: 'table-responsive' }
-    ];
-
-    // Delete record
-    elementsToModify.forEach(({ selector, classToRemove, classToAdd }) => {
-      document.querySelectorAll(selector).forEach(element => {
-        if (classToRemove) {
-          classToRemove.split(' ').forEach(className => element.classList.remove(className));
-        }
-        if (classToAdd) {
-          classToAdd.split(' ').forEach(className => element.classList.add(className));
-        }
-      });
-    });
-  }, 100);
-});
+    $('.dataTables_filter .form-control').removeClass('form-control-sm');
+    $('.dataTables_length .form-select').removeClass('form-select-sm');
+  }, 300);
+})();

@@ -129,6 +129,16 @@
 <script src="{{ asset ('/assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js') }}"></script>
 <script src="{{ asset ('/assets/vendor/libs/moment/moment.js') }}"></script>
 <script src="{{ asset('/assets/js/custom.js?ver='.rand ()) }}"></script>
+
+            <!-- Flatpickr JS -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    flatpickr('.flatpickr-basic', {
+                        dateFormat: 'Y-m-d',
+                        allowInput: true
+                    });
+                });
+            </script>
 @stack('scripts')
 </body>
 </html>

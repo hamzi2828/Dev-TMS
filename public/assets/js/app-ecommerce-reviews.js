@@ -5,19 +5,20 @@
 'use strict';
 
 // apex-chart
-document.addEventListener('DOMContentLoaded', function (e) {
-  let cardColor, shadeColor, labelColor, headingColor, borderColor, bodyBg;
+(function () {
+  let cardColor, shadeColor, labelColor, headingColor;
 
   if (isDarkStyle) {
+    cardColor = config.colors_dark.cardColor;
+    labelColor = config.colors_dark.textMuted;
+    headingColor = config.colors_dark.headingColor;
     shadeColor = 'dark';
   } else {
+    cardColor = config.colors.cardColor;
+    labelColor = config.colors.textMuted;
+    headingColor = config.colors.headingColor;
     shadeColor = '';
   }
-  cardColor = config.colors.cardColor;
-  labelColor = config.colors.textMuted;
-  headingColor = config.colors.headingColor;
-  borderColor = config.colors.borderColor;
-  bodyBg = config.colors.bodyBg;
 
   // Visitor Bar Chart
   // --------------------------------------------------------------------
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       grid: {
         show: false,
         padding: {
-          top: -3,
+          top: -25,
           bottom: -12
         }
       },
@@ -234,30 +235,43 @@ document.addEventListener('DOMContentLoaded', function (e) {
     const visitorBarChart = new ApexCharts(visitorBarChartEl, visitorBarChartConfig);
     visitorBarChart.render();
   }
+})();
+
+// Datatable (jquery)
+$(function () {
+  let borderColor, bodyBg, headingColor;
+
+  if (isDarkStyle) {
+    borderColor = config.colors_dark.borderColor;
+    bodyBg = config.colors_dark.bodyBg;
+    headingColor = config.colors_dark.headingColor;
+  } else {
+    borderColor = config.colors.borderColor;
+    bodyBg = config.colors.bodyBg;
+    headingColor = config.colors.headingColor;
+  }
 
   // Variable declaration for table
-  var dt_customer_review = document.querySelector('.datatables-review'),
+  var dt_customer_review = $('.datatables-review'),
     customerView = 'app-ecommerce-customer-details-overview.html',
     statusObj = {
       Pending: { title: 'Pending', class: 'bg-label-warning' },
       Published: { title: 'Published', class: 'bg-label-success' }
     };
   // reviewer datatable
-  if (dt_customer_review) {
-    const reviewFilter = document.createElement('div');
-    reviewFilter.classList.add('review_filter');
-    var dt_review = new DataTable(dt_customer_review, {
+  if (dt_customer_review.length) {
+    var dt_review = dt_customer_review.DataTable({
       ajax: assetsPath + 'json/app-ecommerce-reviews.json', // JSON file to add data
       columns: [
         // columns according to JSON
+        { data: '' },
         { data: 'id' },
-        { data: 'id', orderable: false, render: DataTable.render.select() },
         { data: 'product' },
         { data: 'reviewer' },
         { data: 'review' },
         { data: 'date' },
         { data: 'status' },
-        { data: 'id' }
+        { data: ' ' }
       ],
       columnDefs: [
         {
@@ -286,128 +300,147 @@ document.addEventListener('DOMContentLoaded', function (e) {
           }
         },
         {
+          // product
           targets: 2,
+          // responsivePriority: 2,
           render: function (data, type, full, meta) {
-            const product = full['product'];
-            const companyName = full['company_name'];
-            const id = full['id'];
-            const image = full['product_image'];
-            let output;
+            var $product = full['product'],
+              $company_name = full['company_name'],
+              $id = full['id'],
+              $image = full['product_image'];
 
-            if (image) {
-              // For Product image
-              output = `
-                <img src="${assetsPath}img/ecommerce-images/${image}" alt="Product-${id}" class="rounded">
-              `;
+            if ($image) {
+              // For Avatar image
+              var $output =
+                '<img src="' +
+                assetsPath +
+                'img/ecommerce-images/' +
+                $image +
+                '" alt="Product-' +
+                $id +
+                '" class="rounded-2">';
             } else {
               // For Avatar badge
-              const stateNum = Math.floor(Math.random() * 6);
-              const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-              const state = states[stateNum];
-              const initials = (product.match(/\b\w/g) || []).slice(0, 2).join('').toUpperCase();
-
-              output = `<span class="avatar-initial rounded bg-label-${state}">${initials}</span>`;
+              var stateNum = Math.floor(Math.random() * 6);
+              var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+              var $state = states[stateNum],
+                $product = full['product'],
+                $initials = $product.match(/\b\w/g) || [];
+              $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
+              $output = '<span class="avatar-initial rounded bg-label-' + $state + '">' + $initials + '</span>';
             }
-
-            // Creates full output for product and company name
-            const rowOutput = `
-              <div class="d-flex justify-content-start align-items-center customer-name">
-                <div class="avatar-wrapper">
-                  <div class="avatar me-4 rounded-2 bg-label-secondary">${output}</div>
-                </div>
-                <div class="d-flex flex-column">
-                  <span class="fw-medium text-nowrap text-heading">${product}</span>
-                  <small>${companyName}</small>
-                </div>
-              </div>`;
-
-            return rowOutput;
+            // Creates full output for row
+            var $row_output =
+              '<div class="d-flex justify-content-start align-items-center customer-name">' +
+              '<div class="avatar-wrapper">' +
+              '<div class="avatar me-4 rounded-2 bg-label-secondary">' +
+              $output +
+              '</div>' +
+              '</div>' +
+              '<div class="d-flex flex-column">' +
+              '<span class="fw-medium text-nowrap text-heading">' +
+              $product +
+              '</span></a>' +
+              '<small>' +
+              $company_name +
+              '</small>' +
+              '</div>' +
+              '</div>';
+            return $row_output;
           }
         },
         {
-          // Reviewer
+          // reviewer
           targets: 3,
           responsivePriority: 1,
           render: function (data, type, full, meta) {
-            const reviewerName = full['reviewer'];
-            const email = full['email'];
-            const avatar = full['avatar'];
-            let output;
+            var $name = full['reviewer'],
+              $email = full['email'],
+              $avatar = full['avatar'];
 
-            if (avatar) {
+            if ($avatar) {
               // For Avatar image
-              output = `<img src="${assetsPath}img/avatars/${avatar}" alt="Avatar" class="rounded-circle">`;
+              var $output =
+                '<img src="' + assetsPath + 'img/avatars/' + $avatar + '" alt="Avatar" class="rounded-circle">';
             } else {
               // For Avatar badge
-              const stateNum = Math.floor(Math.random() * 6);
-              const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
-              const state = states[stateNum];
-              const initials = (reviewerName.match(/\b\w/g) || []).slice(0, 2).join('').toUpperCase();
-              output = `<span class="avatar-initial rounded-circle bg-label-${state}">${initials}</span>`;
+              var stateNum = Math.floor(Math.random() * 6);
+              var states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+              var $state = states[stateNum],
+                $name = full['reviewer'],
+                $initials = $name.match(/\b\w/g) || [];
+              $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
+              $output = '<span class="avatar-initial rounded-circle bg-label-' + $state + '">' + $initials + '</span>';
             }
-
             // Creates full output for row
-            const rowOutput = `
-              <div class="d-flex justify-content-start align-items-center customer-name">
-                <div class="avatar-wrapper">
-                  <div class="avatar avatar-sm me-4">${output}</div>
-                </div>
-                <div class="d-flex flex-column">
-                  <a href="${customerView}"><span class="fw-medium">${reviewerName}</span></a>
-                  <small class="text-nowrap">${email}</small>
-                </div>
-              </div>`;
-
-            return rowOutput;
+            var $row_output =
+              '<div class="d-flex justify-content-start align-items-center customer-name">' +
+              '<div class="avatar-wrapper">' +
+              '<div class="avatar avatar-sm me-4">' +
+              $output +
+              '</div>' +
+              '</div>' +
+              '<div class="d-flex flex-column">' +
+              '<a href="' +
+              customerView +
+              '"><span class="fw-medium">' +
+              $name +
+              '</span></a>' +
+              '<small class="text-nowrap">' +
+              $email +
+              '</small>' +
+              '</div>' +
+              '</div>';
+            return $row_output;
           }
         },
         {
+          // Review
           targets: 4,
           responsivePriority: 2,
           sortable: false,
           render: function (data, type, full, meta) {
-            const num = full['review'];
-            const heading = full['head'];
-            const comment = full['para'];
+            var $num = full['review'];
+            var $heading = full['head'];
+            var $comment = full['para'];
+            var $readOnlyRatings = $('<div class="read-only-ratings ps-0 mb-1"></div>');
 
             function capitalizeFirstLetter(str) {
-              if (typeof str !== 'string' || str.length === 0) {
-                return str; // Return the input as it is if it's not a string or empty
+              if (typeof str !== 'string') {
+                return str; // Return the input as it is if it's not a string
               }
+
+              if (str.length === 0) {
+                return str; // Return an empty string if the input is an empty string
+              }
+
               return str.charAt(0).toUpperCase() + str.slice(1);
             }
 
-            const firstCap = capitalizeFirstLetter(heading);
+            var $firstCap = capitalizeFirstLetter($heading);
+            // Initialize rateYo plugin
+            $readOnlyRatings.rateYo({
+              rating: $num,
+              rtl: isRtl,
+              readOnly: true, // Make the rating read-only
+              starWidth: '24px', // Set the width of each star
+              spacing: '3px', // Spacing between the stars
+              starSvg:
+                '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star-filled" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z" stroke-width="0" /></svg>'
+            });
 
-            // Create the rating element container
-            const readOnlyRatings = document.createElement('div');
-            readOnlyRatings.className = 'read-only-ratings raty';
-            readOnlyRatings.setAttribute('data-number', '5');
-            let r = parseInt(window.Helpers.getCssVar('gray-200', true).slice(1, 3), 16);
-            let g = parseInt(window.Helpers.getCssVar('gray-200', true).slice(3, 5), 16);
-            let b = parseInt(window.Helpers.getCssVar('gray-200', true).slice(5, 7), 16);
-            // Initialize the Raty plugin
-            if (readOnlyRatings) {
-              const ratings = new Raty(readOnlyRatings, {
-                score: num,
-                readOnly: true, // Make the rating read-only
-                starOn:
-                  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' %3E%3Cpath fill='%23FFD700' d='M21.947 9.179a1 1 0 0 0-.868-.676l-5.701-.453l-2.467-5.461a.998.998 0 0 0-1.822-.001L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.213 4.107l-1.49 6.452a1 1 0 0 0 1.53 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4l4.536-4.082c.297-.268.406-.686.278-1.065'/%3E%3C/svg%3E",
-                starOff: `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' %3E%3Cpath fill='rgb(${r},${g},${b})' d='M21.947 9.179a1 1 0 0 0-.868-.676l-5.701-.453l-2.467-5.461a.998.998 0 0 0-1.822-.001L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.213 4.107l-1.49 6.452a1 1 0 0 0 1.53 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4l4.536-4.082c.297-.268.406-.686.278-1.065'/%3E%3C/svg%3E`
-              });
-              ratings.init();
+            var $review =
+              '<div>' +
+              $readOnlyRatings.prop('outerHTML') + // Get the HTML string of the rateYo plugin
+              '<p class="h6 mb-1 text-truncate">' +
+              $firstCap +
+              '</p>' +
+              '<small class="text-break pe-3">' +
+              $comment +
+              '</small>' +
+              '</div>';
 
-              // Generate the HTML for the review
-              const review = `
-              <div>
-                ${readOnlyRatings.outerHTML}
-                <p class="h6 mb-1 text-truncate">${firstCap}</p>
-                <small class="text-break">${comment}</small>
-              </div>
-            `;
-
-              return review;
-            }
+            return $review;
           }
         },
         {
@@ -423,329 +456,274 @@ document.addEventListener('DOMContentLoaded', function (e) {
           // User Status
           targets: 6,
           render: function (data, type, full, meta) {
-            let status = full['status'];
+            var $status = full['status'];
 
             return (
               '<span class="badge ' +
-              statusObj[status].class +
+              statusObj[$status].class +
               '" text-capitalize>' +
-              statusObj[status].title +
+              statusObj[$status].title +
               '</span>'
             );
           }
         },
+
         {
+          // Actions
           targets: -1,
           title: 'Actions',
           searchable: false,
           orderable: false,
           render: function (data, type, full, meta) {
-            return `
-              <div class="text-xxl-center">
-                <div class="dropdown">
-                  <a href="javascript:void(0);" class="btn btn-text-secondary rounded-pill waves-effect btn-icon dropdown-toggle hide-arrow p-0" data-bs-toggle="dropdown">
-                    <i class="icon-base ti tabler-dots-vertical icon-md"></i>
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <a href="javascript:void(0);" class="dropdown-item">Download</a>
-                    <a href="javascript:void(0);" class="dropdown-item">Edit</a>
-                    <a href="javascript:void(0);" class="dropdown-item">Duplicate</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="javascript:void(0);" class="dropdown-item delete-record text-danger">Delete</a>
-                  </div>
-                </div>
-              </div>
-            `;
+            return (
+              '<div class="text-xxl-center">' +
+              '<div class="dropdown">' +
+              '<a href="javascript:;" class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill dropdown-toggle hide-arrow p-0" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical ti-md"></i></a>' +
+              '<div class="dropdown-menu dropdown-menu-end">' +
+              '<a href="javascript:;" class="dropdown-item">Download</a>' +
+              '<a href="javascript:;" class="dropdown-item">Edit</a>' +
+              '<a href="javascript:;" class="dropdown-item">Duplicate</a>' +
+              '<div class="dropdown-divider"></div>' +
+              '<a href="javascript:;" class="dropdown-item delete-record text-danger">Delete</a>' +
+              '</div>' +
+              '</div>' +
+              '</div>'
+            );
           }
         }
       ],
-      select: {
-        style: 'multi',
-        selector: 'td:nth-child(2)'
-      },
       order: [[2, 'asc']],
-      layout: {
-        topStart: {
-          rowClass: 'row m-3 my-0 justify-content-between',
-          features: [
-            {
-              search: {
-                placeholder: 'Search Review',
-                text: '_INPUT_'
-              }
-            }
-          ]
-        },
-        topEnd: {
-          features: [
-            {
-              pageLength: {
-                menu: [10, 25, 50, 100],
-                text: '_MENU_'
-              }
-            },
-            reviewFilter,
-            {
-              buttons: [
-                {
-                  extend: 'collection',
-                  className: 'btn btn-label-primary dropdown-toggle',
-                  text: '<span class="d-flex align-items-center gap-1"><i class="icon-base ti tabler-upload icon-xs"></i> <span class="d-none d-sm-inline-block">Export</span></span>',
-                  buttons: [
-                    {
-                      extend: 'print',
-                      text: `<span class="d-flex align-items-center"><i class="icon-base ti tabler-printer me-1"></i>Print</span>`,
-                      className: 'dropdown-item',
-                      exportOptions: {
-                        columns: [3, 4, 5, 6, 7],
-                        format: {
-                          body: function (inner, coldex, rowdex) {
-                            if (inner.length <= 0) return inner;
-                            const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
-                            let result = '';
-                            el.forEach(item => {
-                              if (item.classList && item.classList.contains('user-name')) {
-                                result += item.lastChild.firstChild.textContent;
-                              } else {
-                                result += item.textContent || item.innerText || '';
-                              }
-                            });
-                            return result;
-                          }
-                        }
-                      },
-                      customize: function (win) {
-                        win.document.body.style.color = headingColor;
-                        win.document.body.style.borderColor = borderColor;
-                        win.document.body.style.backgroundColor = bodyBg;
-                        const table = win.document.body.querySelector('table');
-                        table.classList.add('compact');
-                        table.style.color = 'inherit';
-                        table.style.borderColor = 'inherit';
-                        table.style.backgroundColor = 'inherit';
-                      }
-                    },
-                    {
-                      extend: 'csv',
-                      text: `<span class="d-flex align-items-center"><i class="icon-base ti tabler-file me-1"></i>Csv</span>`,
-                      className: 'dropdown-item',
-                      exportOptions: {
-                        columns: [3, 4, 5, 6, 7],
-                        format: {
-                          body: function (inner, coldex, rowdex) {
-                            if (inner.length <= 0) return inner;
-                            const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
-                            let result = '';
-                            el.forEach(item => {
-                              if (item.classList && item.classList.contains('user-name')) {
-                                result += item.lastChild.firstChild.textContent;
-                              } else {
-                                result += item.textContent || item.innerText || '';
-                              }
-                            });
-                            return result;
-                          }
-                        }
-                      }
-                    },
-                    {
-                      extend: 'excel',
-                      text: `<span class="d-flex align-items-center"><i class="icon-base ti tabler-upload me-1"></i>Excel</span>`,
-                      className: 'dropdown-item',
-                      exportOptions: {
-                        columns: [3, 4, 5, 6, 7],
-                        format: {
-                          body: function (inner, coldex, rowdex) {
-                            if (inner.length <= 0) return inner;
-                            const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
-                            let result = '';
-                            el.forEach(item => {
-                              if (item.classList && item.classList.contains('user-name')) {
-                                result += item.lastChild.firstChild.textContent;
-                              } else {
-                                result += item.textContent || item.innerText || '';
-                              }
-                            });
-                            return result;
-                          }
-                        }
-                      }
-                    },
-                    {
-                      extend: 'pdf',
-                      text: `<span class="d-flex align-items-center"><i class="icon-base ti tabler-file-text me-1"></i>Pdf</span>`,
-                      className: 'dropdown-item',
-                      exportOptions: {
-                        columns: [3, 4, 5, 6, 7],
-                        format: {
-                          body: function (inner, coldex, rowdex) {
-                            if (inner.length <= 0) return inner;
-                            const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
-                            let result = '';
-                            el.forEach(item => {
-                              if (item.classList && item.classList.contains('user-name')) {
-                                result += item.lastChild.firstChild.textContent;
-                              } else {
-                                result += item.textContent || item.innerText || '';
-                              }
-                            });
-                            return result;
-                          }
-                        }
-                      }
-                    },
-                    {
-                      extend: 'copy',
-                      text: `<i class="icon-base ti tabler-copy me-1"></i>Copy`,
-                      className: 'dropdown-item',
-                      exportOptions: {
-                        columns: [3, 4, 5, 6, 7],
-                        format: {
-                          body: function (inner, coldex, rowdex) {
-                            if (inner.length <= 0) return inner;
-                            const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
-                            let result = '';
-                            el.forEach(item => {
-                              if (item.classList && item.classList.contains('user-name')) {
-                                result += item.lastChild.firstChild.textContent;
-                              } else {
-                                result += item.textContent || item.innerText || '';
-                              }
-                            });
-                            return result;
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        bottomStart: {
-          rowClass: 'row mx-3 justify-content-between',
-          features: ['info']
-        },
-        bottomEnd: 'paging'
-      },
+      dom:
+        '<"card-header d-flex align-items-md-center align-items-start py-0 flex-wrap flex-md-row flex-column"' +
+        '<"me-5 ms-n4"f>' +
+        '<"dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-start align-items-sm-center justify-content-md-end pt-0 gap-sm-2 gap-6 flex-wrap flex-sm-row flex-column mb-6 mb-sm-0"l<"review_filter"> <"mx-0 me-md-n3 mt-sm-0"B>>' +
+        '>t' +
+        '<"row mx-2"' +
+        '<"col-sm-12 col-md-6"i>' +
+        '<"col-sm-12 col-md-6"p>' +
+        '>',
+
       language: {
+        sLengthMenu: '_MENU_',
+        search: '',
+        searchPlaceholder: 'Search Review',
         paginate: {
-          next: '<i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-18px"></i>',
-          previous: '<i class="icon-base ti tabler-chevron-left scaleX-n1-rtl icon-18px"></i>',
-          first: '<i class="icon-base ti tabler-chevrons-left scaleX-n1-rtl icon-18px"></i>',
-          last: '<i class="icon-base ti tabler-chevrons-right scaleX-n1-rtl icon-18px"></i>'
+          next: '<i class="ti ti-chevron-right ti-sm"></i>',
+          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
         }
       },
+      // Buttons with Dropdown
+      buttons: [
+        {
+          extend: 'collection',
+          className: 'btn btn-label-secondary dropdown-toggle ms-sm-2 me-3 waves-effect waves-light',
+          text: '<i class="ti ti-upload ti-xs me-2"></i>Export',
+          buttons: [
+            {
+              extend: 'print',
+              text: '<i class="ti ti-printer me-2" ></i>Print',
+              className: 'dropdown-item',
+              exportOptions: {
+                columns: [1, 2, 3, 4, 5, 6],
+                // prevent avatar to be print
+                format: {
+                  body: function (inner, coldex, rowdex) {
+                    if (inner.length <= 0) return inner;
+                    var el = $.parseHTML(inner);
+                    var result = '';
+                    $.each(el, function (index, item) {
+                      if (item.classList !== undefined && item.classList.contains('customer-name')) {
+                        result = result + item.lastChild.firstChild.textContent;
+                      } else if (item.innerText === undefined) {
+                        result = result + item.textContent;
+                      } else result = result + item.innerText;
+                    });
+                    return result;
+                  }
+                }
+              },
+              customize: function (win) {
+                //customize print view for dark
+                $(win.document.body)
+                  .css('color', headingColor)
+                  .css('border-color', borderColor)
+                  .css('background-color', bodyBg);
+                $(win.document.body)
+                  .find('table')
+                  .addClass('compact')
+                  .css('color', 'inherit')
+                  .css('border-color', 'inherit')
+                  .css('background-color', 'inherit');
+              }
+            },
+            {
+              extend: 'csv',
+              text: '<i class="ti ti-file me-2" ></i>Csv',
+              className: 'dropdown-item',
+              exportOptions: {
+                columns: [1, 2, 3, 4, 5, 6],
+                // prevent avatar to be display
+                format: {
+                  body: function (inner, coldex, rowdex) {
+                    if (inner.length <= 0) return inner;
+                    var el = $.parseHTML(inner);
+                    var result = '';
+                    $.each(el, function (index, item) {
+                      if (item.classList !== undefined && item.classList.contains('customer-name')) {
+                        result = result + item.lastChild.firstChild.textContent;
+                      } else if (item.innerText === undefined) {
+                        result = result + item.textContent;
+                      } else result = result + item.innerText;
+                    });
+                    return result;
+                  }
+                }
+              }
+            },
+            {
+              extend: 'excel',
+              text: '<i class="ti ti-file-export me-2"></i>Excel',
+              className: 'dropdown-item',
+              exportOptions: {
+                columns: [1, 2, 3, 4, 5, 6],
+                // prevent avatar to be display
+                format: {
+                  body: function (inner, coldex, rowdex) {
+                    if (inner.length <= 0) return inner;
+                    var el = $.parseHTML(inner);
+                    var result = '';
+                    $.each(el, function (index, item) {
+                      if (item.classList !== undefined && item.classList.contains('customer-name')) {
+                        result = result + item.lastChild.firstChild.textContent;
+                      } else if (item.innerText === undefined) {
+                        result = result + item.textContent;
+                      } else result = result + item.innerText;
+                    });
+                    return result;
+                  }
+                }
+              }
+            },
+            {
+              extend: 'pdf',
+              text: '<i class="ti ti-file-text me-2"></i>Pdf',
+              className: 'dropdown-item',
+              exportOptions: {
+                columns: [1, 2, 3, 4, 5, 6],
+                // prevent avatar to be display
+                format: {
+                  body: function (inner, coldex, rowdex) {
+                    if (inner.length <= 0) return inner;
+                    var el = $.parseHTML(inner);
+                    var result = '';
+                    $.each(el, function (index, item) {
+                      if (item.classList !== undefined && item.classList.contains('customer-name')) {
+                        result = result + item.lastChild.firstChild.textContent;
+                      } else if (item.innerText === undefined) {
+                        result = result + item.textContent;
+                      } else result = result + item.innerText;
+                    });
+                    return result;
+                  }
+                }
+              }
+            },
+            {
+              extend: 'copy',
+              text: '<i class="ti ti-copy me-2"></i>Copy',
+              className: 'dropdown-item',
+              exportOptions: {
+                columns: [1, 2, 3, 4, 5, 6],
+                // prevent avatar to be display
+                format: {
+                  body: function (inner, coldex, rowdex) {
+                    if (inner.length <= 0) return inner;
+                    var el = $.parseHTML(inner);
+                    var result = '';
+                    $.each(el, function (index, item) {
+                      if (item.classList !== undefined && item.classList.contains('customer-name')) {
+                        result = result + item.lastChild.firstChild.textContent;
+                      } else if (item.innerText === undefined) {
+                        result = result + item.textContent;
+                      } else result = result + item.innerText;
+                    });
+                    return result;
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
       // For responsive popup
       responsive: {
         details: {
-          display: DataTable.Responsive.display.modal({
+          display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
-              const data = row.data();
-              return 'Details of ' + data['reviewer'];
+              var data = row.data();
+              return 'Details of ' + data['customer'];
             }
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
-            const data = columns
-              .map(function (col) {
-                return col.title !== '' // Do not show row in modal popup if title is blank (for check box)
-                  ? `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
-                      <td>${col.title}:</td>
-                      <td>${col.data}</td>
-                    </tr>`
-                  : '';
-              })
-              .join('');
+            var data = $.map(columns, function (col, i) {
+              return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
+                ? '<tr data-dt-row="' +
+                    col.rowIndex +
+                    '" data-dt-column="' +
+                    col.columnIndex +
+                    '">' +
+                    '<td>' +
+                    col.title +
+                    ':' +
+                    '</td> ' +
+                    '<td>' +
+                    col.data +
+                    '</td>' +
+                    '</tr>'
+                : '';
+            }).join('');
 
-            if (data) {
-              const div = document.createElement('div');
-              div.classList.add('table-responsive');
-              const table = document.createElement('table');
-              div.appendChild(table);
-              table.classList.add('table');
-              const tbody = document.createElement('tbody');
-              tbody.innerHTML = data;
-              table.appendChild(tbody);
-              return div;
-            }
-            return false;
+            return data ? $('<table class="table"/><tbody />').append(data) : false;
           }
         }
       },
       initComplete: function () {
+        // Adding role filter once table initialized
         this.api()
           .columns(6)
           .every(function () {
-            const column = this;
-            if (reviewFilter) {
-              const select = document.createElement('select');
-              select.className = 'form-select';
-              select.innerHTML = '<option value=""> All </option>';
-              reviewFilter.appendChild(select);
-
-              select.addEventListener('change', function () {
-                const val = select.value ? '^' + select.value + '$' : '';
-                column.search(val, true, false).draw();
+            var column = this;
+            var select = $('<select id="Review" class="form-select"><option value=""> All </option></select>')
+              .appendTo('.review_filter')
+              .on('change', function () {
+                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                column.search(val ? '^' + val + '$' : '', true, false).draw();
               });
 
-              column
-                .data()
-                .unique()
-                .sort()
-                .each(function (d) {
-                  const option = document.createElement('option');
-                  option.value = d;
-                  option.className = 'text-capitalize';
-                  option.textContent = d;
-                  select.appendChild(option);
-                });
-            }
+            column
+              .data()
+              .unique()
+              .sort()
+              .each(function (d, j) {
+                select.append('<option value="' + d + '" class="text-capitalize">' + d + '</option>');
+              });
           });
       }
     });
   }
 
-  //? The 'delete-record' class is necessary for the functionality of the following code.
-  document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('delete-record')) {
-      dt_review.row(e.target.closest('tr')).remove().draw();
-      const modalEl = document.querySelector('.dtr-bs-modal');
-      if (modalEl && modalEl.classList.contains('show')) {
-        const modal = bootstrap.Modal.getInstance(modalEl);
-        modal?.hide();
-      }
-    }
+  // Delete Record
+  $('.datatables-review tbody').on('click', '.delete-record', function () {
+    dt_review.row($(this).parents('tr')).remove().draw();
   });
 
   // Filter form control to default size
-  // ? setTimeout used for reviews table initialization
+  // ? setTimeout used for multilingual table initialization
   setTimeout(() => {
-    const elementsToModify = [
-      { selector: '.dt-buttons .btn', classToRemove: 'btn-secondary', classToAdd: 'btn-label-secondary' },
-      { selector: '.dt-search .form-control', classToRemove: 'form-control-sm', classToAdd: 'ms-0' },
-      { selector: '.dt-search', classToAdd: 'mb-md-6 mb-0' },
-      { selector: '.dt-length .form-select', classToRemove: 'form-select-sm', classToAdd: 'me-md-4 me-0' },
-      { selector: '.dt-layout-table', classToRemove: 'row mt-2' },
-      { selector: '.review_filter', classToAdd: 'me-md-4' },
-      { selector: '.review_filter .form-select', classToAdd: 'w-px-100' },
-      { selector: '.dt-buttons', classToAdd: 'mb-0' },
-      { selector: '.dt-layout-start', classToAdd: 'mt-0' },
-      { selector: '.dt-layout-end', classToAdd: 'd-flex gap-md-0 gap-4 mt-0' },
-      { selector: '.dt-layout-full', classToRemove: 'col-md col-12', classToAdd: 'table-responsive' }
-    ];
-
-    // Delete record
-    elementsToModify.forEach(({ selector, classToRemove, classToAdd }) => {
-      document.querySelectorAll(selector).forEach(element => {
-        if (classToRemove) {
-          classToRemove.split(' ').forEach(className => element.classList.remove(className));
-        }
-        if (classToAdd) {
-          classToAdd.split(' ').forEach(className => element.classList.add(className));
-        }
-      });
-    });
-  }, 100);
+    $('.dataTables_filter .form-control').removeClass('form-control-sm');
+    $('.dataTables_filter').addClass('mb-0 mb-md-6');
+    $('.dataTables_length .form-select').removeClass('form-select-sm');
+    $('.dataTables_length').addClass('ms-n2 me-2 me-sm-0 mb-0 mb-sm-6');
+  }, 300);
 });

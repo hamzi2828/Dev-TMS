@@ -4,7 +4,7 @@
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
+(function () {
   // Cancel Subscription alert
   const cancelSubscription = document.querySelector('.cancel-subscription');
 
@@ -54,4 +54,4 @@ document.addEventListener('DOMContentLoaded', function (e) {
     addressTitle.innerHTML = 'Edit Address'; // reset text
     addressSubTitle.innerHTML = 'Edit your current address';
   };
-});
+})();

@@ -1,9 +1,6 @@
-/* Invoice Print
-******************************************************************************* */
-/* (C) */
 html,
 body {
-  background: var(--bs-white);
+  background: #fff !important;
 }
 
 body > :not(.invoice-print) {
@@ -11,14 +8,17 @@ body > :not(.invoice-print) {
 }
 
 .invoice-print {
-  font-size: 15px;
-  min-inline-size: 768px !important;
+  min-width: 768px !important;
+  font-size: 15px !important;
+}
+.invoice-print svg {
+  fill: #6d6b77 !important;
 }
 
 .invoice-print * {
   color: #6d6b77 !important;
 }
 
-.invoice-print .text-primary * {
-  color: var(--bs-primary) !important;
+.dark-style .invoice-print th {
+  color: #fff !important;
 }

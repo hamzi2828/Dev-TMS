@@ -4,19 +4,24 @@
 
 'use strict';
 (function () {
-  let cardColor, labelColor, fontFamily, headingColor, shadeColor, legendColor, borderColor, barBgColor;
+  let cardColor, labelColor, headingColor, shadeColor, legendColor, borderColor, barBgColor;
   if (isDarkStyle) {
+    cardColor = config.colors_dark.cardColor;
+    labelColor = config.colors_dark.textMuted;
+    legendColor = config.colors_dark.bodyColor;
+    borderColor = config.colors_dark.borderColor;
+    headingColor = config.colors_dark.headingColor;
     barBgColor = '#3d4157';
     shadeColor = 'dark';
   } else {
+    cardColor = config.colors.cardColor;
+    labelColor = config.colors.textMuted;
+    legendColor = config.colors.bodyColor;
+    borderColor = config.colors.borderColor;
+    headingColor = config.colors.headingColor;
     barBgColor = '#efeef0';
     shadeColor = '';
   }
-  cardColor = config.colors.cardColor;
-  labelColor = config.colors.textMuted;
-  legendColor = config.colors.bodyColor;
-  borderColor = config.colors.borderColor;
-  headingColor = config.colors.headingColor;
 
   // Orders last week Bar Chart
   // --------------------------------------------------------------------
@@ -36,7 +41,7 @@
       plotOptions: {
         bar: {
           barHeight: '100%',
-          columnWidth: '7px',
+          columnWidth: '30px',
           startingShape: 'rounded',
           endingShape: 'rounded',
           borderRadius: 4,
@@ -61,7 +66,7 @@
       },
       series: [
         {
-          data: [75, 65, 25, 55, 60, 40, 88]
+          data: [60, 50, 20, 45, 50, 30, 70]
         }
       ],
       legend: {
@@ -227,11 +232,10 @@
       fill: {
         type: 'gradient',
         gradient: {
-          shadeIntensity: 1,
-          opacityFrom: 0.4,
-          gradientToColors: [config.colors.cardColor],
-          opacityTo: 0.1,
-          stops: [0, 100]
+          shade: shadeColor,
+          shadeIntensity: 0.8,
+          opacityFrom: 0.6,
+          opacityTo: 0.25
         }
       },
       dataLabels: {
@@ -243,7 +247,7 @@
       },
       series: [
         {
-          data: [200, 55, 380, 230]
+          data: [200, 55, 400, 250]
         }
       ],
       xaxis: {
@@ -281,7 +285,7 @@
   const revenueGrowthEl = document.querySelector('#revenueGrowth'),
     revenueGrowthConfig = {
       chart: {
-        height: 162,
+        height: 170,
         type: 'bar',
         parentHeightOffset: 0,
         toolbar: {
@@ -294,7 +298,7 @@
           columnWidth: '30%',
           startingShape: 'rounded',
           endingShape: 'rounded',
-          borderRadius: 5,
+          borderRadius: 6,
           distributed: true
         }
       },
@@ -306,8 +310,8 @@
         padding: {
           top: -20,
           bottom: -12,
-          left: -13,
-          right: -3
+          left: -10,
+          right: 0
         }
       },
       colors: [
@@ -342,7 +346,7 @@
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           }
         }
       },
@@ -364,7 +368,7 @@
           options: {
             plotOptions: {
               bar: {
-                columnWidth: '45%'
+                columnWidth: '50%'
               }
             }
           }
@@ -492,7 +496,7 @@
           fontSize: '15px',
           colors: [headingColor],
           fontWeight: '500',
-          fontFamily: fontFamily
+          fontFamily: 'Public Sans'
         }
       },
       series: [
@@ -519,7 +523,7 @@
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           }
         }
       },
@@ -532,7 +536,7 @@
           style: {
             fontSize: '13px',
             colors: labelColor,
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           },
           min: 0,
           max: 60000,
@@ -678,7 +682,8 @@
         },
         markers: {
           height: 12,
-          width: 12
+          width: 12,
+          offsetX: -5
         },
         itemMargin: {
           horizontal: 10
@@ -697,7 +702,7 @@
       grid: {
         show: false,
         padding: {
-          top: -25,
+          top: 0,
           bottom: -5
         }
       },
@@ -708,7 +713,7 @@
           style: {
             colors: [labelColor, labelColor, labelColor, labelColor, labelColor, labelColor],
             fontSize: '13px',
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           }
         }
       },
@@ -821,11 +826,9 @@
       fill: {
         type: 'gradient',
         gradient: {
-          shadeIntensity: 1,
-          opacityFrom: 0.4,
-          gradientToColors: [config.colors.cardColor],
-          opacityTo: 0.1,
-          stops: [0, 100]
+          opacityFrom: 0.6,
+          opacityTo: 0.15,
+          stops: [0, 95, 100]
         }
       },
       xaxis: {

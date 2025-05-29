@@ -92,7 +92,7 @@
   "Create Deal": "Créer une offre",
   "Icons": "Icônes",
   "Tabler": "Tableur",
-  "Font Awesome": "Police géniale",
+  "Fontawesome": "Fontawesome",
   "User interface": "Interface utilisateur",
   "Accordion": "Accordéon",
   "Alerts": "Alertes",
@@ -170,8 +170,5 @@
   "Apps & Pages": "Applications et pages",
   "Components": "Composants",
   "Forms & Tables": "Formulaires et tableaux",
-  "Charts & Maps": "Graphiques et cartes",
-  "Multi Level": "Niveau multiple",
-  "Level 2": "Niveau 2",
-  "Level 3": "Niveau 3"
+  "Charts & Maps": "Graphiques et cartes"
 }

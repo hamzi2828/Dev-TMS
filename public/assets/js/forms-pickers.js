@@ -19,8 +19,7 @@
   // Date
   if (flatpickrDate) {
     flatpickrDate.flatpickr({
-      monthSelectorType: 'static',
-      static: true
+      monthSelectorType: 'static'
     });
   }
 
@@ -28,8 +27,7 @@
   if (flatpickrTime) {
     flatpickrTime.flatpickr({
       enableTime: true,
-      noCalendar: true,
-      static: true
+      noCalendar: true
     });
   }
 
@@ -37,8 +35,7 @@
   if (flatpickrDateTime) {
     flatpickrDateTime.flatpickr({
       enableTime: true,
-      dateFormat: 'Y-m-d H:i',
-      static: true
+      dateFormat: 'Y-m-d H:i'
     });
   }
 
@@ -48,16 +45,14 @@
       weekNumbers: true,
       enableTime: true,
       mode: 'multiple',
-      minDate: 'today',
-      static: true
+      minDate: 'today'
     });
   }
 
   // Range
   if (typeof flatpickrRange != undefined) {
     flatpickrRange.flatpickr({
-      mode: 'range',
-      static: true
+      mode: 'range'
     });
   }
 
@@ -75,8 +70,7 @@
     flatpickrFriendly.flatpickr({
       altInput: true,
       altFormat: 'F j, Y',
-      dateFormat: 'Y-m-d',
-      static: true
+      dateFormat: 'Y-m-d'
     });
   }
 
@@ -92,14 +86,93 @@
           from: fromDate.toISOString().split('T')[0],
           to: toDate.toISOString().split('T')[0]
         }
-      ],
-      static: true
+      ]
     });
   }
 })();
 
 // * Pickers with jQuery dependency (jquery)
 $(function () {
+  // Bootstrap Datepicker
+  // --------------------------------------------------------------------
+  var bsDatepickerBasic = $('#bs-datepicker-basic'),
+    bsDatepickerFormat = $('#bs-datepicker-format'),
+    bsDatepickerRange = $('#bs-datepicker-daterange'),
+    bsDatepickerDisabledDays = $('#bs-datepicker-disabled-days'),
+    bsDatepickerMultidate = $('#bs-datepicker-multidate'),
+    bsDatepickerOptions = $('#bs-datepicker-options'),
+    bsDatepickerAutoclose = $('#bs-datepicker-autoclose'),
+    bsDatepickerInlinedate = $('#bs-datepicker-inline');
+
+  // Basic
+  if (bsDatepickerBasic.length) {
+    bsDatepickerBasic.datepicker({
+      todayHighlight: true,
+      orientation: isRtl ? 'auto right' : 'auto left'
+    });
+  }
+
+  // Format
+  if (bsDatepickerFormat.length) {
+    bsDatepickerFormat.datepicker({
+      todayHighlight: true,
+      format: 'dd/mm/yyyy',
+      orientation: isRtl ? 'auto right' : 'auto left'
+    });
+  }
+
+  // Range
+  if (bsDatepickerRange.length) {
+    bsDatepickerRange.datepicker({
+      todayHighlight: true,
+      orientation: isRtl ? 'auto right' : 'auto left'
+    });
+  }
+
+  // Disabled Days
+  if (bsDatepickerDisabledDays.length) {
+    bsDatepickerDisabledDays.datepicker({
+      todayHighlight: true,
+      daysOfWeekDisabled: [0, 6],
+      orientation: isRtl ? 'auto right' : 'auto left'
+    });
+  }
+
+  // Multiple
+  if (bsDatepickerMultidate.length) {
+    bsDatepickerMultidate.datepicker({
+      multidate: true,
+      todayHighlight: true,
+      orientation: isRtl ? 'auto right' : 'auto left'
+    });
+  }
+
+  // Options
+  if (bsDatepickerOptions.length) {
+    bsDatepickerOptions.datepicker({
+      calendarWeeks: true,
+      clearBtn: true,
+      todayHighlight: true,
+      orientation: isRtl ? 'auto left' : 'auto right'
+    });
+  }
+
+  // Auto close
+  if (bsDatepickerAutoclose.length) {
+    bsDatepickerAutoclose.datepicker({
+      todayHighlight: true,
+      autoclose: true,
+      orientation: isRtl ? 'auto right' : 'auto left'
+    });
+  }
+
+  // Inline picker
+  if (bsDatepickerInlinedate.length) {
+    bsDatepickerInlinedate.datepicker({
+      todayHighlight: true
+    });
+  }
+
   // Bootstrap Daterange Picker
   // --------------------------------------------------------------------
   var bsRangePickerBasic = $('#bs-rangepicker-basic'),
@@ -166,11 +239,11 @@ $(function () {
     });
   }
 
-  // Adding btn-label-primary class and removing btn-default in cancel buttons
-  Array.from(bsRangePickerCancelBtn).forEach(btn => {
-    btn.classList.remove('btn-default');
-    btn.classList.add('btn-label-primary');
-  });
+  // Adding btn-label-secondary class in cancel btn
+  for (var i = 0; i < bsRangePickerCancelBtn.length; i++) {
+    bsRangePickerCancelBtn[i].classList.remove('btn-default');
+    bsRangePickerCancelBtn[i].classList.add('btn-label-primary');
+  }
 
   // jQuery Timepicker
   // --------------------------------------------------------------------
@@ -244,7 +317,7 @@ $(function () {
 
   // classic
   if (classicPicker) {
-    const classicPickr = new Pickr({
+    pickr.create({
       el: classicPicker,
       theme: 'classic',
       default: 'rgba(102, 108, 232, 1)',
@@ -278,7 +351,7 @@ $(function () {
 
   // monolith
   if (monolithPicker) {
-    const monoPickr = new Pickr({
+    pickr.create({
       el: monolithPicker,
       theme: 'monolith',
       default: 'rgba(40, 208, 148, 1)',
@@ -312,7 +385,7 @@ $(function () {
 
   // nano
   if (nanoPicker) {
-    const nanoPickr = new Pickr({
+    pickr.create({
       el: nanoPicker,
       theme: 'nano',
       default: 'rgba(255, 73, 97, 1)',

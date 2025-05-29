@@ -1,6 +1,4 @@
 @charset "UTF-8";
-/* (C) */
-/* Variables */
 @keyframes plyr-progress {
   to {
     background-position: var(--plyr-progress-loading-size, 25px) 0;
@@ -24,7 +22,6 @@
     opacity: 1;
   }
 }
-/* Components */
 .plyr {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -1107,76 +1104,67 @@ a.plyr__control::after, a.plyr__control::before {
   display: none !important;
 }
 
-.plyr {
-  --plyr-color-main: var(--bs-primary);
-  --plyr-focus-visible-color: var(--bs-primary);
-  --plyr-menu-background: var(--bs-white);
-  --plyr-video-control-color-hover: var(--bs-primary-contrast);
-  --plyr-audio-control-color-hover: var(--plyr-video-control-color-hover);
-}
-.plyr .plyr--audio .plyr__controls {
-  padding: 0;
-}
-.plyr.plyr--video .plyr__control:focus-visible, .plyr.plyr--audio .plyr__control:focus-visible {
-  outline: none;
-}
-.plyr.plyr--audio .plyr__progress__buffer {
-  color: var(--bs-gray-200);
-}
-.plyr.plyr--audio .plyr__controls {
-  background-color: var(--bs-paper-bg);
-  color: var(--bs-body-color);
-}
-.plyr.plyr--full-ui.plyr--audio input[type=range]::-webkit-slider-runnable-track, .plyr.plyr--full-ui.plyr--audio input[type=range]::-moz-range-track, .plyr.plyr--full-ui.plyr--audio input[type=range]::-ms-track {
-  background-color: var(--bs-gray-100);
-}
-.plyr .plyr__menu__container .plyr__control[role=menuitemradio]:hover::before, .plyr .plyr__menu__container .plyr__control[role=menuitemradio]:focus-visible::before {
-  background: hsl(216, 15%, 88%);
-}
-.plyr .plyr__menu__container .plyr__control[role=menuitemradio][aria-checked=true]:hover::before, .plyr .plyr__menu__container .plyr__control[role=menuitemradio][aria-checked=true]:focus-visible::before {
-  background: var(--bs-white);
-}
-.plyr .plyr__menu__container .plyr__control[role=menuitemradio][aria-checked=true]:hover::after, .plyr .plyr__menu__container .plyr__control[role=menuitemradio][aria-checked=true]:focus-visible::after {
-  background: var(--bs-primary);
-}
-.plyr input[type=range]::-ms-fill-lower {
-  background: var(--bs-primary);
-}
-.plyr input[type=range]:active::-webkit-slider-thumb {
-  background: var(--bs-primary);
-}
-.plyr input[type=range]:active::-moz-range-thumb {
-  background: var(--bs-primary);
-}
-.plyr input[type=range]:active::-ms-thumb {
-  background: var(--bs-primary);
-}
-.plyr .plyr__tooltip,
-.plyr .plyr__menu__container {
-  box-shadow: none;
-  filter: drop-shadow(0 0.0625rem 0.125rem rgba(0, 0, 0, 0.15));
-}
-.plyr .plyr__controls {
-  flex-wrap: wrap;
-}
-.plyr .plyr__controls .plyr__progress__container {
-  min-inline-size: 3.75rem;
+.plyr__progress__container,
+.plyr__volume input[type=range] {
+  flex: 0 1 auto;
 }
 
-:dir(rtl) .plyr__menu__container {
+.plyr--audio .plyr__controls {
+  padding: 0;
+}
+
+[dir=rtl] .plyr__menu__container {
   direction: rtl;
+  text-align: right;
 }
-:dir(rtl) .plyr__menu__container .plyr__control--forward::after {
-  border-inline-end-color: transparent;
-  border-inline-start-color: rgba(var(--plyr-menu-color, hsl(216, 15%, 34%)), 0.8);
-  inset-inline: auto 5px;
+[dir=rtl] .plyr__menu__container .plyr__control--forward::after {
+  left: 5px;
+  right: auto;
+  border-right-color: rgba(var(--plyr-menu-color, hsl(216, 15%, 34%)), 0.8);
+  border-left-color: transparent;
 }
-:dir(rtl) .plyr__menu__container .plyr__menu__value {
-  padding-inline: calc(var(--plyr-control-spacing, 10px) * 0.7 * 1.5) 1rem;
+[dir=rtl] .plyr__menu__container .plyr__control--forward.plyr__tab-focus::after, [dir=rtl] .plyr__menu__container .plyr__control--forward:hover::after {
+  border-right-color: currentColor;
 }
-:dir(rtl) .plyr__menu__container .plyr__control[role=menuitemradio]::before {
-  margin-inline: 0 var(--plyr-control-spacing, 10px);
+[dir=rtl] .plyr__menu__container .plyr__menu__value {
+  padding-left: 1rem;
+  padding-right: calc(var(--plyr-control-spacing, 10px) * 0.7 * 1.5);
 }
-:dir(rtl) .plyr__menu__container .plyr__control[role=menuitemradio]::after {
-  inset-inline: 0.9375rem auto;
+[dir=rtl] .plyr__menu__container .plyr__control[role=menuitemradio] .plyr__menu__value {
+  margin-right: auto;
+  padding-left: 0;
+}
+[dir=rtl] .plyr__menu__container .plyr__control[role=menuitemradio]::before {
+  margin-left: var(--plyr-control-spacing, 10px);
+  margin-right: 0;
+}
+[dir=rtl] .plyr__menu__container .plyr__control[role=menuitemradio]::after {
+  right: 15px;
+  left: auto;
+}
+
+.light-style .plyr__tooltip {
+  line-height: 1.125;
+  font-size: 0.8125rem;
+}
+
+.dark-style .plyr__tooltip {
+  line-height: 1.125;
+  font-size: 0.8125rem;
+}
+.dark-style .plyr--audio .plyr__controls {
+  color: #acabc1;
+  background-color: #2f3349;
+}
+.dark-style .plyr--full-ui.plyr--audio input[type=range]::-webkit-slider-runnable-track {
+  background-color: rgba(225, 222, 245, 0.1);
+}
+.dark-style .plyr--full-ui.plyr--audio input[type=range]::-moz-range-track {
+  background-color: rgba(225, 222, 245, 0.1);
+}
+.dark-style .plyr--full-ui.plyr--audio input[type=range]::-ms-track {
+  background-color: rgba(225, 222, 245, 0.1);
+}
+.dark-style .plyr--audio .plyr__progress__buffer {
+  color: rgba(225, 222, 245, 0.12);
 }

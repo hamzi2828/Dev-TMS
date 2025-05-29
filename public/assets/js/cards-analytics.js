@@ -4,14 +4,21 @@
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  let cardColor, headingColor, legendColor, labelColor, fontFamily, borderColor;
-  cardColor = config.colors.cardColor;
-  labelColor = config.colors.textMuted;
-  legendColor = config.colors.bodyColor;
-  headingColor = config.colors.headingColor;
-  borderColor = config.colors.borderColor;
-  fontFamily = config.fontFamily;
+(function () {
+  let cardColor, headingColor, legendColor, labelColor, borderColor;
+  if (isDarkStyle) {
+    cardColor = config.colors_dark.cardColor;
+    labelColor = config.colors_dark.textMuted;
+    legendColor = config.colors_dark.bodyColor;
+    headingColor = config.colors_dark.headingColor;
+    borderColor = config.colors_dark.borderColor;
+  } else {
+    cardColor = config.colors.cardColor;
+    labelColor = config.colors.textMuted;
+    legendColor = config.colors.bodyColor;
+    headingColor = config.colors.headingColor;
+    borderColor = config.colors.borderColor;
+  }
 
   // Chart Colors
   const chartColors = {
@@ -91,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           }
         }
       },
@@ -112,19 +119,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
             }
           }
         }
-      ],
-      states: {
-        hover: {
-          filter: {
-            type: 'none'
-          }
-        },
-        active: {
-          filter: {
-            type: 'none'
-          }
-        }
-      }
+      ]
     };
   if (typeof weeklyEarningReportsEl !== undefined && weeklyEarningReportsEl !== null) {
     const weeklyEarningReports = new ApexCharts(weeklyEarningReportsEl, weeklyEarningReportsConfig);
@@ -138,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       series: [85],
       labels: ['Completed Task'],
       chart: {
-        height: 335,
+        height: 360,
         type: 'radialBar'
       },
       plotOptions: {
@@ -159,14 +154,14 @@ document.addEventListener('DOMContentLoaded', function (e) {
               color: labelColor,
               fontSize: '13px',
               fontWeight: '400',
-              fontFamily: fontFamily
+              fontFamily: 'Public Sans'
             },
             value: {
               offsetY: 10,
               color: headingColor,
               fontSize: '38px',
               fontWeight: '400',
-              fontFamily: fontFamily
+              fontFamily: 'Public Sans'
             }
           }
         }
@@ -244,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         }
       ],
       chart: {
-        height: 320,
+        height: 300,
         type: 'radar',
         toolbar: {
           show: false
@@ -303,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             colors: [labelColor, labelColor, labelColor, labelColor, labelColor, labelColor],
             fontSize: '13px',
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           }
         }
       },
@@ -365,11 +360,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
         bar: {
           horizontal: false,
           columnWidth: '40%',
-          borderRadius: 7,
+          borderRadius: 9,
           startingShape: 'rounded',
-          endingShape: 'rounded',
-          borderRadiusApplication: 'around',
-          borderRadiusWhenStacked: 'last'
+          endingShape: 'rounded'
         }
       },
       colors: [config.colors.primary, config.colors.warning],
@@ -387,14 +380,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
         horizontalAlign: 'right',
         position: 'top',
         fontSize: '13px',
-        fontFamily: fontFamily,
+        fontFamily: 'Public Sans',
         markers: {
           height: 12,
           width: 12,
           radius: 12,
           offsetX: -5,
-          offsetY: 2,
-          strokeWidth: 0
+          offsetY: 2
         },
         labels: {
           colors: headingColor
@@ -417,7 +409,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             fontSize: '13px',
             colors: labelColor,
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           }
         },
         axisTicks: {
@@ -433,7 +425,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             fontSize: '13px',
             colors: labelColor,
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           }
         },
         min: -200,
@@ -655,11 +647,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
       fill: {
         type: 'gradient',
         gradient: {
-          shadeIntensity: 1,
-          opacityFrom: 0.4,
-          gradientToColors: [config.colors.cardColor],
-          opacityTo: 0.1,
-          stops: [0, 100]
+          opacityFrom: 0.6,
+          opacityTo: 0.15,
+          stops: [0, 95, 100]
         }
       },
       xaxis: {
@@ -719,7 +709,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       plotOptions: {
         bar: {
           columnWidth: '32%',
-          borderRadiusApplication: 'round',
+          startingShape: 'rounded',
           borderRadius: 6,
           distributed: true,
           dataLabels: {
@@ -747,7 +737,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           fontSize: '15px',
           colors: [headingColor],
           fontWeight: '500',
-          fontFamily: fontFamily
+          fontFamily: 'Public Sans'
         }
       },
       series: [
@@ -774,21 +764,20 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           }
         }
       },
       yaxis: {
         labels: {
           offsetX: -15,
-          offsetY: -5,
           formatter: function (val) {
             return parseInt(val / 1) + 'k';
           },
           style: {
             fontSize: '13px',
             colors: labelColor,
-            fontFamily: fontFamily
+            fontFamily: 'Public Sans'
           },
           min: 0,
           max: 60000,
@@ -895,6 +884,16 @@ document.addEventListener('DOMContentLoaded', function (e) {
   // --------------------------------------------------------------------
   const totalEarningChartEl = document.querySelector('#totalEarningChart'),
     totalEarningChartOptions = {
+      series: [
+        {
+          name: 'Earning',
+          data: [15, 10, 20, 8, 12, 18, 12, 5]
+        },
+        {
+          name: 'Expense',
+          data: [-7, -10, -7, -12, -6, -9, -5, -8]
+        }
+      ],
       chart: {
         height: 175,
         parentHeightOffset: 0,
@@ -902,54 +901,33 @@ document.addEventListener('DOMContentLoaded', function (e) {
         type: 'bar',
         toolbar: { show: false }
       },
-      series: [
-        {
-          name: 'Earning',
-          data: [300, 200, 350, 150, 250, 325, 250, 270]
-        },
-        {
-          name: 'Expense',
-          data: [-180, -225, -180, -280, -125, -200, -125, -150]
-        }
-      ],
       tooltip: {
         enabled: false
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '40%',
-          borderRadius: 7,
-          startingShape: 'rounded',
-          endingShape: 'rounded',
-          borderRadiusApplication: 'around',
-          borderRadiusWhenStacked: 'last'
-        }
-      },
-
-      colors: [config.colors.primary, config.colors.secondary],
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: 'smooth',
-        width: 5,
-        lineCap: 'round',
-        colors: [cardColor]
       },
       legend: {
         show: false
       },
-      colors: [config.colors.primary, config.colors.secondary],
-      fill: {
-        opacity: 1
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '20%',
+          borderRadius: 6,
+          startingShape: 'rounded',
+          endingShape: 'rounded'
+        }
       },
-
+      fill: {
+        opacity: [1, 1]
+      },
+      colors: [config.colors.primary, config.colors.secondary],
+      dataLabels: {
+        enabled: false
+      },
       grid: {
         show: false,
         padding: {
           top: -40,
-          bottom: -40,
+          bottom: -20,
           left: -10,
           right: -2
         }
@@ -972,94 +950,81 @@ document.addEventListener('DOMContentLoaded', function (e) {
       },
       responsive: [
         {
-          breakpoint: 1700,
+          breakpoint: 1468,
           options: {
             plotOptions: {
               bar: {
-                columnWidth: '43%'
+                columnWidth: '22%'
               }
             }
           }
         },
         {
-          breakpoint: 1441,
+          breakpoint: 1197,
           options: {
+            chart: {
+              height: 212
+            },
             plotOptions: {
               bar: {
-                columnWidth: '50%'
+                borderRadius: 8,
+                columnWidth: '26%'
               }
             }
           }
         },
         {
-          breakpoint: 1300,
+          breakpoint: 783,
+          options: {
+            chart: {
+              height: 210
+            },
+            plotOptions: {
+              bar: {
+                borderRadius: 6,
+                columnWidth: '28%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 589,
+          options: {
+            plotOptions: {
+              bar: {
+                columnWidth: '16%'
+              }
+            }
+          }
+        },
+        {
+          breakpoint: 520,
           options: {
             plotOptions: {
               bar: {
                 borderRadius: 6,
-                columnWidth: '60%'
+                columnWidth: '18%'
               }
             }
           }
         },
         {
-          breakpoint: 1200,
+          breakpoint: 426,
           options: {
             plotOptions: {
               bar: {
-                borderRadius: 6,
-                columnWidth: '30%'
+                borderRadius: 5,
+                columnWidth: '20%'
               }
             }
           }
         },
         {
-          breakpoint: 991,
+          breakpoint: 381,
           options: {
             plotOptions: {
               bar: {
-                borderRadius: 6,
-                columnWidth: '35%'
-              }
-            }
-          }
-        },
-        {
-          breakpoint: 850,
-          options: {
-            plotOptions: {
-              bar: {
-                columnWidth: '50%'
-              }
-            }
-          }
-        },
-        {
-          breakpoint: 768,
-          options: {
-            plotOptions: {
-              bar: {
-                columnWidth: '30%'
-              }
-            }
-          }
-        },
-        {
-          breakpoint: 476,
-          options: {
-            plotOptions: {
-              bar: {
-                columnWidth: '43%'
-              }
-            }
-          }
-        },
-        {
-          breakpoint: 394,
-          options: {
-            plotOptions: {
-              bar: {
-                columnWidth: '58%'
+                columnWidth: '24%'
               }
             }
           }
@@ -1100,7 +1065,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
           barHeight: '60%',
           distributed: true,
           startingShape: 'rounded',
-          borderRadiusApplication: 'end',
           borderRadius: 7
         }
       },
@@ -1122,6 +1086,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           bottom: -12
         }
       },
+
       colors: [
         config.colors.primary,
         config.colors.info,
@@ -1139,7 +1104,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           colors: ['#fff'],
           fontWeight: 400,
           fontSize: '13px',
-          fontFamily: fontFamily
+          fontFamily: 'Public Sans'
         },
         formatter: function (val, opts) {
           return horizontalBarChartConfig.labels[opts.dataPointIndex];
@@ -1155,6 +1120,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           data: [35, 20, 14, 12, 10, 9]
         }
       ],
+
       xaxis: {
         categories: ['6', '5', '4', '3', '2', '1'],
         axisBorder: {
@@ -1166,7 +1132,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
         labels: {
           style: {
             colors: labelColor,
-            fontFamily: fontFamily,
             fontSize: '13px'
           },
           formatter: function (val) {
@@ -1179,7 +1144,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         labels: {
           style: {
             colors: [labelColor],
-            fontFamily: fontFamily,
+            fontFamily: 'Public Sans',
             fontSize: '13px'
           }
         }
@@ -1255,7 +1220,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: fontFamily,
+            fontFamily: 'Public Sans',
             fontWeight: 400
           }
         },
@@ -1274,7 +1239,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: fontFamily,
+            fontFamily: 'Public Sans',
             fontWeight: 400
           },
           formatter: function (val) {
@@ -1286,23 +1251,25 @@ document.addEventListener('DOMContentLoaded', function (e) {
         show: true,
         position: 'bottom',
         markers: {
-          size: 5,
-          shape: 'circle'
+          width: 8,
+          height: 8,
+          offsetX: -5,
+          radius: 12
         },
         height: 40,
         offsetY: 0,
         itemMargin: {
-          horizontal: 8,
+          horizontal: 10,
           vertical: 0
         },
         fontSize: '13px',
-        fontFamily: fontFamily,
+        fontFamily: 'Public Sans',
         fontWeight: 400,
         labels: {
           colors: headingColor,
           useSeriesColors: false
         },
-        offsetY: -5
+        offsetY: 10
       },
       grid: {
         strokeDashArray: 6,
@@ -1354,7 +1321,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
   const deliveryExceptionsChartE1 = document.querySelector('#deliveryExceptionsChart'),
     deliveryExceptionsChartConfig = {
       chart: {
-        height: 365,
+        height: 396,
         parentHeightOffset: 0,
         type: 'donut'
       },
@@ -1380,15 +1347,16 @@ document.addEventListener('DOMContentLoaded', function (e) {
         position: 'bottom',
         offsetY: 10,
         markers: {
-          size: 4,
-          strokeWidth: 0
+          width: 8,
+          height: 8,
+          offsetX: -3
         },
         itemMargin: {
           horizontal: 15,
           vertical: 5
         },
         fontSize: '13px',
-        fontFamily: fontFamily,
+        fontFamily: 'Public Sans',
         fontWeight: 400,
         labels: {
           colors: legendColor,
@@ -1411,7 +1379,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               show: true,
               value: {
                 fontSize: '38px',
-                fontFamily: fontFamily,
+                fontFamily: 'Public Sans',
                 color: headingColor,
                 fontWeight: 500,
                 offsetY: -20,
@@ -1421,12 +1389,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
               },
               name: {
                 offsetY: 30,
-                fontFamily: fontFamily
+                fontFamily: 'Public Sans'
               },
               total: {
                 show: true,
                 fontSize: '15px',
-                fontFamily: fontFamily,
+                fontFamily: 'Public Sans',
                 color: legendColor,
                 label: 'AVG. Exceptions',
                 formatter: function (w) {
@@ -1452,4 +1420,4 @@ document.addEventListener('DOMContentLoaded', function (e) {
     const deliveryExceptionsChart = new ApexCharts(deliveryExceptionsChartE1, deliveryExceptionsChartConfig);
     deliveryExceptionsChart.render();
   }
-});
+})();

@@ -1,4 +1,7 @@
 <x-dashboard :title="$title">
+    <!-- Flatpickr CSS -->
+
+
     <!-- Content -->
     <div class="container-p-x flex-grow-1 container-p-y">
         @include('_partials.errors.validation-errors')
@@ -14,13 +17,13 @@
                             <input type="text" class="form-control flatpickr-basic" id="start-date"
                                    name="start-date" value="{{ request ('start-date') }}">
                         </div>
-                        
+
                         <div class="form-group col-md-3 mb-1">
                             <label class="mb-25" for="end-date">End Date</label>
                             <input type="text" class="form-control flatpickr-basic" id="end-date"
                                    name="end-date" value="{{ request ('end-date') }}">
                         </div>
-                        
+
                         <div class="form-group col-2 mt-4">
                             <button type="submit"
                                     class="btn w-100 btn-primary d-block ps-0 pe-0">Search
@@ -29,7 +32,9 @@
                     </div>
                 </form>
             </div>
-            
+
+
+
             @if(count ($account_heads) > 0)
                 <div class="row">
                     <div class="col-12 d-flex justify-content-end">
@@ -46,7 +51,7 @@
                     </div>
                 </div>
             @endif
-            
+
             <div class="table-responsive">
                 <table class="table w-100 table-hover table-responsive table-striped" id="excel-table">
                     <thead class="table-light">
@@ -75,7 +80,7 @@
                                 $running_balance = (new \App\Services\GeneralLedgerService()) -> calculate_running_balance($opening_balance, $account_head -> totalCredit, $account_head -> totalDebit, $account_head);
                                 $netRB += $running_balance;
                             @endphp
-                            
+
                             <tr>
                                 <td>{{ $loop -> iteration }}</td>
                                 <td>{{ $account_head -> name }}</td>

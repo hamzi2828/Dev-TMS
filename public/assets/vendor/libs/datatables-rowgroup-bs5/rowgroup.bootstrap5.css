@@ -1,4 +1,3 @@
-/* (C) */
 table.dataTable tr.dtrg-group th {
   background-color: rgba(0, 0, 0, 0.1);
   text-align: left;
@@ -77,6 +76,12 @@ table.dataTable.table-striped tr.dtrg-level-5 th {
   background-color: transparent;
 }
 
-table.table.dataTable > tbody > tr.group, table.table.dataTable > tbody > tr.group:hover {
-  background-color: var(--bs-gray-100);
+.light-style tr.group,
+.light-style tr.group:hover {
+  background-color: rgba(47, 43, 61, 0.1) !important;
+}
+
+.dark-style tr.group,
+.dark-style tr.group:hover {
+  background-color: rgba(225, 222, 245, 0.1) !important;
 }

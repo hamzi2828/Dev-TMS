@@ -4,22 +4,28 @@
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  let labelColor, headingColor, borderColor, legendColor, fontFamily;
+(function () {
+  let borderColor, labelColor, headingColor, legendColor;
 
-  labelColor = config.colors.textMuted;
-  headingColor = config.colors.headingColor;
-  borderColor = config.colors.borderColor;
-  legendColor = config.colors.bodyColor;
-  fontFamily = config.fontFamily;
+  if (isDarkStyle) {
+    borderColor = config.colors_dark.borderColor;
+    labelColor = config.colors_dark.textMuted;
+    headingColor = config.colors_dark.headingColor;
+    legendColor = config.colors_dark.bodyColor;
+  } else {
+    borderColor = config.colors.borderColor;
+    labelColor = config.colors.textMuted;
+    headingColor = config.colors.headingColor;
+    legendColor = config.colors.bodyColor;
+  }
 
   // Chart Colors
   const chartColors = {
     donut: {
       series1: config.colors.success,
-      series2: 'color-mix(in sRGB, ' + config.colors.success + ' 80%, ' + config.colors.cardColor + ')',
-      series3: 'color-mix(in sRGB, ' + config.colors.success + ' 60%, ' + config.colors.cardColor + ')',
-      series4: 'color-mix(in sRGB, ' + config.colors.success + ' 40%, ' + config.colors.cardColor + ')'
+      series2: '#53D28C',
+      series3: '#7EDDA9',
+      series4: '#A9E9C5'
     },
     line: {
       series1: config.colors.warning,
@@ -68,9 +74,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
         show: true,
         position: 'bottom',
         markers: {
-          size: 4,
-          strokeWidth: 0,
-          shape: 'circle',
+          width: 8,
+          height: 8,
           offsetX: -3
         },
         height: 40,
@@ -79,13 +84,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
           vertical: 0
         },
         fontSize: '15px',
-        fontFamily: fontFamily,
+        fontFamily: 'Public Sans',
         fontWeight: 400,
         labels: {
           colors: headingColor,
           useSeriesColors: false
         },
-        offsetY: 8
+        offsetY: 10
       },
       grid: {
         strokeDashArray: 8,
@@ -111,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: fontFamily,
             fontWeight: 400
           }
         },
@@ -126,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: fontFamily,
+            fontFamily: 'Public Sans',
             fontWeight: 400
           },
           formatter: function (val) {
@@ -138,16 +142,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
         {
           breakpoint: 1400,
           options: {
-            chart: {
-              height: 320
-            },
-            xaxis: {
-              labels: {
-                style: {
-                  fontSize: '10px'
-                }
-              }
-            },
+            chart: { height: 320 },
+            xaxis: { labels: { style: { fontSize: '10px' } } },
             legend: {
               itemMargin: {
                 vertical: 0,
@@ -188,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
   const deliveryExceptionsChartE1 = document.querySelector('#deliveryExceptionsChart'),
     deliveryExceptionsChartConfig = {
       chart: {
-        height: 391,
+        height: 420,
         parentHeightOffset: 0,
         type: 'donut'
       },
@@ -212,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       legend: {
         show: true,
         position: 'bottom',
-        offsetY: 15,
+        offsetY: 10,
         markers: {
           width: 8,
           height: 8,
@@ -220,10 +216,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
         },
         itemMargin: {
           horizontal: 15,
-          vertical: 8
+          vertical: 5
         },
         fontSize: '13px',
-        fontFamily: fontFamily,
+        fontFamily: 'Public Sans',
         fontWeight: 400,
         labels: {
           colors: headingColor,
@@ -231,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         }
       },
       tooltip: {
-        theme: 'dark'
+        theme: false
       },
       grid: {
         padding: {
@@ -246,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
               show: true,
               value: {
                 fontSize: '24px',
-                fontFamily: fontFamily,
+                fontFamily: 'Public Sans',
                 color: headingColor,
                 fontWeight: 500,
                 offsetY: -20,
@@ -256,12 +252,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
               },
               name: {
                 offsetY: 30,
-                fontFamily: fontFamily
+                fontFamily: 'Public Sans'
               },
               total: {
                 show: true,
                 fontSize: '15px',
-                fontFamily: fontFamily,
+                fontFamily: 'Public Sans',
                 color: legendColor,
                 label: 'AVG. Exceptions',
                 formatter: function (w) {
@@ -287,18 +283,21 @@ document.addEventListener('DOMContentLoaded', function (e) {
     const deliveryExceptionsChart = new ApexCharts(deliveryExceptionsChartE1, deliveryExceptionsChartConfig);
     deliveryExceptionsChart.render();
   }
+})();
 
-  // DataTable (js)
-  // --------------------------------------------------------------------
-  const dt_dashboard_table = document.querySelector('.dt-route-vehicles');
+// DataTable (jquery)
+// --------------------------------------------------------------------
+$(function () {
+  // Variable declaration for table
+  var dt_dashboard_table = $('.dt-route-vehicles');
 
   // On route vehicles DataTable
-  if (dt_dashboard_table) {
-    var dt_dashboard = new DataTable(dt_dashboard_table, {
+  if (dt_dashboard_table.length) {
+    var dt_dashboard = dt_dashboard_table.DataTable({
       ajax: assetsPath + 'json/logistics-dashboard.json',
       columns: [
         { data: 'id' },
-        { data: 'id', orderable: false, render: DataTable.render.select() },
+        { data: 'id' },
         { data: 'location' },
         { data: 'start_city' },
         { data: 'end_city' },
@@ -322,8 +321,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
           targets: 1,
           orderable: false,
           searchable: false,
-          responsivePriority: 3,
           checkboxes: true,
+          responsivePriority: 3,
           render: function () {
             return '<input type="checkbox" class="dt-checkboxes form-check-input">';
           },
@@ -332,179 +331,139 @@ document.addEventListener('DOMContentLoaded', function (e) {
           }
         },
         {
+          // Icon and location
           targets: 2,
           responsivePriority: 1,
-          render: (data, type, full) => {
-            const location = full['location'];
-
-            return `
-                  <div class="d-flex justify-content-start align-items-center user-name">
-                      <div class="avatar-wrapper">
-                          <div class="avatar me-4">
-                              <span class="avatar-initial rounded-circle bg-label-secondary">
-                                  <i class="icon-base ti tabler-car icon-lg"></i>
-                              </span>
-                          </div>
-                      </div>
-                      <div class="d-flex flex-column">
-                          <a class="text-heading text-nowrap fw-medium" href="app-logistics-fleet.html">VOL-${location}</a>
-                      </div>
-                  </div>
-              `;
+          render: function (data, type, full, meta) {
+            var $location = full['location'];
+            // Creates full output for row
+            var $row_output =
+              '<div class="d-flex justify-content-start align-items-center user-name">' +
+              '<div class="avatar-wrapper">' +
+              '<div class="avatar me-4">' +
+              '<span class="avatar-initial rounded-circle bg-label-secondary"><i class="ti ti-car ti-28px"></i></span>' +
+              '</div>' +
+              '</div>' +
+              '<div class="d-flex flex-column">' +
+              '<a class="text-heading fw-medium" href="app-logistics-fleet.html">VOL-' +
+              $location +
+              '</a>' +
+              '</div>' +
+              '</div>';
+            return $row_output;
           }
         },
         {
+          // starting route
           targets: 3,
-          render: (data, type, full) => {
-            const { start_city, start_country } = full;
-
-            return `
-                  <div class="text-body">
-                      ${start_city}, ${start_country}
-                  </div>
-              `;
+          render: function (data, type, full, meta) {
+            var $start_city = full['start_city'],
+              $start_country = full['start_country'];
+            var $row_output = '<div class="text-body">' + $start_city + ', ' + $start_country + '</div >';
+            return $row_output;
           }
         },
         {
+          // ending route
           targets: 4,
-          render: (data, type, full) => {
-            const { end_city, end_country } = full;
-
-            return `
-                  <div class="text-body">
-                      ${end_city}, ${end_country}
-                  </div>
-              `;
+          render: function (data, type, full, meta) {
+            var $end_city = full['end_city'],
+              $end_country = full['end_country'];
+            var $row_output = '<div class="text-body">' + $end_city + ', ' + $end_country + '</div >';
+            return $row_output;
           }
         },
         {
+          // warnings
           targets: -2,
-          render: (data, type, full) => {
-            const statusNumber = full['warnings'];
-            const status = {
+          render: function (data, type, full, meta) {
+            var $status_number = full['warnings'];
+            var $status = {
               1: { title: 'No Warnings', class: 'bg-label-success' },
-              2: { title: 'Temperature Not Optimal', class: 'bg-label-warning' },
+              2: {
+                title: 'Temperature Not Optimal',
+                class: 'bg-label-warning'
+              },
               3: { title: 'Ecu Not Responding', class: 'bg-label-danger' },
               4: { title: 'Oil Leakage', class: 'bg-label-info' },
-              5: { title: 'Fuel Problems', class: 'bg-label-primary' }
+              5: { title: 'fuel problems', class: 'bg-label-primary' }
             };
-
-            const warning = status[statusNumber];
-
-            if (!warning) {
+            if (typeof $status[$status_number] === 'undefined') {
               return data;
             }
-
-            return `
-                  <span class="badge rounded ${warning.class}">
-                      ${warning.title}
-                  </span>
-              `;
+            return (
+              '<span class="badge rounded ' +
+              $status[$status_number].class +
+              '">' +
+              $status[$status_number].title +
+              '</span>'
+            );
           }
         },
         {
+          // progress
           targets: -1,
-          render: (data, type, full) => {
-            const progress = full['progress'];
-
-            return `
-                  <div class="d-flex align-items-center">
-                      <div class="progress w-100" style="height: 8px;">
-                          <div
-                              class="progress-bar"
-                              role="progressbar"
-                              style="width: ${progress}%"
-                              aria-valuenow="${progress}"
-                              aria-valuemin="0"
-                              aria-valuemax="100">
-                          </div>
-                      </div>
-                      <div class="text-body ms-3">${progress}%</div>
-                  </div>
-              `;
+          render: function (data, type, full, meta) {
+            var $progress = full['progress'];
+            var $progress_output =
+              '<div class="d-flex align-items-center">' +
+              '<div div class="progress w-100" style="height: 8px;">' +
+              '<div class="progress-bar" role="progressbar" style="width:' +
+              $progress +
+              '%;" aria-valuenow="' +
+              $progress +
+              '" aria-valuemin="0" aria-valuemax="100"></div>' +
+              '</div>' +
+              '<div class="text-body ms-3">' +
+              $progress +
+              '%</div>' +
+              '</div>';
+            return $progress_output;
           }
         }
       ],
-      select: {
-        style: 'multi',
-        selector: 'td:nth-child(2)'
-      },
       order: [2, 'asc'],
-      layout: {
-        topStart: {
-          rowClass: '',
-          features: []
-        },
-        topEnd: {},
-        bottomStart: {
-          rowClass: 'row mx-3 justify-content-between',
-          features: ['info']
-        },
-        bottomEnd: 'paging'
-      },
-      lengthMenu: [5],
+      dom: '<"table-responsive"t><"row d-flex align-items-center"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+      displayLength: 5,
       language: {
         paginate: {
-          next: '<i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-18px"></i>',
-          previous: '<i class="icon-base ti tabler-chevron-left scaleX-n1-rtl icon-18px"></i>',
-          first: '<i class="icon-base ti tabler-chevrons-left scaleX-n1-rtl icon-18px"></i>',
-          last: '<i class="icon-base ti tabler-chevrons-right scaleX-n1-rtl icon-18px"></i>'
+          next: '<i class="ti ti-chevron-right ti-sm"></i>',
+          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
         }
       },
       responsive: {
         details: {
-          display: DataTable.Responsive.display.modal({
+          display: $.fn.dataTable.Responsive.display.modal({
             header: function (row) {
-              const data = row.data();
+              var data = row.data();
               return 'Details of ' + data['location'];
             }
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
-            const data = columns
-              .map(function (col) {
-                return col.title !== '' // Do not show row in modal popup if title is blank (for check box)
-                  ? `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
-                      <td>${col.title}:</td>
-                      <td>${col.data}</td>
-                    </tr>`
-                  : '';
-              })
-              .join('');
+            var data = $.map(columns, function (col, i) {
+              return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
+                ? '<tr data-dt-row="' +
+                    col.rowIndex +
+                    '" data-dt-column="' +
+                    col.columnIndex +
+                    '">' +
+                    '<td>' +
+                    col.title +
+                    ':' +
+                    '</td> ' +
+                    '<td>' +
+                    col.data +
+                    '</td>' +
+                    '</tr>'
+                : '';
+            }).join('');
 
-            if (data) {
-              const table = document.createElement('table');
-              table.classList.add('table', 'datatables-basic', 'mb-2');
-              const tbody = document.createElement('tbody');
-              tbody.innerHTML = data;
-              table.appendChild(tbody);
-              return table;
-            }
-            return false;
+            return data ? $('<table class="table"/><tbody />').append(data) : false;
           }
         }
       }
     });
+    $('.dataTables_info').addClass('pt-0');
   }
-
-  setTimeout(() => {
-    const elementsToModify = [
-      { selector: '.dt-layout-start', classToAdd: 'my-0' },
-      { selector: '.dt-layout-end', classToAdd: 'my-0' },
-      { selector: '.dt-layout-table', classToRemove: 'row mt-2', classToAdd: 'mt-n2' },
-      { selector: '.dt-layout-full', classToRemove: 'col-md col-12', classToAdd: 'table-responsive' }
-    ];
-
-    // Delete record
-    elementsToModify.forEach(({ selector, classToRemove, classToAdd }) => {
-      document.querySelectorAll(selector).forEach(element => {
-        if (classToRemove) {
-          classToRemove.split(' ').forEach(className => element.classList.remove(className));
-        }
-        if (classToAdd) {
-          classToAdd.split(' ').forEach(className => element.classList.add(className));
-        }
-      });
-    });
-  }, 100);
 });

@@ -6,49 +6,49 @@
  */
 
 'use strict';
-/* JS global variables
- !Please use the hex color code (#000) here. Don't use rgba(), hsl(), etc
-*/
+
+// JS global variables
 window.config = {
-  // global color variables for charts except chartjs
   colors: {
-    primary: window.Helpers.getCssVar('primary'),
-    secondary: window.Helpers.getCssVar('secondary'),
-    success: window.Helpers.getCssVar('success'),
-    info: window.Helpers.getCssVar('info'),
-    warning: window.Helpers.getCssVar('warning'),
-    danger: window.Helpers.getCssVar('danger'),
-    dark: window.Helpers.getCssVar('dark'),
-    black: window.Helpers.getCssVar('pure-black'),
-    white: window.Helpers.getCssVar('white'),
-    cardColor: window.Helpers.getCssVar('paper-bg'),
-    bodyBg: window.Helpers.getCssVar('body-bg'),
-    bodyColor: window.Helpers.getCssVar('body-color'),
-    headingColor: window.Helpers.getCssVar('heading-color'),
-    textMuted: window.Helpers.getCssVar('secondary-color'),
-    borderColor: window.Helpers.getCssVar('border-color')
+    primary: '#7367f0',
+    secondary: '#808390',
+    success: '#28c76f',
+    info: '#00bad1',
+    warning: '#ff9f43',
+    danger: '#FF4C51',
+    dark: '#4b4b4b',
+    black: '#000',
+    white: '#fff',
+    cardColor: '#fff',
+    bodyBg: '#f8f7fa',
+    bodyColor: '#6d6b77',
+    headingColor: '#444050',
+    textMuted: '#acaab1',
+    borderColor: '#e6e6e8'
   },
   colors_label: {
-    primary: window.Helpers.getCssVar('primary-bg-subtle'),
-    secondary: window.Helpers.getCssVar('secondary-bg-subtle'),
-    success: window.Helpers.getCssVar('success-bg-subtle'),
-    info: window.Helpers.getCssVar('info-bg-subtle'),
-    warning: window.Helpers.getCssVar('warning-bg-subtle'),
-    danger: window.Helpers.getCssVar('danger-bg-subtle'),
-    dark: window.Helpers.getCssVar('dark-bg-subtle')
+    primary: '#7367f029',
+    secondary: '#a8aaae29',
+    success: '#28c76f29',
+    info: '#00cfe829',
+    warning: '#ff9f4329',
+    danger: '#ea545529',
+    dark: '#4b4b4b29'
   },
-  fontFamily: window.Helpers.getCssVar('font-family-base'),
+  colors_dark: {
+    cardColor: '#2f3349',
+    bodyBg: '#25293c',
+    bodyColor: '#b2b1cb',
+    headingColor: '#cfcce4',
+    textMuted: '#8285a0',
+    borderColor: '#565b79'
+  },
   enableMenuLocalStorage: true // Enable menu state with local storage support
-};
-
-// Template customizer is disabled
-window.templateCustomizer = {
-  // Disable the template customizer
-  showCustomizer: false
 };
 
 window.assetsPath = document.documentElement.getAttribute('data-assets-path');
 window.templateName = document.documentElement.getAttribute('data-template');
+window.rtlSupport = true; // set true for rtl support (rtl + ltr), false for ltr only.
 
 /**
  * TemplateCustomizer
@@ -56,50 +56,52 @@ window.templateName = document.documentElement.getAttribute('data-template');
  * -----------------------------------------------------------------------------------------------
  */
 
+// To use more themes, just push it to THEMES object.
+
+/* TemplateCustomizer.THEMES.push({
+  name: 'theme-raspberry',
+  title: 'Raspberry'
+}); */
+
+// To add more languages, just push it to LANGUAGES object.
+/*
+TemplateCustomizer.LANGUAGES.fr = { ... };
+*/
+
 /**
  * TemplateCustomizer settings
  * -------------------------------------------------------------------------------------
+ * cssPath: Core CSS file path
+ * themesPath: Theme CSS file path
  * displayCustomizer: true(Show customizer), false(Hide customizer)
- * lang: To set default language, Add more languages and set default. Fallback language is 'en'
- * defaultPrimaryColor: '#7367F0' | Set default primary color
- * defaultSkin: 0(Default), 1(Bordered)
- * defaultTheme: 'light', 'dark', 'system'
- * defaultSemiDark: true, false (For dark menu only)
+ * lang: To set default language, Add more langues and set default. Fallback language is 'en'
+ * controls: [ 'rtl', 'style', 'headerType', 'contentLayout', 'layoutCollapsed', 'layoutNavbarOptions', 'themes' ] | Show/Hide customizer controls
+ * defaultTheme: 0(Default), 1(Bordered), 2(Semi Dark)
+ * defaultStyle: 'light', 'dark', 'system' (Mode)
+ * defaultTextDir: 'ltr', 'rtl' (rtlSupport must be true for rtl mode)
  * defaultContentLayout: 'compact', 'wide' (compact=container-xxl, wide=container-fluid)
  * defaultHeaderType: 'static', 'fixed' (for horizontal layout only)
  * defaultMenuCollapsed: true, false (For vertical layout only)
  * defaultNavbarType: 'sticky', 'static', 'hidden' (For vertical layout only)
- * defaultTextDir: 'ltr', 'rtl' (Direction)
  * defaultFooterFixed: true, false (For vertical layout only)
  * defaultShowDropdownOnHover : true, false (for horizontal layout only)
- * controls: [ 'color', 'theme', 'skins', 'semiDark', 'layoutCollapsed', 'layoutNavbarOptions', 'headerType', 'contentLayout', 'rtl' ] | Show/Hide customizer controls
  */
 
 if (typeof TemplateCustomizer !== 'undefined') {
   window.templateCustomizer = new TemplateCustomizer({
+    cssPath: assetsPath + 'vendor/css' + (rtlSupport ? '/rtl' : '') + '/',
+    themesPath: assetsPath + 'vendor/css' + (rtlSupport ? '/rtl' : '') + '/',
     displayCustomizer: true,
     lang: localStorage.getItem('templateCustomizer-' + templateName + '--Lang') || 'en', // Set default language here
-    // defaultPrimaryColor: '#D11BB4',
-    // defaultSkin: 1,
-    // defaultTheme: 'system',
-    // defaultSemiDark: true,
+    // defaultTheme: 2,
+    // defaultStyle: 'system',
+    // defaultTextDir: 'rtl',
     // defaultContentLayout: 'wide',
     // defaultHeaderType: 'static',
     // defaultMenuCollapsed: true,
-    // defaultNavbarType: 'static',
-    // defaultTextDir: 'rtl',
+    // defaultNavbarType: 'sticky',
     // defaultFooterFixed: false,
     // defaultShowDropdownOnHover: false,
-    controls: [
-      'color',
-      'theme',
-      'skins',
-      'semiDark',
-      'layoutCollapsed',
-      'layoutNavbarOptions',
-      'headerType',
-      'contentLayout',
-      'rtl'
-    ]
+    controls: ['rtl', 'style', 'headerType', 'contentLayout', 'layoutCollapsed', 'layoutNavbarOptions', 'themes']
   });
 }

@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           trigger: new FormValidation.plugins.Trigger(),
           bootstrap5: new FormValidation.plugins.Bootstrap5({
             eleValidClass: '',
-            rowSelector: '.form-control-validation'
+            rowSelector: '.col-md-6'
           }),
           submitButton: new FormValidation.plugins.SubmitButton(),
           // Submit the form when all fields are valid
@@ -133,32 +133,23 @@ document.addEventListener('DOMContentLoaded', function (e) {
       };
     }
 
-    // CleaveJ-zen validation
+    // CleaveJS validation
 
     const phoneNumber = document.querySelector('#phoneNumber'),
       zipCode = document.querySelector('#zipCode');
     // Phone Mask
     if (phoneNumber) {
-      phoneNumber.addEventListener('input', event => {
-        const cleanValue = event.target.value.replace(/\D/g, '');
-        phoneNumber.value = formatGeneral(cleanValue, {
-          blocks: [3, 3, 4],
-          delimiters: [' ', ' ']
-        });
-      });
-      registerCursorTracker({
-        input: phoneNumber,
-        delimiter: ' '
+      new Cleave(phoneNumber, {
+        phone: true,
+        phoneRegionCode: 'US'
       });
     }
 
     // Pincode
     if (zipCode) {
-      zipCode.addEventListener('input', event => {
-        zipCode.value = formatNumeral(event.target.value, {
-          delimiter: '',
-          numeral: true
-        });
+      new Cleave(zipCode, {
+        delimiter: '',
+        numeral: true
       });
     }
 
