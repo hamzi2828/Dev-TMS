@@ -149,21 +149,21 @@
                                             <tbody>
                                                 <tr>
                                                     <td>Adult</td>
-                                                    <td>PKR {{ number_format($airlineGroup->sale_per_adult ?? 0, 0) }}</td>
+                                                    <td>  {{ number_format($airlineGroup->sale_per_adult ?? 0, 0) }}</td>
                                                     <td id="adult-seats">{{ $booking->adults }}</td>
-                                                    <td id="adult-total">PKR {{ number_format($booking->adults * $airlineGroup->sale_per_adult, 0) }}</td>
+                                                    <td id="adult-total">  {{ number_format($booking->adults * $airlineGroup->sale_per_adult, 0) }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Children</td>
-                                                    <td>PKR {{ number_format($airlineGroup->sale_per_child ?? 0, 0) }}</td>
+                                                    <td>  {{ number_format($airlineGroup->sale_per_child ?? 0, 0) }}</td>
                                                     <td id="child-seats">{{ $booking->children }}</td>
-                                                    <td id="child-total">PKR {{ number_format($booking->children * $airlineGroup->sale_per_child, 0) }}</td>
+                                                    <td id="child-total">  {{ number_format($booking->children * $airlineGroup->sale_per_child, 0) }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Infants</td>
-                                                    <td>PKR {{ number_format($airlineGroup->sale_per_infant ?? 0, 0) }}</td>
+                                                    <td>  {{ number_format($airlineGroup->sale_per_infant ?? 0, 0) }}</td>
                                                     <td id="infant-seats">{{ $booking->infants }}</td>
-                                                    <td id="infant-total">PKR {{ number_format($booking->infants * $airlineGroup->sale_per_infant, 0) }}</td>
+                                                    <td id="infant-total">  {{ number_format($booking->infants * $airlineGroup->sale_per_infant, 0) }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="3" class="text-end">Discount</td>
@@ -183,7 +183,7 @@
                                                 <tr class="fw-bold border-top">
                                                     <td colspan="2" class="text-end">Total</td>
                                                     <td id="total-seats">{{ $booking->adults + $booking->children + $booking->infants }}</td>
-                                                    <td id="grand-total">PKR <span id="total-price-span">{{ number_format($booking->total_price - ($booking->discount ?? 0), 2) }}</span></td>
+                                                    <td id="grand-total">  <span id="total-price-span">{{ number_format($booking->total_price - ($booking->discount ?? 0), 2) }}</span></td>
                                                 </tr>
 
                                                 <script>
@@ -203,7 +203,7 @@
                                                         }
 
                                                         const newTotalPrice = Math.max(0, (totalPrice - discount)).toFixed(2);
-                                                        document.getElementById('grand-total').innerHTML = `PKR ${newTotalPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+                                                        document.getElementById('grand-total').innerHTML = `  ${newTotalPrice.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
                                                         document.getElementById('total-price-span').textContent = newTotalPrice;
                                                     }
                                                 </script>
@@ -432,10 +432,10 @@
             function formatCurrency(amount) {
                 return new Intl.NumberFormat('en-PK', {
                     style: 'currency',
-                    currency: 'PKR',
+                    currency: ' ',
                     minimumFractionDigits: 0,
                     maximumFractionDigits: 0
-                }).format(amount).replace('PKR', 'PKR ');
+                }).format(amount).replace(' ', '  ');
             }
 
             function createSectionHeader(label) {

@@ -263,19 +263,15 @@ document.addEventListener('DOMContentLoaded', function (e) {
     //? Revalidation third-party libs inputs on change trigger
 
     // Flatpickr
-    const flatpickrDate = document.querySelector('[name="formValidationDob"]');
-
-    if (flatpickrDate) {
-      flatpickrDate.flatpickr({
-        enableTime: false,
-        // See https://flatpickr.js.org/formatting/
-        dateFormat: 'Y/m/d',
-        // After selecting a date, we need to revalidate the field
-        onChange: function () {
-          fv.revalidateField('formValidationDob');
-        }
-      });
-    }
+    flatpickr(formValidationExamples.querySelector('[name="formValidationDob"]'), {
+      enableTime: false,
+      // See https://flatpickr.js.org/formatting/
+      dateFormat: 'Y/m/d',
+      // After selecting a date, we need to revalidate the field
+      onChange: function () {
+        fv.revalidateField('formValidationDob');
+      }
+    });
 
     // Select2 (Country)
     if (formValidationSelect2Ele.length) {
@@ -285,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           placeholder: 'Select country',
           dropdownParent: formValidationSelect2Ele.parent()
         })
-        .on('change', function () {
+        .on('change.select2', function () {
           // Revalidate the color field when an option is chosen
           fv.revalidateField('formValidationSelect2');
         });

@@ -26,7 +26,7 @@ return /******/ (function() { // webpackBootstrap
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   flatpickr: function() { return /* reexport default from dynamic */ flatpickr_dist_flatpickr__WEBPACK_IMPORTED_MODULE_0___default.a; }\n/* harmony export */ });\n/* harmony import */ var flatpickr_dist_flatpickr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flatpickr/dist/flatpickr */ \"./node_modules/flatpickr/dist/flatpickr.js\");\n/* harmony import */ var flatpickr_dist_flatpickr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flatpickr_dist_flatpickr__WEBPACK_IMPORTED_MODULE_0__);\n\ntry {\n  window.flatpickr = (flatpickr_dist_flatpickr__WEBPACK_IMPORTED_MODULE_0___default());\n} catch (e) {}\n\n\n//# sourceURL=webpack://Vuexy/./libs/flatpickr/flatpickr.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   flatpickr: function() { return /* reexport module object */ flatpickr_dist_flatpickr__WEBPACK_IMPORTED_MODULE_0__; }\n/* harmony export */ });\n/* harmony import */ var flatpickr_dist_flatpickr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flatpickr/dist/flatpickr */ \"./node_modules/flatpickr/dist/flatpickr.js\");\n/* harmony import */ var flatpickr_dist_flatpickr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(flatpickr_dist_flatpickr__WEBPACK_IMPORTED_MODULE_0__);\n\n\n\n//# sourceURL=webpack://Vuexy/./libs/flatpickr/flatpickr.js?");
 
 /***/ }),
 

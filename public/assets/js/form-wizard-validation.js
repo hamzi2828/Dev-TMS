@@ -168,7 +168,7 @@
             placeholder: 'Select an country',
             dropdownParent: $this.parent()
           })
-          .on('change', function () {
+          .on('change.select2', function () {
             // Revalidate the color field when an option is chosen
             FormValidation2.revalidateField('formValidationCountry');
           });

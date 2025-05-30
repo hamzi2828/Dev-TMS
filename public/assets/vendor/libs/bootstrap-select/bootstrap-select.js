@@ -26,7 +26,7 @@ return /******/ (function() { // webpackBootstrap
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var bootstrap_select_js_bootstrap_select__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap-select/js/bootstrap-select */ \"./node_modules/bootstrap-select/js/bootstrap-select.js\");\n/* harmony import */ var bootstrap_select_js_bootstrap_select__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_select_js_bootstrap_select__WEBPACK_IMPORTED_MODULE_0__);\n\n\n//# sourceURL=webpack://Vuexy/./libs/bootstrap-select/bootstrap-select.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   bootstrapSelect: function() { return /* reexport default from dynamic */ bootstrap_select_js_bootstrap_select__WEBPACK_IMPORTED_MODULE_0___default.a; }\n/* harmony export */ });\n/* harmony import */ var bootstrap_select_js_bootstrap_select__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap-select/js/bootstrap-select */ \"./node_modules/bootstrap-select/js/bootstrap-select.js\");\n/* harmony import */ var bootstrap_select_js_bootstrap_select__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bootstrap_select_js_bootstrap_select__WEBPACK_IMPORTED_MODULE_0__);\n\n\n\n//# sourceURL=webpack://Vuexy/./libs/bootstrap-select/bootstrap-select.js?");
 
 /***/ }),
 

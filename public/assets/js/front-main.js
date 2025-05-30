@@ -3,8 +3,8 @@
  */
 'use strict';
 
-window.isRtl = window.Helpers.isRtl();
-window.isDarkStyle = window.Helpers.isDarkStyle();
+let isRtl = window.Helpers.isRtl(),
+  isDarkStyle = window.Helpers.isDarkStyle();
 
 (function () {
   const menu = document.getElementById('navbarSupportedContent'),
@@ -28,21 +28,6 @@ window.isDarkStyle = window.Helpers.isDarkStyle();
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
-  });
-
-  // Accordion active class
-  const accordionActiveFunction = function (e) {
-    if (e.type == 'show.bs.collapse' || e.type == 'show.bs.collapse') {
-      e.target.closest('.accordion-item').classList.add('active');
-    } else {
-      e.target.closest('.accordion-item').classList.remove('active');
-    }
-  };
-
-  const accordionTriggerList = [].slice.call(document.querySelectorAll('.accordion'));
-  const accordionList = accordionTriggerList.map(function (accordionTriggerEl) {
-    accordionTriggerEl.addEventListener('show.bs.collapse', accordionActiveFunction);
-    accordionTriggerEl.addEventListener('hide.bs.collapse', accordionActiveFunction);
   });
 
   // If layout is RTL add .dropdown-menu-end class to .dropdown-menu
@@ -102,18 +87,16 @@ window.isDarkStyle = window.Helpers.isDarkStyle();
 
   //Style Switcher (Light/Dark/System Mode)
   let styleSwitcher = document.querySelector('.dropdown-style-switcher');
-  const activeStyle = document.documentElement.getAttribute('data-style');
-
-  // Get style from local storage or use 'system' as default
-  let storedStyle =
-    localStorage.getItem('templateCustomizer-' + templateName + '--Style') || //if no template style then use Customizer style
-    (window.templateCustomizer?.settings?.defaultStyle ?? 'light'); //!if there is no Customizer then use default style as light
 
   // Set style on click of style switcher item if template customizer is enabled
   if (window.templateCustomizer && styleSwitcher) {
+    // Get style from local storage or use 'system' as default
+    let storedStyle =
+      localStorage.getItem('templateCustomizer-' + templateName + '--Style') ||
+      window.templateCustomizer.settings.defaultStyle;
+
     let styleSwitcherItems = [].slice.call(styleSwitcher.children[1].querySelectorAll('.dropdown-item'));
     styleSwitcherItems.forEach(function (item) {
-      item.classList.remove('active');
       item.addEventListener('click', function () {
         let currentStyle = this.getAttribute('data-theme');
         if (currentStyle === 'light') {
@@ -124,12 +107,6 @@ window.isDarkStyle = window.Helpers.isDarkStyle();
           window.templateCustomizer.setStyle('system');
         }
       });
-      setTimeout(() => {
-        if (item.getAttribute('data-theme') === activeStyle) {
-          // Add 'active' class to the item if it matches the activeStyle
-          item.classList.add('active');
-        }
-      }, 1000);
     });
 
     // Update style switcher icon based on the stored style
@@ -143,22 +120,21 @@ window.isDarkStyle = window.Helpers.isDarkStyle();
         fallbackPlacements: ['bottom']
       });
     } else if (storedStyle === 'dark') {
-      styleSwitcherIcon.classList.add('ti-moon-stars');
+      styleSwitcherIcon.classList.add('ti-moon');
       new bootstrap.Tooltip(styleSwitcherIcon, {
         title: 'Dark Mode',
         fallbackPlacements: ['bottom']
       });
     } else {
-      styleSwitcherIcon.classList.add('ti-device-desktop-analytics');
+      styleSwitcherIcon.classList.add('ti-device-desktop');
       new bootstrap.Tooltip(styleSwitcherIcon, {
         title: 'System Mode',
         fallbackPlacements: ['bottom']
       });
     }
+    // Run switchImage function based on the stored style
+    switchImage(storedStyle);
   }
-
-  // Run switchImage function based on the stored style
-  switchImage(storedStyle);
 
   // Update light/dark image based on current style
   function switchImage(style) {

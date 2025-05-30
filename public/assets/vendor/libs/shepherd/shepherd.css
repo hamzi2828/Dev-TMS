@@ -238,38 +238,30 @@
   margin-top: 0.8rem !important;
 }
 .shepherd-element[data-popper-placement=top] {
-  margin-top: -0.8rem !important;
+  margin-bottom: 0.8rem !important;
 }
 .shepherd-element[data-popper-placement=left] {
-  margin-left: -0.8rem !important;
-}
-.shepherd-element[data-popper-placement=left] .shepherd-arrow:before {
-  border-bottom: 0;
-  border-top: 1px solid;
+  margin-right: 0.8rem !important;
 }
 .shepherd-element[data-popper-placement=right] {
   margin-left: 0.8rem !important;
 }
-.shepherd-element[data-popper-placement=right] .shepherd-arrow:before {
-  border-right: 0;
-  border-left: 1px solid;
-}
 
 .shepherd-element {
-  box-shadow: 0 0.1875rem 0.75rem 0 rgba(47, 43, 61, 0.14);
+  box-shadow: 0 0.25rem 1rem rgba(165, 163, 174, 0.45) !important;
   background-color: #fff !important;
 }
 .shepherd-element .shepherd-content .shepherd-header {
   background: #fff !important;
 }
 .shepherd-element .shepherd-content .shepherd-header .shepherd-title {
-  color: #444050 !important;
+  color: #5d596c !important;
 }
 .shepherd-element .shepherd-content .shepherd-header .shepherd-cancel-icon {
-  color: #acaab1 !important;
+  color: #a5a3ae !important;
 }
 .shepherd-element .shepherd-content .shepherd-text {
-  color: #6d6b77 !important;
+  color: #6f6b7d !important;
 }
 .shepherd-element .shepherd-arrow:before {
   background-color: #fff !important;
@@ -277,20 +269,20 @@
 }
 
 .dark-style .shepherd-element {
-  box-shadow: 0 0.1875rem 0.75rem 0 rgba(19, 17, 32, 0.2);
+  box-shadow: 0 0.25rem 1rem rgba(15, 20, 34, 0.55) !important;
   background: #2f3349 !important;
 }
 .dark-style .shepherd-element .shepherd-content .shepherd-header {
   background: #2f3349 !important;
 }
 .dark-style .shepherd-element .shepherd-content .shepherd-header .shepherd-title {
-  color: #cfcde4 !important;
+  color: #cfd3ec !important;
 }
 .dark-style .shepherd-element .shepherd-content .shepherd-header .shepherd-cancel-icon {
-  color: #76778e !important;
+  color: #7983bb !important;
 }
 .dark-style .shepherd-element .shepherd-content .shepherd-text {
-  color: #acabc1 !important;
+  color: #b6bee3 !important;
 }
 .dark-style .shepherd-arrow:before {
   background-color: #2f3349 !important;
@@ -299,9 +291,6 @@
 
 [dir=rtl] .shepherd-element .btn-next {
   margin-right: 0.75rem;
-}
-[dir=rtl] .shepherd-element[data-popper-placement=left] {
-  margin-left: -0.8rem !important;
 }
 
 @media (max-width: 575.98px) {

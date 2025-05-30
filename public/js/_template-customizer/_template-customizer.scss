@@ -102,7 +102,6 @@ $open-customizer-primary-color: var(--bs-primary);
   .template-customizer-open-btn {
     position: absolute;
     top: $open-btn-top;
-    display: none;
 
     @media (max-width: 991.98px) {
       top: $open-btn-top-md;

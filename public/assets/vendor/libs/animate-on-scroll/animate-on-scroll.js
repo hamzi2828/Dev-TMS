@@ -36,7 +36,7 @@ eval("!function(e,t){ true?module.exports=t():0}(this,function(){return function
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   AOS: function() { return /* reexport default from dynamic */ aos_dist_aos__WEBPACK_IMPORTED_MODULE_0___default.a; }\n/* harmony export */ });\n/* harmony import */ var aos_dist_aos__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! aos/dist/aos */ \"./node_modules/aos/dist/aos.js\");\n/* harmony import */ var aos_dist_aos__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(aos_dist_aos__WEBPACK_IMPORTED_MODULE_0__);\n\ntry {\n  window.AOS = (aos_dist_aos__WEBPACK_IMPORTED_MODULE_0___default());\n} catch (e) {}\n\n\n//# sourceURL=webpack://Vuexy/./libs/animate-on-scroll/animate-on-scroll.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   AOS: function() { return /* reexport module object */ aos_dist_aos__WEBPACK_IMPORTED_MODULE_0__; }\n/* harmony export */ });\n/* harmony import */ var aos_dist_aos__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! aos/dist/aos */ \"./node_modules/aos/dist/aos.js\");\n/* harmony import */ var aos_dist_aos__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(aos_dist_aos__WEBPACK_IMPORTED_MODULE_0__);\n\n\n\n//# sourceURL=webpack://Vuexy/./libs/animate-on-scroll/animate-on-scroll.js?");
 
 /***/ })
 

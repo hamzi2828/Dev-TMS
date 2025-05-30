@@ -22,7 +22,7 @@
   // Donut Chart Colors
   const chartColors = {
     donut: {
-      series1: '#209F59',
+      series1: '#22A95E',
       series2: '#24B364',
       series3: config.colors.success,
       series4: '#53D28C',
@@ -34,8 +34,8 @@
   const leadsReportChartEl = document.querySelector('#leadsReportChart'),
     leadsReportChartConfig = {
       chart: {
-        height: 170,
-        width: 150,
+        height: 157,
+        width: 130,
         parentHeightOffset: 0,
         type: 'donut'
       },
@@ -72,15 +72,15 @@
       plotOptions: {
         pie: {
           donut: {
-            size: '70%',
+            size: '75%',
             labels: {
               show: true,
               value: {
-                fontSize: '1.125rem',
+                fontSize: '1.5rem',
                 fontFamily: 'Public Sans',
                 color: headingColor,
                 fontWeight: 500,
-                offsetY: -20,
+                offsetY: -15,
                 formatter: function (val) {
                   return parseInt(val) + '%';
                 }
@@ -91,7 +91,7 @@
               },
               total: {
                 show: true,
-                fontSize: '.9375rem',
+                fontSize: '.7rem',
                 label: 'Total',
                 color: labelColor,
                 formatter: function (w) {
@@ -113,7 +113,7 @@
   const horizontalBarChartEl = document.querySelector('#horizontalBarChart'),
     horizontalBarChartConfig = {
       chart: {
-        height: 320,
+        height: 270,
         type: 'bar',
         toolbar: {
           show: false
@@ -155,14 +155,11 @@
         config.colors.danger,
         config.colors.warning
       ],
-      fill: {
-        opacity: [1, 1, 1, 1, 1, 1]
-      },
       dataLabels: {
         enabled: true,
         style: {
           colors: ['#fff'],
-          fontWeight: 400,
+          fontWeight: 200,
           fontSize: '13px',
           fontFamily: 'Public Sans'
         },
@@ -192,8 +189,7 @@
         labels: {
           style: {
             colors: labelColor,
-            fontSize: '13px',
-            fontFamily: 'Public Sans'
+            fontSize: '13px'
           },
           formatter: function (val) {
             return `${val}%`;
@@ -237,14 +233,14 @@
   function radialBarChart(color, value, show) {
     const radialBarChartOpt = {
       chart: {
-        height: show == 'true' ? 58 : 48,
-        width: show == 'true' ? 58 : 38,
+        height: show == 'true' ? 58 : 53,
+        width: show == 'true' ? 58 : 43,
         type: 'radialBar'
       },
       plotOptions: {
         radialBar: {
           hollow: {
-            size: show == 'true' ? '50%' : '25%'
+            size: show == 'true' ? '45%' : '33%'
           },
           dataLabels: {
             show: show == 'true' ? true : false,
@@ -296,11 +292,11 @@
   // Variable declaration for table
   var dt_academy_course = $('.datatables-academy-course'),
     logoObj = {
-      angular: '<span class="badge bg-label-danger rounded p-1_5"><i class="ti ti-brand-angular ti-28px"></i></span>',
-      figma: '<span class="badge bg-label-warning rounded p-1_5"><i class="ti ti-brand-figma ti-28px"></i></span>',
-      react: '<span class="badge bg-label-info rounded p-1_5"><i class="ti ti-brand-react-native ti-28px"></i></span>',
-      art: '<span class="badge bg-label-success rounded p-1_5"><i class="ti ti-color-swatch ti-28px"></i></span>',
-      fundamentals: '<span class="badge bg-label-primary rounded p-1_5"><i class="ti ti-diamond ti-28px"></i></span>'
+      angular: '<span class="badge bg-label-danger p-2"><i class="ti ti-brand-angular ti-md"></i></span>',
+      figma: '<span class="badge bg-label-warning p-2"><i class="ti ti-brand-figma ti-md"></i></span>',
+      react: '<span class="badge bg-label-info p-2"><i class="ti ti-brand-react-native ti-md"></i></span>',
+      art: '<span class="badge bg-label-success p-2"><i class="ti ti-color-swatch ti-md"></i></span>',
+      fundamentals: '<span class="badge bg-label-primary p-2"><i class="ti ti-diamond ti-md"></i></span>'
     };
 
   // orders datatable
@@ -367,11 +363,11 @@
             // Creates full output for row
             var $row_output =
               '<div class="d-flex align-items-center">' +
-              '<span class="me-4">' +
+              '<span class="me-3">' +
               logoObj[$logo] +
               '</span>' +
               '<div>' +
-              '<a class="text-heading text-truncate fw-medium mb-2 text-wrap" href="app-academy-course-details.html">' +
+              '<a class="text-body text-truncate fw-medium mb-2 text-wrap" href="app-academy-course-details.html">' +
               $course +
               '</a>' +
               '<div class="d-flex align-items-center mt-1">' +
@@ -380,9 +376,9 @@
               $output +
               '</div>' +
               '</div>' +
-              '<small class="text-nowrap text-heading">' +
+              '<span class="text-nowrap">' +
               $user +
-              '</small>' +
+              '</span>' +
               '</div>' +
               '</div>' +
               '</div>';
@@ -397,7 +393,7 @@
             var Hs = Math.floor(duration.asHours());
             var minutes = Math.floor(duration.asMinutes()) - Hs * 60;
             var formattedTime = Hs + 'h ' + minutes + 'm';
-            return '<span class="fw-medium text-nowrap text-heading">' + formattedTime + '</span>';
+            return '<span class="h6 mb-0 text-nowrap">' + formattedTime + '</span>';
           }
         },
         {
@@ -409,7 +405,7 @@
 
             return (
               '<div class="d-flex align-items-center gap-3">' +
-              '<p class="fw-medium mb-0 text-heading">' +
+              '<p class="h6 mb-0">' +
               $status_number +
               '</p>' +
               '<div class="progress w-100" style="height: 8px;">' +
@@ -419,7 +415,7 @@
               $status_number +
               '" aria-valuemin="0" aria-valuemax="100"></div>' +
               '</div>' +
-              '<small>' +
+              '<small class="text-muted">' +
               $average_number +
               '</small></div>'
             );
@@ -436,17 +432,17 @@
             return (
               '<div class="d-flex align-items-center justify-content-between">' +
               '<div class="w-px-50 d-flex align-items-center">' +
-              '<i class="ti ti-users ti-lg me-2 text-primary"></i><span>' +
+              '<i class="ti ti-users ti-sm me-2 text-primary"></i>' +
               $user_number +
-              '</span></div>' +
+              '</div>' +
               '<div class="w-px-50 d-flex align-items-center">' +
-              '<i class="ti ti-book ti-lg me-2 text-info"></i><span>' +
+              '<i class="ti ti-book ti-sm me-2 text-info"></i>' +
               $note +
-              '</span></div>' +
+              '</div>' +
               '<div class="w-px-50 d-flex align-items-center">' +
-              '<i class="ti ti-video ti-lg me-2 text-danger"></i><span>' +
+              '<i class="ti ti-video ti-sm me-2 text-danger" ></i>' +
               $view +
-              '</span></div>' +
+              '</div>' +
               '</div>'
             );
           }
@@ -456,19 +452,15 @@
       dom:
         '<"card-header py-sm-0"<"head-label text-center">f' +
         '>t' +
-        '<"row mx-md-4 flex-column flex-md-row align-items-center"' +
-        '<"col-sm-6 col-12 text-center text-md-start pb-2 pb-xl-0 px-0"i>' +
-        '<"col-sm-6 col-12 d-flex justify-content-center justify-content-md-end px-0"p>' +
+        '<"row mx-4"' +
+        '<"col-sm-6 col-12 text-center text-xl-start pb-2 pb-xl-0 px-0"i>' +
+        '<"col-sm-6 col-12 d-flex justify-content-center justify-content-xl-end px-0"p>' +
         '>',
       lengthMenu: [5],
       language: {
         sLengthMenu: '_MENU_',
         search: '',
-        searchPlaceholder: 'Search Course',
-        paginate: {
-          next: '<i class="ti ti-chevron-right ti-sm"></i>',
-          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
-        }
+        searchPlaceholder: 'Course Name'
       },
       // Buttons with Dropdown
 

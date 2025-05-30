@@ -70,6 +70,7 @@
         Route::get('/completed-Bookings', [MyBookingController::class, 'completedBookings'])->name('myBookings.completed');
         Route::get('/confirm-Bookings', [MyBookingController::class, 'confirmBookings'])->name('myBookings.confirmBooking');
         Route::get('/cancel-Bookings', [MyBookingController::class, 'cancelBookings'])->name('myBookings.canceleBooking');
+        Route::get('/myLedger', [MyBookingController::class, 'myLedger'])->name('myBookings.myLedger');
 
 
 

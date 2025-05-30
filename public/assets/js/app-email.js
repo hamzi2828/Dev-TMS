@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         modules: {
           toolbar: '.email-editor-toolbar'
         },
-        placeholder: 'Message ',
+        placeholder: 'Write your message... ',
         theme: 'snow'
       });
     }

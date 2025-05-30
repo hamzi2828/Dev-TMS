@@ -26,7 +26,7 @@ return /******/ (function() { // webpackBootstrap
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   Quill: function() { return /* reexport default from dynamic */ quill_dist_quill__WEBPACK_IMPORTED_MODULE_0___default.a; }\n/* harmony export */ });\n/* harmony import */ var quill_dist_quill__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! quill/dist/quill */ \"./node_modules/quill/dist/quill.js\");\n/* harmony import */ var quill_dist_quill__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(quill_dist_quill__WEBPACK_IMPORTED_MODULE_0__);\n\ntry {\n  window.Quill = (quill_dist_quill__WEBPACK_IMPORTED_MODULE_0___default());\n} catch (e) {}\n\n\n//# sourceURL=webpack://Vuexy/./libs/quill/quill.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   Quill: function() { return /* reexport default from dynamic */ quill_dist_quill__WEBPACK_IMPORTED_MODULE_0___default.a; }\n/* harmony export */ });\n/* harmony import */ var quill_dist_quill__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! quill/dist/quill */ \"./node_modules/quill/dist/quill.js\");\n/* harmony import */ var quill_dist_quill__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(quill_dist_quill__WEBPACK_IMPORTED_MODULE_0__);\n\n\n\n//# sourceURL=webpack://Vuexy/./libs/quill/quill.js?");
 
 /***/ }),
 

@@ -26,7 +26,7 @@ return /******/ (function() { // webpackBootstrap
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   ClipboardJS: function() { return /* reexport default from dynamic */ clipboard__WEBPACK_IMPORTED_MODULE_0___default.a; }\n/* harmony export */ });\n/* harmony import */ var clipboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! clipboard */ \"./node_modules/clipboard/dist/clipboard.js\");\n/* harmony import */ var clipboard__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(clipboard__WEBPACK_IMPORTED_MODULE_0__);\n\ntry {\n  window.ClipboardJS = (clipboard__WEBPACK_IMPORTED_MODULE_0___default());\n} catch (e) {}\n\n\n//# sourceURL=webpack://Vuexy/./libs/clipboard/clipboard.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   ClipboardJS: function() { return /* reexport module object */ clipboard_dist_clipboard__WEBPACK_IMPORTED_MODULE_0__; }\n/* harmony export */ });\n/* harmony import */ var clipboard_dist_clipboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! clipboard/dist/clipboard */ \"./node_modules/clipboard/dist/clipboard.js\");\n/* harmony import */ var clipboard_dist_clipboard__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(clipboard_dist_clipboard__WEBPACK_IMPORTED_MODULE_0__);\n\n\n\n//# sourceURL=webpack://Vuexy/./libs/clipboard/clipboard.js?");
 
 /***/ }),
 

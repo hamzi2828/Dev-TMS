@@ -104,8 +104,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
             showCancelButton: true,
             confirmButtonText: 'Yes',
             customClass: {
-              confirmButton: 'btn btn-primary me-2 waves-effect waves-light',
-              cancelButton: 'btn btn-label-secondary waves-effect waves-light'
+              confirmButton: 'btn btn-primary me-2',
+              cancelButton: 'btn btn-label-secondary'
             },
             buttonsStyling: false
           }).then(function (result) {
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 title: 'Deleted!',
                 text: 'Your file has been deleted.',
                 customClass: {
-                  confirmButton: 'btn btn-success waves-effect waves-light'
+                  confirmButton: 'btn btn-success'
                 }
               });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 text: 'Deactivation Cancelled!!',
                 icon: 'error',
                 customClass: {
-                  confirmButton: 'btn btn-success waves-effect waves-light'
+                  confirmButton: 'btn btn-success'
                 }
               });
             }

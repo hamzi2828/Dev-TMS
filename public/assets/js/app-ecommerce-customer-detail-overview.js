@@ -23,6 +23,7 @@ $(function () {
       columns: [
         // columns according to JSON
         { data: '' },
+        { data: 'id' },
         { data: 'order' },
         { data: 'date' },
         { data: 'status' },
@@ -42,18 +43,32 @@ $(function () {
           }
         },
         {
-          // order order number
+          // For Checkboxes
           targets: 1,
+          orderable: false,
+          searchable: false,
+          responsivePriority: 3,
+          checkboxes: true,
+          render: function () {
+            return '<input type="checkbox" class="dt-checkboxes form-check-input">';
+          },
+          checkboxes: {
+            selectAllRender: '<input type="checkbox" class="form-check-input">'
+          }
+        },
+        {
+          // order order number
+          targets: 2,
           responsivePriority: 4,
           render: function (data, type, full, meta) {
             var $id = full['order'];
 
-            return "<a href='" + order_details + "'><span>#" + $id + '</span></a>';
+            return "<a href='" + order_details + "' class='fw-medium'><span>#" + $id + '</span></a>';
           }
         },
         {
           // date
-          targets: 2,
+          targets: 3,
           render: function (data, type, full, meta) {
             var date = new Date(full.date); // convert the date string to a Date object
             var formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -62,7 +77,7 @@ $(function () {
         },
         {
           // status
-          targets: 3,
+          targets: 4,
           render: function (data, type, full, meta) {
             var $status = full['status'];
 
@@ -77,7 +92,7 @@ $(function () {
         },
         {
           // spent
-          targets: 4,
+          targets: 5,
           render: function (data, type, full, meta) {
             var $spent = full['spent'];
 
@@ -93,7 +108,7 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="text-xxl-center">' +
-              '<button class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>' +
+              '<button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical"></i></button>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item">View</a>' +
               '<a href="javascript:;" class="dropdown-item  delete-record">Delete</a>' +
@@ -103,23 +118,19 @@ $(function () {
           }
         }
       ],
-      order: [[1, 'desc']],
+      order: [[2, 'desc']],
       dom:
-        '<"card-header flex-column flex-md-row py-0 mt-6 mt-md-0"<"head-label text-center pt-2 pt-md-0">f' +
+        '<"card-header flex-column flex-md-row py-2"<"head-label text-center pt-2 pt-md-0">f' +
         '>t' +
-        '<"row mx-6"' +
-        '<"col-md-12 col-xxl-6 text-center text-xl-start pb-2 pb-xxl-0 pe-0"i>' +
-        '<"col-md-12 col-xxl-6"p>' +
+        '<"row mx-4"' +
+        '<"col-md-12 col-xl-6 text-center text-xl-start pb-2 pb-lg-0 pe-0"i>' +
+        '<"col-md-12 col-xl-6 d-flex justify-content-center justify-content-xl-end"p>' +
         '>',
       lengthMenu: [6, 30, 50, 70, 100],
       language: {
         sLengthMenu: '_MENU_',
         search: '',
-        searchPlaceholder: 'Search order',
-        paginate: {
-          next: '<i class="ti ti-chevron-right ti-sm"></i>',
-          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
-        }
+        searchPlaceholder: 'Search order'
       },
       // Buttons with Dropdown
 

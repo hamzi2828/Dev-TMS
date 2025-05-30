@@ -138,3 +138,19 @@
         </div>
     </td>
 </tr>
+
+
+<tr>
+    <td></td>
+    <td>
+        <h6 class="mb-0">My Ledger</h6>
+    </td>
+    <td>
+        <div class="form-check form-check-success">
+            <input type="checkbox" class="form-check-input" name="permission[]"
+                   value="my-ledger"
+                   id="my-ledger" @checked(in_array ('my-ledger', $role -> permissions()))>
+            <label class="form-check-label" for="my-ledger">My Ledger</label>
+        </div>
+    </td>
+</tr>

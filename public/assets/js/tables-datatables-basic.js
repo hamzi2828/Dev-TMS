@@ -97,19 +97,15 @@ document.addEventListener('DOMContentLoaded', function (e) {
     });
 
     // FlatPickr Initialization & Validation
-    const flatpickrDate = document.querySelector('[name="basicDate"]');
-
-    if (flatpickrDate) {
-      flatpickrDate.flatpickr({
-        enableTime: false,
-        // See https://flatpickr.js.org/formatting/
-        dateFormat: 'm/d/Y',
-        // After selecting a date, we need to revalidate the field
-        onChange: function () {
-          fv.revalidateField('basicDate');
-        }
-      });
-    }
+    flatpickr(formAddNewRecord.querySelector('[name="basicDate"]'), {
+      enableTime: false,
+      // See https://flatpickr.js.org/formatting/
+      dateFormat: 'm/d/Y',
+      // After selecting a date, we need to revalidate the field
+      onChange: function () {
+        fv.revalidateField('basicDate');
+      }
+    });
   })();
 });
 
@@ -244,7 +240,7 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical ti-md"></i></a>' +
+              '<a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="text-primary ti ti-dots-vertical"></i></a>' +
               '<ul class="dropdown-menu dropdown-menu-end m-0">' +
               '<li><a href="javascript:;" class="dropdown-item">Details</a></li>' +
               '<li><a href="javascript:;" class="dropdown-item">Archive</a></li>' +
@@ -252,26 +248,20 @@ $(function () {
               '<li><a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a></li>' +
               '</ul>' +
               '</div>' +
-              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ti ti-pencil ti-md"></i></a>'
+              '<a href="javascript:;" class="btn btn-sm btn-icon item-edit"><i class="text-primary ti ti-pencil"></i></a>'
             );
           }
         }
       ],
       order: [[2, 'desc']],
-      dom: '<"card-header flex-column flex-md-row"<"head-label text-center"><"dt-action-buttons text-end pt-6 pt-md-0"B>><"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+      dom: '<"card-header flex-column flex-md-row"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
       displayLength: 7,
       lengthMenu: [7, 10, 25, 50, 75, 100],
-      language: {
-        paginate: {
-          next: '<i class="ti ti-chevron-right ti-sm"></i>',
-          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
-        }
-      },
       buttons: [
         {
           extend: 'collection',
-          className: 'btn btn-label-primary dropdown-toggle me-4 waves-effect waves-light border-none',
-          text: '<i class="ti ti-file-export ti-xs me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
+          className: 'btn btn-label-primary dropdown-toggle me-2',
+          text: '<i class="ti ti-file-export me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
           buttons: [
             {
               extend: 'print',
@@ -410,7 +400,7 @@ $(function () {
         },
         {
           text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Add New Record</span>',
-          className: 'create-new btn btn-primary waves-effect waves-light'
+          className: 'create-new btn btn-primary'
         }
       ],
       responsive: {
@@ -444,9 +434,6 @@ $(function () {
             return data ? $('<table class="table"/><tbody />').append(data) : false;
           }
         }
-      },
-      initComplete: function (settings, json) {
-        $('.card-header').after('<hr class="my-0">');
       }
     });
     $('div.head-label').html('<h5 class="card-title mb-0">DataTable with Buttons</h5>');
@@ -531,7 +518,7 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical ti-md"></i></a>' +
+              '<a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="text-primary ti ti-dots-vertical"></i></a>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item">Details</a>' +
               '<a href="javascript:;" class="dropdown-item">Archive</a>' +
@@ -539,20 +526,14 @@ $(function () {
               '<a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a>' +
               '</div>' +
               '</div>' +
-              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ti ti-pencil ti-md"></i></a>'
+              '<a href="javascript:;" class="btn btn-sm btn-icon item-edit"><i class="text-primary ti ti-pencil"></i></a>'
             );
           }
         }
       ],
-      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0"f>><"table-responsive"t><"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>><"table-responsive"t><"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
       displayLength: 7,
-      lengthMenu: [7, 10, 25, 50, 75, 100],
-      language: {
-        paginate: {
-          next: '<i class="ti ti-chevron-right ti-sm"></i>',
-          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
-        }
-      }
+      lengthMenu: [7, 10, 25, 50, 75, 100]
     });
   }
 
@@ -615,7 +596,7 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical ti-md"></i></a>' +
+              '<a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="text-primary ti ti-dots-vertical"></i></a>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item">Details</a>' +
               '<a href="javascript:;" class="dropdown-item">Archive</a>' +
@@ -623,21 +604,15 @@ $(function () {
               '<a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a>' +
               '</div>' +
               '</div>' +
-              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ti ti-pencil ti-md"></i></a>'
+              '<a href="javascript:;" class="btn btn-sm btn-icon item-edit"><i class="text-primary ti ti-pencil"></i></a>'
             );
           }
         }
       ],
       order: [[groupColumn, 'asc']],
-      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
       displayLength: 7,
       lengthMenu: [7, 10, 25, 50, 75, 100],
-      language: {
-        paginate: {
-          next: '<i class="ti ti-chevron-right ti-sm"></i>',
-          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
-        }
-      },
       drawCallback: function (settings) {
         var api = this.api();
         var rows = api.rows({ page: 'current' }).nodes();
@@ -758,7 +733,7 @@ $(function () {
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ti ti-dots-vertical ti-md"></i></a>' +
+              '<a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="text-primary ti ti-dots-vertical"></i></a>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item">Details</a>' +
               '<a href="javascript:;" class="dropdown-item">Archive</a>' +
@@ -766,21 +741,16 @@ $(function () {
               '<a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a>' +
               '</div>' +
               '</div>' +
-              '<a href="javascript:;" class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit"><i class="ti ti-pencil ti-md"></i></a>'
+              '<a href="javascript:;" class="btn btn-sm btn-icon item-edit"><i class="text-primary ti ti-pencil"></i></a>'
             );
           }
         }
       ],
       language: {
-        url: '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/' + lang + '.json',
-        paginate: {
-          next: '<i class="ti ti-chevron-right ti-sm"></i>',
-          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
-        }
+        url: '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/' + lang + '.json'
       },
-      order: [[2, 'desc']],
       displayLength: 7,
-      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-n6 mt-md-0"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
       lengthMenu: [7, 10, 25, 50, 75, 100],
       responsive: {
         details: {

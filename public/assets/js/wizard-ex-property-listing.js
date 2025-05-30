@@ -185,7 +185,7 @@
           placeholder: 'Select property type',
           dropdownParent: plPropertyType.parent()
         })
-        .on('change', function () {
+        .on('change.select2', function () {
           // Revalidate the color field when an option is chosen
           FormValidation2.revalidateField('plPropertyType');
         });

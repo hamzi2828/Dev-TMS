@@ -206,14 +206,6 @@
     </div>
   `;
   }
-  function dropdownHeaderTemplate(suggestions) {
-    return `
-        <div class="${this.settings.classNames.dropdownItem} ${this.settings.classNames.dropdownItem}__addAll">
-            <strong>${this.value.length ? `Add remaning` : 'Add All'}</strong>
-            <span>${suggestions.length} members</span>
-        </div>
-    `;
-  }
 
   // initialize Tagify on the above input node reference
   let TagifyUserList = new Tagify(TagifyUserListEl, {
@@ -228,24 +220,44 @@
     },
     templates: {
       tag: tagTemplate,
-      dropdownItem: suggestionItemTemplate,
-      dropdownHeader: dropdownHeaderTemplate
+      dropdownItem: suggestionItemTemplate
     },
     whitelist: usersList
   });
 
-  // attach events listeners
-  TagifyUserList.on('dropdown:select', onSelectSuggestion) // allows selecting all the suggested (whitelist) items
-    .on('edit:start', onEditStart); // show custom text in the tag while in edit-mode
+  TagifyUserList.on('dropdown:show dropdown:updated', onDropdownShow);
+  TagifyUserList.on('dropdown:select', onSelectSuggestion);
 
-  function onSelectSuggestion(e) {
-    // custom class from "dropdownHeaderTemplate"
-    if (e.detail.elm.classList.contains(`${TagifyUserList.settings.classNames.dropdownItem}__addAll`))
-      TagifyUserList.dropdown.selectAll();
+  let addAllSuggestionsEl;
+
+  function onDropdownShow(e) {
+    let dropdownContentEl = e.detail.tagify.DOM.dropdown.content;
+
+    if (TagifyUserList.suggestedListItems.length > 1) {
+      addAllSuggestionsEl = getAddAllSuggestionsEl();
+
+      // insert "addAllSuggestionsEl" as the first element in the suggestions list
+      dropdownContentEl.insertBefore(addAllSuggestionsEl, dropdownContentEl.firstChild);
+    }
   }
 
-  function onEditStart({ detail: { tag, data } }) {
-    TagifyUserList.setTagTextNode(tag, `${data.name} <${data.email}>`);
+  function onSelectSuggestion(e) {
+    if (e.detail.elm == addAllSuggestionsEl) TagifyUserList.dropdown.selectAll.call(TagifyUserList);
+  }
+
+  // create an "add all" custom suggestion element every time the dropdown changes
+  function getAddAllSuggestionsEl() {
+    // suggestions items should be based on "dropdownItem" template
+    return TagifyUserList.parseTemplate('dropdownItem', [
+      {
+        class: 'addAll',
+        name: 'Add all',
+        email:
+          TagifyUserList.settings.whitelist.reduce(function (remainingSuggestions, item) {
+            return TagifyUserList.isTagDuplicate(item.value) ? remainingSuggestions : remainingSuggestions + 1;
+          }, 0) + ' Members'
+      }
+    ]);
   }
 
   // Email List suggestion

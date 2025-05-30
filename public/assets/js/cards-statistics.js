@@ -12,24 +12,24 @@
     labelColor = config.colors_dark.textMuted;
     headingColor = config.colors_dark.headingColor;
     shadeColor = 'dark';
-    barBgColor = '#3d4157';
+    barBgColor = '#8692d014';
     borderColor = config.colors_dark.borderColor;
   } else {
     cardColor = config.colors.cardColor;
     labelColor = config.colors.textMuted;
     headingColor = config.colors.headingColor;
     shadeColor = '';
-    barBgColor = '#efeef0';
+    barBgColor = '#4b465c14';
     borderColor = config.colors.borderColor;
   }
 
   // Donut Chart Colors
   const chartColors = {
     donut: {
-      series1: '#24B364',
-      series2: '#53D28C',
-      series3: '#7EDDA9',
-      series4: '#A9E9C5'
+      series1: config.colors.success,
+      series2: '#28c76fb3',
+      series3: '#28c76f80',
+      series4: config.colors_label.success
     }
   };
 
@@ -602,7 +602,7 @@
               show: false
             },
             value: {
-              fontSize: '24px',
+              fontSize: '22px',
               color: headingColor,
               fontWeight: 500,
               offsetY: -5
@@ -1549,7 +1549,7 @@
             labels: {
               show: true,
               value: {
-                fontSize: '1.5rem',
+                fontSize: '1.375rem',
                 fontFamily: 'Public Sans',
                 color: headingColor,
                 fontWeight: 500,

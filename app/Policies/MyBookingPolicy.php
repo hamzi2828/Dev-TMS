@@ -53,4 +53,8 @@ class MyBookingPolicy
     public function printTicketConfirmedBooking(User $user): bool {
         return in_array('print-ticket-confirmed-booking', $user->permissions());
     }
+
+    public function myLedger(User $user): bool {
+        return in_array('my-ledger', $user->permissions());
+    }
 }

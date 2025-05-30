@@ -26,7 +26,7 @@ return /******/ (function() { // webpackBootstrap
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   toastr: function() { return /* reexport default from dynamic */ toastr_toastr__WEBPACK_IMPORTED_MODULE_0___default.a; }\n/* harmony export */ });\n/* harmony import */ var toastr_toastr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! toastr/toastr */ \"./node_modules/toastr/toastr.js\");\n/* harmony import */ var toastr_toastr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(toastr_toastr__WEBPACK_IMPORTED_MODULE_0__);\n\ntry {\n  window.toastr = (toastr_toastr__WEBPACK_IMPORTED_MODULE_0___default());\n} catch (e) {}\n\n\n//# sourceURL=webpack://Vuexy/./libs/toastr/toastr.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   toastr: function() { return /* reexport module object */ toastr_toastr__WEBPACK_IMPORTED_MODULE_0__; }\n/* harmony export */ });\n/* harmony import */ var toastr_toastr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! toastr/toastr */ \"./node_modules/toastr/toastr.js\");\n/* harmony import */ var toastr_toastr__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(toastr_toastr__WEBPACK_IMPORTED_MODULE_0__);\n\n\n\n//# sourceURL=webpack://Vuexy/./libs/toastr/toastr.js?");
 
 /***/ }),
 

@@ -165,26 +165,26 @@
                                             <tbody>
                                                 <tr>
                                                     <td>Adult</td>
-                                                    <td>PKR {{ number_format($airlineGroup->sale_per_adult ?? 0, 0) }}</td>
+                                                    <td>{{ number_format($airlineGroup->sale_per_adult ?? 0, 0) }}</td>
                                                     <td id="adult-seats">0</td>
-                                                    <td id="adult-total">PKR 0</td>
+                                                    <td id="adult-total">0</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Children</td>
-                                                    <td>PKR {{ number_format($airlineGroup->sale_per_child ?? 0, 0) }}</td>
+                                                    <td>{{ number_format($airlineGroup->sale_per_child ?? 0, 0) }}</td>
                                                     <td id="child-seats">0</td>
-                                                    <td id="child-total">PKR 0</td>
+                                                    <td id="child-total">0</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Infants</td>
-                                                    <td>PKR {{ number_format($airlineGroup->sale_per_infant ?? 0, 0) }}</td>
+                                                    <td>{{ number_format($airlineGroup->sale_per_infant ?? 0, 0) }}</td>
                                                     <td id="infant-seats">0</td>
-                                                    <td id="infant-total">PKR 0</td>
+                                                    <td id="infant-total">0</td>
                                                 </tr>
                                                 <tr class="fw-bold border-top">
                                                     <td colspan="2" class="text-end">Total</td>
                                                     <td id="total-seats">0</td>
-                                                    <td id="grand-total">PKR 0</td>
+                                                    <td id="grand-total">0</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -234,10 +234,10 @@
             function formatCurrency(amount) {
                 return new Intl.NumberFormat('en-PK', {
                     style: 'currency',
-                    currency: 'PKR',
+                    currency: ' ',
                     minimumFractionDigits: 0,
                     maximumFractionDigits: 0
-                }).format(amount).replace('PKR', 'PKR ');
+                }).format(amount).replace(' ', '  ');
             }
 
             function createSectionHeader(label) {

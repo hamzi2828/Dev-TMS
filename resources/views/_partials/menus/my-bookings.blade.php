@@ -33,6 +33,14 @@
             </a>
         </li>
         @endcan
+
+        @can('myLedger', \App\Models\MyBooking::class)
+        <li class="menu-item {{ request()->routeIs('myBookings.myLedger') ? 'active' : '' }}">
+            <a href="{{ route('myBookings.myLedger') }}" class="menu-link">
+                <div data-i18n="My Ledger">My Ledger</div>
+            </a>
+        </li>
+        @endcan
     </ul>
 </li>
 @endcan

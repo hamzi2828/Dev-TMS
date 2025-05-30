@@ -93,17 +93,17 @@ $(function () {
             var $row_output =
               '<div class="d-flex justify-content-start align-items-center customer-name">' +
               '<div class="avatar-wrapper">' +
-              '<div class="avatar avatar-sm me-4">' +
+              '<div class="avatar me-2">' +
               $output +
               '</div>' +
               '</div>' +
               '<div class="d-flex flex-column">' +
               '<a href="' +
               customerView +
-              '" class="text-heading"><span class="fw-medium">' +
+              '"><span class="fw-medium">' +
               $name +
               '</span></a>' +
-              '<small class="text-nowrap">' +
+              '<small class="text-muted text-nowrap">' +
               $email +
               '</small>' +
               '</div>' +
@@ -151,31 +151,27 @@ $(function () {
           render: function (data, type, full, meta) {
             var $earn = full['earning'];
 
-            return '<span class="text-heading">' + $earn + '</span > ';
+            return '<span class="h6 mb-0">' + $earn + '</span > ';
           }
         }
       ],
       order: [[2, 'asc']],
       dom:
-        '<"card-header d-flex flex-column flex-sm-row align-items-center py-0"<"head-label"><"d-flex align-items-center justify-content-end"l<"dt-action-buttons"B>>' +
+        '<"card-header d-flex flex-column flex-sm-row pb-md-0 align-items-start align-items-sm-center pt-4 pt-md-2"<"head-label"><"d-flex align-items-sm-center justify-content-end mt-2 mt-sm-0"l<"dt-action-buttons"B>>' +
         '>t' +
-        '<"row mx-1"' +
+        '<"row mx-2"' +
         '<"col-sm-12 col-md-6"i>' +
         '<"col-sm-12 col-md-6"p>' +
         '>',
       language: {
-        sLengthMenu: '_MENU_',
-        paginate: {
-          next: '<i class="ti ti-chevron-right ti-sm"></i>',
-          previous: '<i class="ti ti-chevron-left ti-sm"></i>'
-        }
+        sLengthMenu: '_MENU_'
       },
       // Buttons with Dropdown
       buttons: [
         {
           extend: 'collection',
-          className: 'btn btn-label-secondary dropdown-toggle waves-effect waves-light',
-          text: '<i class="ti ti-upload ti-xs me-2"></i>Export',
+          className: 'btn btn-label-secondary dropdown-toggle',
+          text: '<i class="ti ti-download me-1"></i>Export',
           buttons: [
             {
               extend: 'print',
@@ -347,8 +343,8 @@ $(function () {
         }
       }
     });
-    $('div.head-label').html('<h5 class="card-title mb-0 text-nowrap mt-6 mt-sm-0">Referred users</h5>');
-    $('.dataTables_length').addClass('me-2 ms-n2 ms-sm-0');
+    $('div.head-label').html('<h5 class="card-title text-nowrap mb-2 mb-sm-0">Referred users</h5>');
+    $('.dataTables_length').addClass('mt-0 mt-md-3 me-2 ms-n2 ms-sm-0');
     $('.dt-action-buttons').addClass('pt-0');
   }
 

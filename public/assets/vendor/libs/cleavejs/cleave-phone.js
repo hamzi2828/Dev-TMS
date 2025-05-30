@@ -26,7 +26,7 @@ return /******/ (function() { // webpackBootstrap
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var cleave_js_dist_addons_cleave_phone_us__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! cleave.js/dist/addons/cleave-phone.us */ \"./node_modules/cleave.js/dist/addons/cleave-phone.us.js\");\n/* harmony import */ var cleave_js_dist_addons_cleave_phone_us__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(cleave_js_dist_addons_cleave_phone_us__WEBPACK_IMPORTED_MODULE_0__);\n\n\n//# sourceURL=webpack://Vuexy/./libs/cleavejs/cleave-phone.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   phone: function() { return /* reexport module object */ cleave_js_dist_addons_cleave_phone_us__WEBPACK_IMPORTED_MODULE_0__; }\n/* harmony export */ });\n/* harmony import */ var cleave_js_dist_addons_cleave_phone_us__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! cleave.js/dist/addons/cleave-phone.us */ \"./node_modules/cleave.js/dist/addons/cleave-phone.us.js\");\n/* harmony import */ var cleave_js_dist_addons_cleave_phone_us__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(cleave_js_dist_addons_cleave_phone_us__WEBPACK_IMPORTED_MODULE_0__);\n\n\n\n//# sourceURL=webpack://Vuexy/./libs/cleavejs/cleave-phone.js?");
 
 /***/ }),
 

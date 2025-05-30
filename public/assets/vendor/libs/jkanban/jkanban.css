@@ -149,14 +149,14 @@
 }
 
 .light-style .kanban-board {
-  background: #e6e6e8;
+  background: #dbdade;
 }
 .light-style .kanban-item {
   background: #fff;
 }
 
 .dark-style .kanban-board {
-  background: #44485e;
+  background: #434968;
 }
 .dark-style .kanban-item {
   background: #2f3349;
