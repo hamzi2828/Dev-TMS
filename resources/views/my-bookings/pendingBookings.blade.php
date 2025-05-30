@@ -104,7 +104,7 @@
 
                                 <td>
                                     @can('confirmBookingPendingBooking', \App\Models\MyBooking::class)
-                                    <a href="javascript:void(0)" onclick="confirmWithPNR('{{ route('myBookings.confirmBooking', ['id' => $booking->id, 'pnr' => '']) }}')" class="btn btn-sm btn-info" style="width: 70px;">
+                                    <a href="javascript:void(0)" onclick="confirmWithPNR('{{ route('myBookings.confirmBooking', ['id' => $booking->id, 'pnr' => '']) }}', {{ $booking->total_price - $booking->discount }})" class="btn btn-sm btn-info" style="width: 70px;">
                                         Confirm
                                     </a>
                                     @endcan
@@ -153,9 +153,12 @@
               <input type="text" class="form-control" id="pnrInput" placeholder="Enter PNR">
             </div>
             <div class="mb-2">
-              <strong>Credit Limit:</strong> {{ $credit_limit }}<br>
-              <strong>Used Credit:</strong> {{ $used_credit }}<br>
-              <strong>Remaining Credit:</strong> {{ $credit_limit - $used_credit }}
+              <strong>Credit Limit:</strong> <span id="modalCreditLimit">{{ $credit_limit }}</span><br>
+              <strong>Used Credit:</strong> <span id="modalUsedCredit">{{ $used_credit }}</span><br>
+              <strong>Remaining Credit:</strong> <span id="modalRemainingCredit">{{ $credit_limit - $used_credit }}</span>
+            </div>
+            <div id="creditLimitWarning" class="alert alert-danger d-none" role="alert">
+              Credit limit has been exceeded!
             </div>
           </div>
           <div class="modal-footer">
@@ -168,9 +171,21 @@
 
     <script>
         let confirmBookingBaseUrl = null;
-        function confirmWithPNR(baseUrl) {
+        // Accepts: baseUrl (string), bookingTotal (number)
+        function confirmWithPNR(baseUrl, bookingTotal = 0) {
             confirmBookingBaseUrl = baseUrl;
             document.getElementById('pnrInput').value = '';
+            // Get credit values from DOM
+            const creditLimit = parseFloat(document.getElementById('modalCreditLimit').innerText) || 0;
+            const usedCredit = parseFloat(document.getElementById('modalUsedCredit').innerText) || 0;
+            const remainingCredit = creditLimit - usedCredit;
+            // Show/hide warning
+            const warningEl = document.getElementById('creditLimitWarning');
+            if ((usedCredit + bookingTotal) > creditLimit) {
+                warningEl.classList.remove('d-none');
+            } else {
+                warningEl.classList.add('d-none');
+            }
             const modal = new bootstrap.Modal(document.getElementById('confirmBookingModal'));
             modal.show();
         }
