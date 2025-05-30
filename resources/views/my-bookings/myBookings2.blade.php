@@ -2,6 +2,7 @@
     <div class="container-p-x flex-grow-1 container-p-y">
         @include('_partials.errors.validation-errors')
         @include('my-bookings.search')
+
         @php
         // Group airlineGroups by sector_id (assuming sector_id is a property on $group or via relation)
         $groupedBySector = $airlineGroups->groupBy(function ($group) {

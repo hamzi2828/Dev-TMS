@@ -1,6 +1,7 @@
 <div class="card mb-3">
-    <div class="card-header border-bottom pt-3 pb-3">
+    <div class="card-header border-bottom pt-3 pb-3 d-flex align-items-center justify-content-between">
         <h5 class="card-title mb-0">Search</h5>
+        <p class="mb-0">Credit Limit: {{ $credit_limit }}</p>
     </div>
     <div class="card-body mt-3">
         <form method="GET" action="{{ request()->routeIs('myBookings.pending') ? route('myBookings.pending') : route('myBookings.index') }}" class="mb-3">

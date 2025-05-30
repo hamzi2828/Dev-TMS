@@ -23,6 +23,9 @@ class MyBookingController extends Controller
      */
     public function index(Request $request)
     {
+        $agent_id = auth()->user()->agent_id;
+        $agent = Agent::where('id', $agent_id)->first();
+
         // Get current date for comparison
         $currentDate = now();
 
@@ -104,7 +107,8 @@ class MyBookingController extends Controller
         $data['title'] = 'All Booking';
         $data['airlineGroups'] = $airlineGroups;
         $data['airlines'] = $airlines;
-        $data['cities'] = $cities; // Pass the cities to the view
+        $data['cities'] = $cities;
+        $data['credit_limit'] = $agent->credit_limit;
 
         return view('my-bookings.myBookings2', $data);
     }
@@ -130,6 +134,9 @@ class MyBookingController extends Controller
 
         // Optional: Add filters (e.g., by airline, origin, etc.) if needed
 
+        $agent_id = auth()->user()->agent_id;
+        $agent = Agent::where('id', $agent_id)->first();
+
         $myBookings = $query->paginate(10);
 
         $airlines = Airline::all();
@@ -139,6 +146,7 @@ class MyBookingController extends Controller
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
+        $data['credit_limit'] = $agent->credit_limit;
 
         return view('my-bookings.pendingBookings', $data);
     }
