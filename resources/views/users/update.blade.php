@@ -56,7 +56,7 @@
 
                                         <div class="col-md-4 mb-3">
                                             <label class="form-label" for="company">Airline GP Supplier</label>
-                                            <select id="company" name="company_id" class="form-control select2" required="required"
+                                            <select id="company" name="company_id" class="form-control select2"
                                                     data-placeholder="Select a Travel Airline GP Supplier">
                                                 <option></option>
                                                 @if(count($companies) > 0)
@@ -71,7 +71,7 @@
 
                                         <div class="col-md-4 mb-3">
                                             <label class="form-label" for="agent">Travel Agents</label>
-                                            <select id="agent" name="agent_id" class="form-control select2" required="required"
+                                            <select id="agent" name="agent_id" class="form-control select2"
                                                     data-placeholder="Select an Agent">
                                                 <option></option>
                                                 @if(count($agents) > 0)
@@ -140,17 +140,28 @@
     </div>
     @push('scripts')
         <script type="text/javascript">
-            $ ( window ).on ( 'load', function () {
-                $ ( document ).on ( 'change', '.account-file-input', function () {
-                    let accountUserImage = document.getElementById ( 'uploadedAvatar' );
-                    if ( accountUserImage ) {
+            $(window).on('load', function () {
+                // Avatar preview
+                $(document).on('change', '.account-file-input', function () {
+                    let accountUserImage = document.getElementById('uploadedAvatar');
+                    if (accountUserImage) {
                         const resetImage = accountUserImage.src;
-                        if ( this.files[ 0 ] ) {
-                            accountUserImage.src = window.URL.createObjectURL ( this.files[ 0 ] );
+                        if (this.files[0]) {
+                            accountUserImage.src = window.URL.createObjectURL(this.files[0]);
                         }
                     }
-                } );
-            } );
+                });
+                // Enable Select2 allowClear for company select
+                $('#company').select2({
+                    placeholder: 'Select a Travel Airline GP Supplier',
+                    allowClear: true
+                });
+                // Enable Select2 allowClear for agent select
+                $('#agent').select2({
+                    placeholder: 'Select an Agent',
+                    allowClear: true
+                });
+            });
         </script>
     @endpush
 </x-dashboard>

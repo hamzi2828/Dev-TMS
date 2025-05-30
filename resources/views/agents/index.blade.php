@@ -14,6 +14,7 @@
                         <th>Sr.No</th>
                         <th>Title</th>
                         <th>Contact No</th>
+                        <th>Credit Limit</th>
                         <th>Date Added</th>
                         <th>Actions</th>
                     </tr>
@@ -25,6 +26,7 @@
                                 <td>{{ $loop -> iteration }}</td>
                                 <td>{{ $agent -> name }}</td>
                                 <td>{{ $agent -> contact }}</td>
+                                <td>{{ $agent -> credit_limit }}</td>
                                 <td>{{ $agent -> createdAt() }}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
@@ -37,7 +39,7 @@
                                                 <i class="ti ti-edit ti-sm me-2"></i>
                                             </a>
                                         @endcan
-                                        
+
                                         @can('edit', $agent)
                                             <form method="post" id="delete-record-form-{{ $agent -> id }}"
                                                   action="{{ route ('agents.destroy', ['agent' => $agent -> id]) }}">

@@ -18,19 +18,19 @@
                                            value="{{ old ('title', $agent -> name) }}"
                                            id="title" name="title" />
                                 </div>
-                                
+
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="contact">Contact No</label>
                                     <input type="text" class="form-control"
                                            value="{{ old ('contact', $agent -> contact) }}"
                                            id="contact" name="contact" />
                                 </div>
-                                
+
                                 <div class="col-md-3 mb-3">
                                     <div class="d-flex justify-content-between">
                                         <label class="form-label" for="logo">Logo</label>
                                         @if(!empty(trim ($agent -> file)))
-                                            <div> 
+                                            <div>
                                                 <a href="{{ $agent -> file }}"
                                                    download="{{ $agent -> file }}"
                                                    target="_blank">
@@ -44,12 +44,18 @@
                                     </div>
                                     <input type="file" class="form-control" id="logo" name="logo" />
                                 </div>
-                                
+
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="address">Address</label>
                                     <textarea rows="3" class="form-control"
                                               id="address"
                                               name="address">{{ old ('address', $agent -> address) }}</textarea>
+                                </div>
+
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="credit_limit">Credit Limit</label>
+                                    <input type="number" class="form-control" id="credit_limit" name="credit_limit"
+                                           value="{{ old ('credit_limit', $agent -> credit_limit) }}" />
                                 </div>
                             </div>
                         </div>

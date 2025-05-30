@@ -8,7 +8,7 @@
                     <form class="pt-0" method="post" action="{{ route ('users.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="card-body pt-1 pb-1">
-                            
+
                             <div class="row">
                                 <div class="col-9">
                                     <div class="row">
@@ -20,7 +20,7 @@
                                                     id="name"
                                                     name="name" />
                                         </div>
-                                        
+
                                         <div class="col-md-4 mb-3">
                                             <label class="form-label" for="add-user-email">Email</label>
                                             <input
@@ -29,7 +29,7 @@
                                                     class="form-control"
                                                     name="email" />
                                         </div>
-                                        
+
                                         <div class="col-md-4 mb-3">
                                             <label class="form-label" for="password">Password</label>
                                             <input
@@ -38,22 +38,22 @@
                                                     class="form-control"
                                                     name="password" />
                                         </div>
-                                        
+
                                         <div class="col-md-4 mb-3">
                                             <label class="form-label" for="cnic">CNIC</label>
                                             <input type="text" id="cnic" class="form-control" name="cnic"
                                                    value="{{ old ('cnic') }}" />
                                         </div>
-                                        
+
                                         <div class="col-md-4 mb-3">
                                             <label class="form-label" for="mobile">Mobile No</label>
                                             <input type="text" id="mobile" class="form-control" name="mobile"
                                                    value="{{ old ('mobile') }}" />
                                         </div>
-                                       
+
                                         <div class="col-md-4 mb-3">
                                             <label class="form-label" for="company">Airline GP Supplier</label>
-                                            <select id="company" name="company_id" class="form-control select2" required="required"
+                                            <select id="company" name="company_id" class="form-control select2"
                                                     data-placeholder="Select a Airline GP Supplier">
                                                 <option></option>
                                                 @if(count($companies) > 0)
@@ -65,10 +65,10 @@
                                                 @endif
                                             </select>
                                         </div>
-                                        
+
                                         <div class="col-md-4 mb-3"> <!-- Add this block -->
                                             <label class="form-label" for="agent">Travel Agents</label>
-                                            <select id="agent" name="agent_id" class="form-control select2" required="required"
+                                            <select id="agent" name="agent_id" class="form-control select2"
                                                     data-placeholder="Select an Travel Agent">
                                                 <option></option>
                                                 @if(count($agents) > 0)
@@ -80,9 +80,9 @@
                                                 @endif
                                             </select>
                                         </div>
-                                        
- 
-                                        
+
+
+
                                         <div class="col-md-4 mb-3">
                                             <label class="form-label" for="roles">Role(s)</label>
                                             <select id="roles" name="roles[]" multiple="multiple"
@@ -98,7 +98,7 @@
                                                 @endif
                                             </select>
                                         </div>
-                                        
+
                                         <div class="col-md-12 mb-3">
                                             <label class="form-label" for="address">Address</label>
                                             <textarea id="address" class="form-control" name="address"
@@ -106,7 +106,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-md-3">
                                     <div class="row">
                                         <div class="align-items-center border d-flex flex-column gap-4 justify-content-center pt-3 rounded">
