@@ -3,7 +3,7 @@
         <h5 class="card-title mb-0">Search</h5>
         <span class="d-flex align-items-center">
             <p class="mb-0 me-5">Credit Limit: {{ $credit_limit }}</p>
-            <p class="mb-0 ">Used Credit: {{ $used_credit }}</p>
+            <p class="mb-0 ">Remaining Credit: {{ $credit_limit  - $used_credit }}</p>
         </span>
     </div>
     <div class="card-body mt-3">

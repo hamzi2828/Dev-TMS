@@ -68,5 +68,23 @@
             $suffixes = array ( '', 'K', 'M', 'G', 'T' );
             return round ( pow ( 1024, $base - floor ( $base ) ), $precision ) . ' ' . $suffixes[ floor ( $base ) ];
         }
-        
+
+        /**
+         * Get the used credit (net closing) for an agent by account_head_id
+         *
+         * @param int $agent_account_head_id
+         * @return float
+         */
+        public function getAgentUsedCredit($agent_account_head_id)
+        {
+            $accountService = new \App\Services\AccountService();
+            $generalLedgerService = new \App\Services\GeneralLedgerService();
+            $account_heads = $accountService->getRecursiveAccountHeads($agent_account_head_id);
+            $parent_account_head = $accountService->get_account_head_by_id($agent_account_head_id);
+            $account_head = [];
+            $account_head[] = $parent_account_head;
+            $account_heads_list = array_merge($account_head, $account_heads);
+            $ledgers = $generalLedgerService->build_ledgers_table($account_heads_list);
+            return $ledgers['net_closing'] ?? 0;
+        }
     }

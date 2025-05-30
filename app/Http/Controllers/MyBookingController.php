@@ -103,22 +103,14 @@ class MyBookingController extends Controller
         $airlines = Airline::all();
         $cities = \App\Models\City::all(); // Fetch all cities for the dropdown
 
-        // Prepare data for the view
-        // Calculate used credit (net closing) for the agent
         $agent_account_head_id = $agent->account_head_id;
-        $account_heads = (new AccountService())->getRecursiveAccountHeads($agent_account_head_id);
-        $parent_account_head = (new AccountService())->get_account_head_by_id($agent_account_head_id);
-        $account_head = [];
-        $account_head[] = $parent_account_head;
-        $account_heads_list = array_merge($account_head, $account_heads);
-        $ledgers = (new GeneralLedgerService())->build_ledgers_table($account_heads_list);
-        $used_credit = $ledgers['net_closing'];
+        $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
 
         $data['title'] = 'All Booking';
         $data['airlineGroups'] = $airlineGroups;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
-        $data['credit_limit'] = $agent->credit_limit;
+        $data['credit_limit'] = $agent->credit_limit ? $agent->credit_limit : 0;
         $data['used_credit'] = $used_credit;
 
         return view('my-bookings.myBookings2', $data);
@@ -152,12 +144,15 @@ class MyBookingController extends Controller
 
         $airlines = Airline::all();
         $cities = City::all();
+        $agent_account_head_id = $agent->account_head_id;
+        $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
 
         $data['title'] = 'My Pending Bookings';
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
         $data['credit_limit'] = $agent->credit_limit;
+        $data['used_credit'] = $used_credit;
 
         return view('my-bookings.pendingBookings', $data);
     }
@@ -170,6 +165,9 @@ class MyBookingController extends Controller
             ->join('roles', 'user_roles.role_id', '=', 'roles.id')
             ->where('user_roles.user_id', auth()->user()->id)
             ->value('roles.slug');
+
+        $agent_id = auth()->user()->agent_id;
+        $agent = Agent::where('id', $agent_id)->first();
 
         if ($roleName === 'admin') {
             $query = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
@@ -188,11 +186,15 @@ class MyBookingController extends Controller
 
         $airlines = Airline::all();
         $cities = City::all();
+        $agent_account_head_id = $agent->account_head_id;
+        $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
 
         $data['title'] = 'My Canceled Bookings';
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
+        $data['credit_limit'] = $agent->credit_limit;
+        $data['used_credit'] = $used_credit;
 
         return view('my-bookings.canceledBookings', $data);
     }
@@ -204,6 +206,8 @@ class MyBookingController extends Controller
             ->join('roles', 'user_roles.role_id', '=', 'roles.id')
             ->where('user_roles.user_id', auth()->user()->id)
             ->value('roles.slug');
+            $agent_id = auth()->user()->agent_id;
+            $agent = Agent::where('id', $agent_id)->first();
 
         if ($roleName === 'admin') {
             $query = MyBooking::with(['airline', 'airlineGroup.segments', 'passengers'])
@@ -222,11 +226,15 @@ class MyBookingController extends Controller
 
         $airlines = Airline::all();
         $cities = City::all();
+        $agent_account_head_id = $agent->account_head_id;
+        $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
 
         $data['title'] = 'My Confirmed Bookings';
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
+        $data['credit_limit'] = $agent->credit_limit ? $agent->credit_limit : 0;
+        $data['used_credit'] = $used_credit;
 
         return view('my-bookings.completedBookings', $data);
     }
