@@ -1,13 +1,9 @@
 <x-login :title="$title">
     <div class="authentication-wrapper authentication-cover">
         <!-- Logo -->
-        <a href="/" class="app-brand auth-cover-brand">
-            <span class="app-brand-logo demo">
-              <span class="text-primary">
-                <img src="{{ asset('assets/main_logo.png') }}" alt="logo" />
-              </span>
-            </span>
-            <h2 class="brand-text text-primary ms-1">Travel Management System</h2>
+        <a href="index.html" class="app-brand auth-cover-brand">
+            <img src="{{ asset('assets/main_logo.png') }}" alt="logo" class="app-brand-logo demo" />
+            <span class="app-brand-text demo text-heading fw-bold">Travel Management System</span>
           </a>
         <!-- /Logo -->
         <div class="authentication-inner row m-0">

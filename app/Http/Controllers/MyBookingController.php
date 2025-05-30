@@ -394,8 +394,7 @@ class MyBookingController extends Controller
             // Find the booking with necessary relationships
             $booking = MyBooking::with(['airlineGroup.company'])->find($request->id);
 
-    if ($booking->status === 'confirmed') {
-
+            if ($booking->status === 'confirmed') {
             // Update booking status
             $booking->status = 'cancelled';
             $booking->save();
@@ -493,16 +492,16 @@ class MyBookingController extends Controller
             DB::commit();
             return redirect()->back()->with('success', 'Booking cancelled successfully');
 
-    }else{
-        $booking = MyBooking::find($request->id);
-        $booking->status = 'cancelled';
-        $booking->save();
-        $airlineGroup = AirlineGroup::find($booking->airline_group_id);
-        $totalSeats = $booking->adults + $booking->children;
-        $airlineGroup->used_seats = $airlineGroup->used_seats - $totalSeats;
-        $airlineGroup->save();
-        return redirect()->back()->with('success', 'Booking cancelled successfully');
-    }
+        }else{
+            $booking = MyBooking::find($request->id);
+            $booking->status = 'cancelled';
+            $booking->save();
+            $airlineGroup = AirlineGroup::find($booking->airline_group_id);
+            $totalSeats = $booking->adults + $booking->children;
+            $airlineGroup->used_seats = $airlineGroup->used_seats - $totalSeats;
+            $airlineGroup->save();
+            return redirect()->back()->with('success', 'Booking cancelled successfully');
+        }
 
 
         } catch (\Exception $e) {
@@ -517,7 +516,6 @@ class MyBookingController extends Controller
     public function create(Request $request)
     {
         $data['title'] = 'Create My Booking';
-
         // Check if 'airlineGroup' parameter exists in the URL
         if ($request->has('airlineGroup')) {
             // Retrieve the AirlineGroup by ID
@@ -535,7 +533,7 @@ class MyBookingController extends Controller
                 return redirect()->route('myBookings.index')->with('error', 'Airline Group not found');
             }
         }
-    // dd(    $data['airlineGroup'] );
+       // dd( $data['airlineGroup'] );
         return view('my-bookings.create', $data);
     }
 
