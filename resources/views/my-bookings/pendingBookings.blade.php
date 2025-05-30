@@ -139,15 +139,52 @@
     <!-- / Content -->
 
     @push('scripts')
+    <!-- Confirm Booking Modal -->
+    <div class="modal fade" id="confirmBookingModal" tabindex="-1" aria-labelledby="confirmBookingModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmBookingModalLabel">Confirm Booking</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="pnrInput" class="form-label">Please enter the Airline PNR:</label>
+              <input type="text" class="form-control" id="pnrInput" placeholder="Enter PNR">
+            </div>
+            <div class="mb-2">
+              <strong>Credit Limit:</strong> {{ $credit_limit }}<br>
+              <strong>Used Credit:</strong> {{ $used_credit }}<br>
+              <strong>Remaining Credit:</strong> {{ $credit_limit - $used_credit }}
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="confirmBookingModalOk">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
+        let confirmBookingBaseUrl = null;
         function confirmWithPNR(baseUrl) {
-            let pnr = prompt("Please enter the Airline PNR:");
-            if (pnr !== null && pnr.trim() !== "") {
-                window.location.href = baseUrl + encodeURIComponent(pnr);
-            } else {
-                alert("PNR is required to confirm the booking.");
-            }
+            confirmBookingBaseUrl = baseUrl;
+            document.getElementById('pnrInput').value = '';
+            const modal = new bootstrap.Modal(document.getElementById('confirmBookingModal'));
+            modal.show();
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('confirmBookingModalOk').onclick = function () {
+                let pnr = document.getElementById('pnrInput').value;
+                if (pnr !== null && pnr.trim() !== "") {
+                    window.location.href = confirmBookingBaseUrl + encodeURIComponent(pnr);
+                } else {
+                    alert("PNR is required to confirm the booking.");
+                }
+            };
+        });
 
         function confirmCancel(url) {
             if (confirm("Are you sure you want to cancel this booking?")) {
