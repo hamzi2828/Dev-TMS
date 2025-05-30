@@ -104,11 +104,22 @@ class MyBookingController extends Controller
         $cities = \App\Models\City::all(); // Fetch all cities for the dropdown
 
         // Prepare data for the view
+        // Calculate used credit (net closing) for the agent
+        $agent_account_head_id = $agent->account_head_id;
+        $account_heads = (new AccountService())->getRecursiveAccountHeads($agent_account_head_id);
+        $parent_account_head = (new AccountService())->get_account_head_by_id($agent_account_head_id);
+        $account_head = [];
+        $account_head[] = $parent_account_head;
+        $account_heads_list = array_merge($account_head, $account_heads);
+        $ledgers = (new GeneralLedgerService())->build_ledgers_table($account_heads_list);
+        $used_credit = $ledgers['net_closing'];
+
         $data['title'] = 'All Booking';
         $data['airlineGroups'] = $airlineGroups;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
         $data['credit_limit'] = $agent->credit_limit;
+        $data['used_credit'] = $used_credit;
 
         return view('my-bookings.myBookings2', $data);
     }
