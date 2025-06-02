@@ -15,7 +15,7 @@ use App\Models\Section;
 use Illuminate\Contracts\View\View;
 use App\Services\AccountService;
 use App\Services\GeneralLedgerService;
-
+use Carbon\Carbon;
 class MyBookingController extends Controller
 {
     /**
@@ -95,6 +95,9 @@ class MyBookingController extends Controller
             });
         }
 
+        if ($request->has('booking_reference') && $request->input('booking_reference') !== null) {
+            $query->where('booking_reference', 'like', '%' . $request->input('booking_reference') . '%');
+        }
 
 
 
@@ -142,8 +145,14 @@ class MyBookingController extends Controller
                 ->where('user_id', auth()->user()->id);
             }
 
-        // Optional: Add filters (e.g., by airline, origin, etc.) if needed
+            if ($request->has('booking_reference') && $request->input('booking_reference') !== null) {
+                $query->where('booking_reference', 'like', '%' . $request->input('booking_reference') . '%');
+            }
 
+            if ($request->has('tavel_agent') && $request->input('tavel_agent') !== null) {
+                $userIds = \App\Models\User::where('agent_id', $request->input('tavel_agent'))->pluck('id');
+                $query->whereIn('user_id', $userIds);
+            }
         $agent_id = auth()->user()->agent_id;
         $agent = Agent::where('id', $agent_id)->first();
 
@@ -151,6 +160,8 @@ class MyBookingController extends Controller
 
         $airlines = Airline::all();
         $cities = City::all();
+        $tavel_agents = Agent::all();
+
         $agent_account_head_id = $agent ? $agent->account_head_id : null;
         if($agent_account_head_id){
             $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
@@ -164,6 +175,7 @@ class MyBookingController extends Controller
         $data['cities'] = $cities;
         $data['credit_limit'] = $agent ? $agent->credit_limit : 0;
         $data['used_credit'] = $used_credit;
+        $data['tavel_agents'] = $tavel_agents;
 
         return view('my-bookings.pendingBookings', $data);
     }
@@ -193,11 +205,28 @@ class MyBookingController extends Controller
             }
 
 
+            if ($request->has('start_date') && $request->input('start_date') !== null) {
+                $query->where('created_at', '>=', Carbon::createFromFormat('Y-m-d', $request->input('start_date'))->startOfDay());
+            }
+
+            if ($request->has('end_date') && $request->input('end_date') !== null) {
+                $query->where('created_at', '<=', Carbon::createFromFormat('Y-m-d', $request->input('end_date'))->endOfDay());
+            }
+
+            if ($request->has('booking_reference') && $request->input('booking_reference') !== null) {
+                $query->where('booking_reference', 'like', '%' . $request->input('booking_reference') . '%');
+            }
+
+            if ($request->has('tavel_agent') && $request->input('tavel_agent') !== null) {
+                $userIds = \App\Models\User::where('agent_id', $request->input('tavel_agent'))->pluck('id');
+                $query->whereIn('user_id', $userIds);
+            }
 
         $myBookings = $query->paginate(10);
 
         $airlines = Airline::all();
         $cities = City::all();
+        $tavel_agents = Agent::all();
         $agent_account_head_id = $agent ? $agent->account_head_id : null;
         if($agent_account_head_id){
             $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
@@ -211,6 +240,7 @@ class MyBookingController extends Controller
         $data['cities'] = $cities;
         $data['credit_limit'] = $agent ? $agent->credit_limit : 0;
         $data['used_credit'] = $used_credit;
+        $data['tavel_agents'] = $tavel_agents;
 
         return view('my-bookings.canceledBookings', $data);
     }
@@ -236,12 +266,29 @@ class MyBookingController extends Controller
                 ->where('user_id', auth()->user()->id);
             }
 
+            if ($request->has('start_date') && $request->input('start_date') !== null) {
+                $query->where('created_at', '>=', Carbon::createFromFormat('Y-m-d', $request->input('start_date'))->startOfDay());
+            }
+
+            if ($request->has('end_date') && $request->input('end_date') !== null) {
+                $query->where('created_at', '<=', Carbon::createFromFormat('Y-m-d', $request->input('end_date'))->endOfDay());
+            }
+
+            if ($request->has('booking_reference') && $request->input('booking_reference') !== null) {
+                $query->where('booking_reference', 'like', '%' . $request->input('booking_reference') . '%');
+            }
+
+            if ($request->has('tavel_agent') && $request->input('tavel_agent') !== null) {
+                $userIds = \App\Models\User::where('agent_id', $request->input('tavel_agent'))->pluck('id');
+                $query->whereIn('user_id', $userIds);
+            }
 
 
         $myBookings = $query->paginate(10);
 
         $airlines = Airline::all();
         $cities = City::all();
+        $tavel_agents = Agent::all();
         $agent_account_head_id = $agent ? $agent->account_head_id : null;
         if($agent_account_head_id){
             $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
@@ -255,6 +302,7 @@ class MyBookingController extends Controller
         $data['cities'] = $cities;
         $data['credit_limit'] = $agent ? $agent->credit_limit : 0;
         $data['used_credit'] = $used_credit;
+        $data['tavel_agents'] = $tavel_agents;
 
         return view('my-bookings.completedBookings', $data);
     }

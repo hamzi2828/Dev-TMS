@@ -2,7 +2,7 @@
     <!-- Content -->
     <div class="container-p-x flex-grow-1 container-p-y">
         @include('_partials.errors.validation-errors')
-        @include('my-bookings.search')
+        @include('my-bookings.search', ['action' => route('myBookings.pending')])
 
         <!-- Airline Groups Table -->
         <div class="card">
@@ -199,7 +199,7 @@
             const noAgentWarningEl = document.getElementById('noTravelAgentWarning');
             const confirmBtn = document.getElementById('confirmBookingModalOk');
             const warningEl = document.getElementById('creditLimitWarning');
-            
+
             // Set credit limit information
             document.getElementById('modalCreditLimit').innerText = creditLimit;
             document.getElementById('modalUsedCredit').innerText = usedCredit;
@@ -209,7 +209,7 @@
                 travelAgentEl.innerText = agentName;
                 noAgentWarningEl.classList.add('d-none');
                 confirmBtn.disabled = false;
-                
+
                 // Only show credit limit warning if there's an agent
                 if ((usedCredit + bookingTotal) > creditLimit) {
                     warningEl.classList.remove('d-none');
@@ -222,7 +222,7 @@
                 warningEl.classList.add('d-none'); // Hide credit limit warning when no agent
                 confirmBtn.disabled = true;
             }
-            
+
             const modal = new bootstrap.Modal(document.getElementById('confirmBookingModal'));
             modal.show();
         }

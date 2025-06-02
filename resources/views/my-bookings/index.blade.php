@@ -2,8 +2,7 @@
     <!-- Content -->
     <div class="container-p-x flex-grow-1 container-p-y">
         @include('_partials.errors.validation-errors')
-        @include('my-bookings.search')
-        <!-- Filter Form -->
+        @include('my-bookings.search', ['action' => route('myBookings.index')])
 
 
         <!-- Airline Groups Table -->
