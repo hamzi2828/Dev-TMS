@@ -4,7 +4,7 @@
         @include('_partials.errors.validation-errors')
 
         <!-- Filter Form -->
-        @include('airline-groups.search')
+        @include('airline-groups.flown_search')
 
         <!-- Airline Groups Table -->
         <div class="card">

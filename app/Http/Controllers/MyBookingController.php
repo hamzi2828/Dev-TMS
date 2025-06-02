@@ -28,10 +28,13 @@ class MyBookingController extends Controller
 
         // Get current date for comparison
         $currentDate = now();
-
         $query = AirlineGroup::with(['segments', 'airline'])
             ->where('total_seats', '>', 0)
             ->where('status', 'active');
+
+        $query = $query->whereHas('segments', function ($q) {
+            $q->whereDate('departure_date', '>=', now());
+        });
 
 
         // Apply filters
