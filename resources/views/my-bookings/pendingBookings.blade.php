@@ -104,7 +104,15 @@
 
                                 <td>
                                     @can('confirmBookingPendingBooking', \App\Models\MyBooking::class)
-                                    <a href="javascript:void(0)" onclick="confirmWithPNR('{{ route('myBookings.confirmBooking', ['id' => $booking->id, 'pnr' => '']) }}', {{ $booking->total_price - $booking->discount }}, {{ $booking->user->agent_id ?? 'null' }}, '{{ \App\Models\Agent::find($booking->user->agent_id)->name ?? '' }}')" class="btn btn-sm btn-info" style="width: 70px;">
+                                    @php
+                                        $bookingAgentId = $booking->user->agent_id ?? null;
+                                        $bookingAgent = \App\Models\Agent::find($bookingAgentId);
+                                        $bookingAgentName = $bookingAgent->name ?? '';
+                                        $bookingAgentAccountHeadId = $bookingAgent->account_head_id ?? null;
+                                        $bookingAgentCreditLimit = $bookingAgent->credit_limit ?? 0;
+                                        $bookingAgentUsedCredit = $bookingAgentAccountHeadId ? (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($bookingAgentAccountHeadId) : 0;
+                                    @endphp
+                                    <a href="javascript:void(0)" onclick="confirmWithPNR('{{ route('myBookings.confirmBooking', ['id' => $booking->id, 'pnr' => '']) }}', {{ $booking->total_price - $booking->discount }}, {{ $bookingAgentId ?? 'null' }}, '{{ $bookingAgentName }}', {{ $bookingAgentCreditLimit }}, {{ $bookingAgentUsedCredit }})" class="btn btn-sm btn-info" style="width: 70px;">
                                         Confirm
                                     </a>
                                     @endcan
@@ -159,9 +167,9 @@
               No travel agent is selected!
             </div>
             <div class="mb-2">
-              <strong>Credit Limit:</strong> <span id="modalCreditLimit">{{ $credit_limit }}</span><br>
-              <strong>Used Credit:</strong> <span id="modalUsedCredit">{{ $used_credit }}</span><br>
-              <strong>Remaining Credit:</strong> <span id="modalRemainingCredit">{{ $credit_limit - $used_credit }}</span>
+              <strong>Credit Limit:</strong> <span id="modalCreditLimit"></span><br>
+              <strong>Used Credit:</strong> <span id="modalUsedCredit"></span><br>
+              <strong>Remaining Credit:</strong> <span id="modalRemainingCredit"></span>
             </div>
             <div id="creditLimitWarning" class="alert alert-danger d-none" role="alert">
               Credit limit has been exceeded!
@@ -179,39 +187,42 @@
         let confirmBookingBaseUrl = null;
         let currentBookingAgentId = null;
         let currentBookingAgentName = null;
-        // Accepts: baseUrl (string), bookingTotal (number), agentId (number), agentName (string)
-        function confirmWithPNR(baseUrl, bookingTotal = 0, agentId = null, agentName = null) {
+        // Accepts: baseUrl (string), bookingTotal (number), agentId (number), agentName (string), creditLimit (number), usedCredit (number)
+        function confirmWithPNR(baseUrl, bookingTotal = 0, agentId = null, agentName = null, creditLimit = 0, usedCredit = 0) {
             confirmBookingBaseUrl = baseUrl;
             currentBookingAgentId = agentId;
             currentBookingAgentName = agentName;
             document.getElementById('pnrInput').value = '';
-            
+
             // Set travel agent information
             const travelAgentEl = document.getElementById('modalTravelAgent');
             const noAgentWarningEl = document.getElementById('noTravelAgentWarning');
             const confirmBtn = document.getElementById('confirmBookingModalOk');
+            const warningEl = document.getElementById('creditLimitWarning');
             
+            // Set credit limit information
+            document.getElementById('modalCreditLimit').innerText = creditLimit;
+            document.getElementById('modalUsedCredit').innerText = usedCredit;
+            document.getElementById('modalRemainingCredit').innerText = creditLimit - usedCredit;
+
             if (agentId && agentName) {
                 travelAgentEl.innerText = agentName;
                 noAgentWarningEl.classList.add('d-none');
                 confirmBtn.disabled = false;
+                
+                // Only show credit limit warning if there's an agent
+                if ((usedCredit + bookingTotal) > creditLimit) {
+                    warningEl.classList.remove('d-none');
+                } else {
+                    warningEl.classList.add('d-none');
+                }
             } else {
                 travelAgentEl.innerText = 'N/A';
                 noAgentWarningEl.classList.remove('d-none');
+                warningEl.classList.add('d-none'); // Hide credit limit warning when no agent
                 confirmBtn.disabled = true;
             }
             
-            // Get credit values from DOM
-            const creditLimit = parseFloat(document.getElementById('modalCreditLimit').innerText) || 0;
-            const usedCredit = parseFloat(document.getElementById('modalUsedCredit').innerText) || 0;
-            const remainingCredit = creditLimit - usedCredit;
-            // Show/hide warning
-            const warningEl = document.getElementById('creditLimitWarning');
-            if ((usedCredit + bookingTotal) > creditLimit) {
-                warningEl.classList.remove('d-none');
-            } else {
-                warningEl.classList.add('d-none');
-            }
             const modal = new bootstrap.Modal(document.getElementById('confirmBookingModal'));
             modal.show();
         }
