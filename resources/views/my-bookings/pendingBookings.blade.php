@@ -104,7 +104,7 @@
 
                                 <td>
                                     @can('confirmBookingPendingBooking', \App\Models\MyBooking::class)
-                                    <a href="javascript:void(0)" onclick="confirmWithPNR('{{ route('myBookings.confirmBooking', ['id' => $booking->id, 'pnr' => '']) }}', {{ $booking->total_price - $booking->discount }})" class="btn btn-sm btn-info" style="width: 70px;">
+                                    <a href="javascript:void(0)" onclick="confirmWithPNR('{{ route('myBookings.confirmBooking', ['id' => $booking->id, 'pnr' => '']) }}', {{ $booking->total_price - $booking->discount }}, {{ $booking->user->agent_id ?? 'null' }}, '{{ \App\Models\Agent::find($booking->user->agent_id)->name ?? '' }}')" class="btn btn-sm btn-info" style="width: 70px;">
                                         Confirm
                                     </a>
                                     @endcan
@@ -152,6 +152,12 @@
               <label for="pnrInput" class="form-label">Please enter the Airline PNR:</label>
               <input type="text" class="form-control" id="pnrInput" placeholder="Enter PNR">
             </div>
+            <div class="mb-3">
+              <strong>Travel Agent:</strong> <span id="modalTravelAgent"></span>
+            </div>
+            <div id="noTravelAgentWarning" class="alert alert-danger d-none" role="alert">
+              No travel agent is selected!
+            </div>
             <div class="mb-2">
               <strong>Credit Limit:</strong> <span id="modalCreditLimit">{{ $credit_limit }}</span><br>
               <strong>Used Credit:</strong> <span id="modalUsedCredit">{{ $used_credit }}</span><br>
@@ -171,10 +177,30 @@
 
     <script>
         let confirmBookingBaseUrl = null;
-        // Accepts: baseUrl (string), bookingTotal (number)
-        function confirmWithPNR(baseUrl, bookingTotal = 0) {
+        let currentBookingAgentId = null;
+        let currentBookingAgentName = null;
+        // Accepts: baseUrl (string), bookingTotal (number), agentId (number), agentName (string)
+        function confirmWithPNR(baseUrl, bookingTotal = 0, agentId = null, agentName = null) {
             confirmBookingBaseUrl = baseUrl;
+            currentBookingAgentId = agentId;
+            currentBookingAgentName = agentName;
             document.getElementById('pnrInput').value = '';
+            
+            // Set travel agent information
+            const travelAgentEl = document.getElementById('modalTravelAgent');
+            const noAgentWarningEl = document.getElementById('noTravelAgentWarning');
+            const confirmBtn = document.getElementById('confirmBookingModalOk');
+            
+            if (agentId && agentName) {
+                travelAgentEl.innerText = agentName;
+                noAgentWarningEl.classList.add('d-none');
+                confirmBtn.disabled = false;
+            } else {
+                travelAgentEl.innerText = 'N/A';
+                noAgentWarningEl.classList.remove('d-none');
+                confirmBtn.disabled = true;
+            }
+            
             // Get credit values from DOM
             const creditLimit = parseFloat(document.getElementById('modalCreditLimit').innerText) || 0;
             const usedCredit = parseFloat(document.getElementById('modalUsedCredit').innerText) || 0;

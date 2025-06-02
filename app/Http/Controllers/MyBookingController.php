@@ -103,14 +103,18 @@ class MyBookingController extends Controller
         $airlines = Airline::all();
         $cities = \App\Models\City::all(); // Fetch all cities for the dropdown
 
-        $agent_account_head_id = $agent->account_head_id;
-        $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
+        $agent_account_head_id = $agent ? $agent->account_head_id : null;
+        if($agent_account_head_id){
+            $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
+        }else{
+            $used_credit = 0;
+        }
 
         $data['title'] = 'All Booking';
         $data['airlineGroups'] = $airlineGroups;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
-        $data['credit_limit'] = $agent->credit_limit ? $agent->credit_limit : 0;
+        $data['credit_limit'] = $agent ? $agent->credit_limit : 0;
         $data['used_credit'] = $used_credit;
 
         return view('my-bookings.myBookings2', $data);
@@ -144,14 +148,18 @@ class MyBookingController extends Controller
 
         $airlines = Airline::all();
         $cities = City::all();
-        $agent_account_head_id = $agent->account_head_id;
-        $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
+        $agent_account_head_id = $agent ? $agent->account_head_id : null;
+        if($agent_account_head_id){
+            $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
+        }else{
+            $used_credit = 0;
+        }
 
         $data['title'] = 'My Pending Bookings';
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
-        $data['credit_limit'] = $agent->credit_limit;
+        $data['credit_limit'] = $agent ? $agent->credit_limit : 0;
         $data['used_credit'] = $used_credit;
 
         return view('my-bookings.pendingBookings', $data);
@@ -186,14 +194,18 @@ class MyBookingController extends Controller
 
         $airlines = Airline::all();
         $cities = City::all();
-        $agent_account_head_id = $agent->account_head_id;
-        $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
+        $agent_account_head_id = $agent ? $agent->account_head_id : null;
+        if($agent_account_head_id){
+            $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
+        }else{
+            $used_credit = 0;
+        }
 
         $data['title'] = 'My Canceled Bookings';
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
-        $data['credit_limit'] = $agent->credit_limit;
+        $data['credit_limit'] = $agent ? $agent->credit_limit : 0;
         $data['used_credit'] = $used_credit;
 
         return view('my-bookings.canceledBookings', $data);
@@ -226,14 +238,18 @@ class MyBookingController extends Controller
 
         $airlines = Airline::all();
         $cities = City::all();
-        $agent_account_head_id = $agent->account_head_id;
-        $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
+        $agent_account_head_id = $agent ? $agent->account_head_id : null;
+        if($agent_account_head_id){
+            $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
+        }else{
+            $used_credit = 0;
+        }
 
         $data['title'] = 'My Confirmed Bookings';
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
-        $data['credit_limit'] = $agent->credit_limit ? $agent->credit_limit : 0;
+        $data['credit_limit'] = $agent ? $agent->credit_limit : 0;
         $data['used_credit'] = $used_credit;
 
         return view('my-bookings.completedBookings', $data);
@@ -253,6 +269,7 @@ class MyBookingController extends Controller
 
             $totalCost = MyBooking::getBookingCost($request->id);
             $totalSale = MyBooking::getBookingSale($request->id);
+            $agent_account_head_id = MyBooking::getAgentAccountHeadId($request->id);
 
             if ($totalSale === null) {
                 throw new \Exception('Could not calculate total sale amount');
@@ -284,10 +301,10 @@ class MyBookingController extends Controller
                 throw new \Exception('Agent not found for this user');
             }
 
-            $userAccountHeadId = $agent->account_head_id ?? null;
-            if (!$userAccountHeadId) {
-                throw new \Exception('User account head ID not found');
+            if (!$agent_account_head_id) {
+                throw new \Exception('Agent account head ID not found');
             }
+
             if($booking->discount === null){
                 $netSale = $totalSale;
             }else{
@@ -332,7 +349,7 @@ class MyBookingController extends Controller
 
             // Create entry for the net sale to user's account
             GeneralLedger::create([
-                'account_head_id' => $userAccountHeadId,
+                'account_head_id' => $agent_account_head_id,
                 'user_id' => auth()->user()->id,
                 'debit' => $netSale,
                 'credit' => 0,
@@ -386,6 +403,7 @@ class MyBookingController extends Controller
             // Get the original booking financial values
             $totalCost = MyBooking::getBookingCost($request->id);
             $totalSale = MyBooking::getBookingSale($request->id);
+            $agent_account_head_id = MyBooking::getAgentAccountHeadId($request->id);
 
             if ($totalSale === null) {
                 throw new \Exception('Could not calculate total sale amount');
@@ -412,9 +430,9 @@ class MyBookingController extends Controller
                 throw new \Exception('Agent not found for this user');
             }
 
-            $userAccountHeadId = $agent->account_head_id ?? null;
-            if (!$userAccountHeadId) {
-                throw new \Exception('User account head ID not found');
+
+            if (!$agent_account_head_id) {
+                throw new \Exception('agent account head ID not Linked');
             }
 
             // Create reverse entries - exact opposite of the confirmation entries
@@ -445,7 +463,7 @@ class MyBookingController extends Controller
 
             // 3. Reverse the debit entry for user's account
             GeneralLedger::create([
-                'account_head_id' => $userAccountHeadId,
+                'account_head_id' => $agent_account_head_id,
                 'user_id' => auth()->user()->id,
                 'debit' => 0,
                 'credit' => $netSale,  // Opposite of original entry

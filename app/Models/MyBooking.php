@@ -113,4 +113,14 @@ class MyBooking extends Model
 
         return $adultsSale + $childrenSale + $infantsSale;
     }
+
+
+    public static function getAgentAccountHeadId( $bookingId )
+    {
+        $booking = self::with('airlineGroup')->find($bookingId);
+        $user = User::find($booking->user_id);
+        $agent = Agent::find($user->agent_id);
+        return $agent->account_head_id;
+    }
+
 }
