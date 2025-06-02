@@ -295,13 +295,6 @@ class MyBookingController extends Controller
                 throw new \Exception('Company account head ID not found');
             }
 
-            // Get the logged-in user's agent and their account head ID
-            $agent = Agent::with('user')->find(auth()->user()->agent_id);
-
-            if (!$agent) {
-                throw new \Exception('Agent not found for this user');
-            }
-
             if (!$agent_account_head_id) {
                 throw new \Exception('Agent account head ID not found');
             }
@@ -422,13 +415,6 @@ class MyBookingController extends Controller
 
                 if (!$companyAccountHeadId) {
                     throw new \Exception('Company account head ID not found');
-                }
-
-                // Get the logged-in user's agent and their account head ID
-                $agent = Agent::with('user')->find(auth()->user()->agent_id);
-
-                if (!$agent) {
-                    throw new \Exception('Agent not found for this user');
                 }
 
 
