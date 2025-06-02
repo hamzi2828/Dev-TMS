@@ -21,6 +21,12 @@
                 </li>
             @endcan
 
+            <li class="menu-item {{ request()->routeIs('airlineGroups.flown') ? 'active' : '' }}">
+                <a href="{{ route('airlineGroups.flown') }}" class="menu-link">
+                    <div data-i18n="Airline Groups (Flown)">Airline Groups (Flown)</div>
+                </a>
+            </li>
+
             @can('add-airline-groups', \App\Models\AirlineGroup::class)
                 <li class="menu-item {{ request()->routeIs('airlineGroups.create') ? 'active' : '' }}">
                     <a href="{{ route('airlineGroups.create') }}" class="menu-link">

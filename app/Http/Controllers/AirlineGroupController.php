@@ -99,6 +99,89 @@ class AirlineGroupController extends Controller
         ]);
     }
 
+    public function flown(Request $request)
+    {
+
+        // Start the query for AirlineGroup, eager load segments and airline
+        $query = AirlineGroup::with(['segments', 'airline']);
+        if ($request->has('inactive') && $request->inactive == 'true') {
+            $query->where('status', 'inactive');
+        }else{
+            $query->where('status', 'active');
+        }
+
+        if ($request->has('departure_date') && $request->departure_date) {
+            $query->whereDoesntHave('segments', function ($query) use ($request) {
+                $query->whereDate('departure_date', '<', $request->departure_date);
+            });
+        }
+
+
+        if ($request->has('airline') && $request->airline) {
+            $query->where('airline_id', $request->airline);
+        }
+
+        if ($request->has('origin') && $request->origin) {
+            // Handle the case where origin is already a numeric ID
+            $query->whereHas('segments', function ($query) use ($request) {
+                // Check if it's a numeric value (direct ID)
+                if (is_numeric($request->origin)) {
+                    $query->where('origin', $request->origin);
+                } else {
+                    // Try to find matching cities by name
+                    $cityIds = \App\Models\City::where('title', 'like', '%' . $request->origin . '%')
+                        ->pluck('id')
+                        ->toArray();
+
+                    if (!empty($cityIds)) {
+                        $query->whereIn('origin', $cityIds);
+                    }
+                }
+            });
+        }
+
+        if ($request->has('destination') && $request->destination) {
+            // Handle the case where destination is already a numeric ID
+            $query->whereHas('segments', function ($query) use ($request) {
+                // Check if it's a numeric value (direct ID)
+                if (is_numeric($request->destination)) {
+                    $query->where('destination', $request->destination);
+                } else {
+                    // Try to find matching cities by name
+                    $cityIds = \App\Models\City::where('title', 'like', '%' . $request->destination . '%')
+                        ->pluck('id')
+                        ->toArray();
+
+                    if (!empty($cityIds)) {
+                        $query->whereIn('destination', $cityIds);
+                    }
+                }
+            });
+        }
+
+
+        if ($request->filled('trip_type')) {
+            $query->whereHas('section', function ($query) use ($request) {
+                $query->where('trip_type', $request->trip_type);
+            });
+        }
+
+
+        // Use pagination instead of get() to enable appends()
+        $airlineGroups = $query->paginate(100)->appends($request->all());
+
+        // Fetch all airlines and cities for the filter dropdowns
+        $airlines = (new AirlineService())->all();
+        $cities = (new CityService())->all();
+
+        // Prepare the data for the view
+        return view('airline-groups.flown', [
+            'title' => 'All Flown Airline Groups',
+            'airlineGroups' => $airlineGroups,
+            'airlines' => $airlines,
+            'cities' => $cities,
+        ]);
+    }
 
 
     public function create()
