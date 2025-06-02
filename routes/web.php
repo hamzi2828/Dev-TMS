@@ -28,6 +28,8 @@
         Route ::get ( '/register', [ LoginController::class, 'register' ] ) -> name ( 'register' );
         Route ::post ( '/register', [ LoginController::class, 'registerUser' ] ) -> name ( 'register' );
         Route ::post ( '/', [ LoginController::class, 'authenticate' ] ) -> name ( 'authenticate' );
+        Route ::get ( '/forgot-password', [ LoginController::class, 'forgotPassword' ] ) -> name ( 'forgot.password' );
+        Route ::post ( '/forgot-password', [ LoginController::class, 'sendResetLink' ] ) -> name ( 'password.email' );
     } );
 
     Route ::middleware ( [ 'auth', 'web' ] ) -> group ( function () {

@@ -9,13 +9,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=AR+One+Sans:wght@500&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300&display=swap');
-        
+
         @page {
             size   : auto;
             header : myheader;
             footer : myfooter;
         }
-        
+
         body, h1, h2, td strong, p, th, span, td {
             font-family : 'AR One Sans', sans-serif;
         }
@@ -38,7 +38,7 @@
     <tr>
         <th> Sr. No</th>
         <th align="left"> Trans. ID</th>
-        <th align="left"> Invoice/Sale ID</th>
+        <th align="left"> Invoice/Sale ID/Booking Reference</th>
         <th align="left"> Chq/Trans. No</th>
         <th align="left"> Voucher No.</th>
         <th align="left"> Date</th>

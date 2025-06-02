@@ -108,7 +108,7 @@ class MyBookingController extends Controller
         // Get all airlines and cities for the filter dropdowns
         $airlines = Airline::all();
         $cities = \App\Models\City::all(); // Fetch all cities for the dropdown
-
+        $tavel_agents = Agent::all();
         $agent_account_head_id = $agent ? $agent->account_head_id : null;
         if($agent_account_head_id){
             $used_credit = (new \App\Http\Helpers\GeneralHelper())->getAgentUsedCredit($agent_account_head_id);
@@ -122,6 +122,7 @@ class MyBookingController extends Controller
         $data['cities'] = $cities;
         $data['credit_limit'] = $agent ? $agent->credit_limit : 0;
         $data['used_credit'] = $used_credit;
+        $data['tavel_agents'] = $tavel_agents;
 
         return view('my-bookings.myBookings2', $data);
     }
@@ -359,6 +360,7 @@ class MyBookingController extends Controller
             // Create debit entry for the total sale to head ID 199
             $ledgerData = [
                 'account_head_id' => 199,
+                'invoice_no' => $booking->booking_reference,
                 'user_id' => auth()->user()->id,
                 'debit' => $totalCost,
                 'credit' => 0,
@@ -371,6 +373,7 @@ class MyBookingController extends Controller
             // Create the ledger entry
             GeneralLedger::create([
                 'account_head_id' => 199,
+                'invoice_no' => $booking->booking_reference,
                 'user_id' => auth()->user()->id,
                 'debit' => $totalCost,
                 'credit' => 0,
@@ -383,6 +386,7 @@ class MyBookingController extends Controller
             // Create credit entry for the total cost to company's account head
             GeneralLedger::create([
                 'account_head_id' => $companyAccountHeadId,
+                'invoice_no' => $booking->booking_reference,
                 'user_id' => auth()->user()->id,
                 'debit' => 0,
                 'credit' => $totalCost,
@@ -395,6 +399,7 @@ class MyBookingController extends Controller
             // Create entry for the net sale to user's account
             GeneralLedger::create([
                 'account_head_id' => $agent_account_head_id,
+                'invoice_no' => $booking->booking_reference,
                 'user_id' => auth()->user()->id,
                 'debit' => $netSale,
                 'credit' => 0,

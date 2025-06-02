@@ -61,7 +61,7 @@
                             <tr>
                                 <th> Sr. No</th>
                                 <th> System. ID</th>
-                                <th> Invoice/Sale ID</th>
+                                <th> Invoice/Sale ID/Booking Reference</th>
                                 <th> Chq/Trans. No</th>
                                 <th> Voucher No.</th>
                                 <th> Date</th>
