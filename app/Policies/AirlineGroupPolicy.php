@@ -69,4 +69,23 @@ class AirlineGroupPolicy {
         $permissions = $user->permissions();
         return in_array('delete-inactive-airline-groups', $permissions);
     }
+
+    // Flown Airline Groups
+    public function flownAirlineGroups(User $user): bool {
+        $permissions = $user->permissions();
+        return in_array('flown-airline-groups', $permissions);
+    }
+
+    public function editFlownAirlineGroups(User $user): bool {
+        $permissions = $user->permissions();
+        return in_array('edit-flown-airline-groups', $permissions);
+    }
+    public function statusFlownAirlineGroups(User $user): bool {
+        $permissions = $user->permissions();
+        return in_array('status-flown-airline-groups', $permissions);
+    }
+    public function deleteFlownAirlineGroups(User $user): bool {
+        $permissions = $user->permissions();
+        return in_array('delete-flown-airline-groups', $permissions);
+    }
 }

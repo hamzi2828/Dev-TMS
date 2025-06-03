@@ -22,7 +22,7 @@
         @can('cancelledBooking', \App\Models\MyBooking::class)
         <li class="menu-item {{ request()->routeIs('myBookings.canceled') ? 'active' : '' }}">
             <a href="{{ route('myBookings.canceled') }}" class="menu-link">
-                <div data-i18n="Canceled Booking">Canceled Booking</div>
+                <div data-i18n="Cancelled Booking">Cancelled Booking</div>
             </a>
         </li>
         @endcan

@@ -63,6 +63,11 @@
                         <option value="roundtrip" {{ request('trip_type') == 'roundtrip' ? 'selected' : '' }}>Round Trip</option>
                     </select>
                 </div>
+                <div class="col-md-3 mt-3">
+                    <label for="name">First Name</label>
+                    <input type="text" name="name" id="name" class="form-control" value="{{ request('name') }}">
+                </div>
+
                 @if (request()->routeIs('myBookings.completed'))
                 <div class="col-md-3 mt-3">
                     <label for="start_date">Start Date</label>

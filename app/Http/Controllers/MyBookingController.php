@@ -32,8 +32,8 @@ class MyBookingController extends Controller
             ->where('total_seats', '>', 0)
             ->where('status', 'active');
 
-        $query = $query->whereHas('segments', function ($q) {
-            $q->whereDate('departure_date', '>=', now());
+        $query = $query->whereDoesntHave('segments', function ($q) {
+            $q->whereDate('departure_date', '<=', now());
         });
 
 
@@ -154,6 +154,14 @@ class MyBookingController extends Controller
                 $userIds = \App\Models\User::where('agent_id', $request->input('tavel_agent'))->pluck('id');
                 $query->whereIn('user_id', $userIds);
             }
+
+            if ($request->has('name') && $request->input('name') !== null) {
+                $query->whereHas('passengers', function ($query) use ($request) {
+                    $query->where('given_name', 'like', '%' . $request->input('name') . '%')
+                        ->orWhere('surname', 'like', '%' . $request->input('name') . '%');
+                });
+            }
+
         $agent_id = auth()->user()->agent_id;
         $agent = Agent::where('id', $agent_id)->first();
 
@@ -223,6 +231,12 @@ class MyBookingController extends Controller
                 $query->whereIn('user_id', $userIds);
             }
 
+            if ($request->has('name') && $request->input('name') !== null) {
+                $query->whereHas('passengers', function ($query) use ($request) {
+                    $query->where('given_name', 'like', '%' . $request->input('name') . '%')
+                        ->orWhere('surname', 'like', '%' . $request->input('name') . '%');
+                });
+            }
         $myBookings = $query->paginate(10);
 
         $airlines = Airline::all();
@@ -235,7 +249,7 @@ class MyBookingController extends Controller
             $used_credit = 0;
         }
 
-        $data['title'] = 'My Canceled Bookings';
+        $data['title'] = 'My Cancelled Bookings';
         $data['myBookings'] = $myBookings;
         $data['airlines'] = $airlines;
         $data['cities'] = $cities;
@@ -283,7 +297,12 @@ class MyBookingController extends Controller
                 $userIds = \App\Models\User::where('agent_id', $request->input('tavel_agent'))->pluck('id');
                 $query->whereIn('user_id', $userIds);
             }
-
+            if ($request->has('name') && $request->input('name') !== null) {
+                $query->whereHas('passengers', function ($query) use ($request) {
+                    $query->where('given_name', 'like', '%' . $request->input('name') . '%')
+                        ->orWhere('surname', 'like', '%' . $request->input('name') . '%');
+                });
+            }
 
         $myBookings = $query->paginate(10);
 
@@ -413,6 +432,7 @@ class MyBookingController extends Controller
             GeneralLedger::create([
                 'account_head_id' => 434,
                 'user_id' => auth()->user()->id,
+                'invoice_no' => $booking->booking_reference,
                 'debit' => 0,
                 'credit' => $netSale,
                 'transaction_date' => now(),
@@ -520,6 +540,7 @@ class MyBookingController extends Controller
                 GeneralLedger::create([
                     'account_head_id' => 434,
                     'user_id' => auth()->user()->id,
+                    'invoice_no' => $booking->booking_reference,
                     'debit' => $netSale,  // Opposite of original entry
                     'credit' => 0,
                     'transaction_date' => now(),

@@ -55,7 +55,7 @@
 <tr>
     <td></td>
     <td>
-        <h6 class="mb-0">inactive airline groups</h6>
+        <h6 class="mb-0"> airline groups (Inactive)</h6>
     </td>
     <td>
         <div class="form-check form-check-success">
@@ -93,7 +93,47 @@
         </div>
     </td>
 </tr>
+<tr>
+    <td></td>
+    <td>
+        <h6 class="mb-0"> airline groups (Flown)</h6>
+    </td>
+    <td>
+        <div class="form-check form-check-success">
+            <input type="checkbox" class="form-check-input" name="permission[]"
+                   value="flown-airline-groups"
+                   id="flown-airline-groups" @checked(in_array ('flown-airline-groups', $role -> permissions()))>
+            <label class="form-check-label" for="flown-airline-groups">Flown</label>
+        </div>
+    </td>
+</tr>
+<tr>
+    <td colspan="2"></td>
+    <td>
+        <div class="d-flex gap-2 flex-column">
+            <div class="form-check form-check-success">
+                <input type="checkbox" class="form-check-input" name="permission[]"
+                       value="edit-flown-airline-groups"
+                       id="edit-flown-airline-groups" @checked(in_array ('edit-flown-airline-groups', $role -> permissions()))>
+                <label class="form-check-label" for="edit-flown-airline-groups">Edit</label>
+            </div>
 
+            <div class="form-check form-check-success">
+                <input type="checkbox" class="form-check-input" name="permission[]"
+                       value="status-flown-airline-groups"
+                       id="status-flown-airline-groups" @checked(in_array ('status-flown-airline-groups', $role -> permissions()))>
+                <label class="form-check-label" for="status-flown-airline-groups">Status</label>
+            </div>
+
+            <div class="form-check form-check-success">
+                <input type="checkbox" class="form-check-input" name="permission[]"
+                       value="delete-flown-airline-groups"
+                       id="delete-flown-airline-groups" @checked(in_array ('delete-flown-airline-groups', $role -> permissions()))>
+                <label class="form-check-label" for="delete-flown-airline-groups">Delete</label>
+            </div>
+        </div>
+    </td>
+</tr>
 <tr>
     <td></td>
     <td>

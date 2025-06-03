@@ -157,14 +157,14 @@
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              <label for="pnrInput" class="form-label">Please enter the Airline PNR:</label>
-              <input type="text" class="form-control" id="pnrInput" placeholder="Enter PNR">
+              <label for="pnrInput" class="form-label">Please enter the Airline PNR: <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="pnrInput" placeholder="Enter PNR " required>
             </div>
             <div class="mb-3">
               <strong>Travel Agent:</strong> <span id="modalTravelAgent"></span>
             </div>
             <div id="noTravelAgentWarning" class="alert alert-danger d-none" role="alert">
-              No travel agent is selected!
+                No Travel Agent is Liked With User
             </div>
             <div class="mb-2">
               <strong>Credit Limit:</strong> <span id="modalCreditLimit"></span><br>
@@ -213,8 +213,10 @@
                 // Only show credit limit warning if there's an agent
                 if ((usedCredit + bookingTotal) > creditLimit) {
                     warningEl.classList.remove('d-none');
+                    confirmBtn.disabled = true;
                 } else {
                     warningEl.classList.add('d-none');
+                    confirmBtn.disabled = false;
                 }
             } else {
                 travelAgentEl.innerText = 'N/A';

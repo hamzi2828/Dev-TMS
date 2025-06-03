@@ -29,7 +29,6 @@
     @include('permissions.airline-group')
     @include('permissions.my-booking')
     @include('permissions.settings')
-    @include('permissions.templates')
     @include('permissions.users')`
     </tbody>
 </table>

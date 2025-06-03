@@ -24,8 +24,8 @@ class AirlineGroupController extends Controller
             $query->where('status', 'inactive');
         }else{
             $query->where('status', 'active');
-            $query = $query->whereHas('segments', function ($q) {
-                $q->whereDate('departure_date', '>=', now());
+            $query = $query->whereDoesntHave('segments', function ($q) {
+                $q->whereDate('departure_date', '<=', now());
             });
 
         }
@@ -110,7 +110,7 @@ class AirlineGroupController extends Controller
         // Start the query for AirlineGroup, eager load segments and airline
         $query = AirlineGroup::with(['segments', 'airline'])
         ->whereHas('segments', function ($q) {
-            $q->whereDate('departure_date', '<', now());
+            $q->whereDate('departure_date', '<=', now());
         });
         if ($request->has('inactive') && $request->inactive == 'true') {
             $query->where('status', 'inactive');
