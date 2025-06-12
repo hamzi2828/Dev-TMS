@@ -20,7 +20,11 @@
         <div class="card mb-4">
             <div class="card-header bg-primary text-center">
                 <h4 class="mb-0 text-white fw-bold">
-                    <i class="fa-solid fa-plane-departure me-2"></i> {{ $sectorTitle }}
+                    <i class="fa-solid fa-plane-departure"></i>
+                    <span class="ms-2 me-2"></span>
+                        {{ $sectorTitle }}
+                    <span class="ms-2 me-2"></span>
+                    <i class=" fa-solid fa-plane-arrival"></i>
                 </h4>
             </div>
             @php

@@ -64,7 +64,7 @@
                     </select>
                 </div>
                 <div class="col-md-3 mt-3">
-                    <label for="name">First Name</label>
+                    <label class="form-label" for="name">First Name</label>
                     <input type="text" name="name" id="name" class="form-control" value="{{ request('name') }}">
                 </div>
 

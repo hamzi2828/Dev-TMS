@@ -120,8 +120,22 @@
             if ( count ( $account_heads ) > 0 ) {
                 $item .= '<ol>';
                 foreach ( $account_heads as $account_head ) {
+                    $delete = '';
+                    $edit = '';
+                    $status = '';
                     if ( Gate ::allows ( 'delete', Account ::find ( $account_head[ 'id' ] ) ) )
-                        $delete = '<a href="' . route ( 'accounts.destroy', [ 'account' => $account_head[ 'id' ] ] ) . '" class="float-start fs-tiny ms-1 position-relative"><i class="ti ti-trash ti-sm text-dark fs-5 me-1"></i></a>';
+                        $delete = '<form method="POST" action="' . route ( 'accounts.destroy', [ 'account' => $account_head[ 'id' ] ] ) . '" class="d-inline delete-form float-start">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="' . csrf_token() . '">
+                             <button type="submit" data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    data-bs-custom-class="tooltip-danger"
+                                    title="Delete"
+                                    class="text-body delete-record bg-transparent border-0 p-0"
+                                    >
+                                <i class="ti ti-trash ti-sm mx-2"></i>
+                            </button>
+                        </form>';
 
                     if ( Gate ::allows ( 'edit', Account ::find ( $account_head[ 'id' ] ) ) )
                         $edit = '<a href="' . route ( 'accounts.edit', [ 'account' => $account_head[ 'id' ] ] ) . '" class="float-start fs-tiny ms-1 position-relative"><i class="ti ti-edit ti-sm text-dark fs-5 me-1"></i></a>';

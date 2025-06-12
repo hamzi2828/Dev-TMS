@@ -17,14 +17,15 @@
 
     <ul class="menu-inner py-1">
         @include('_partials.menus.dashboard')
+        @include('_partials.menus.airline-groups')
+        @include('_partials.menus.my-bookings')
+
         @include('_partials.menus.accounts')
 
         @include('_partials.menus.accounts-reporting')
         @include('_partials.menus.accounts-settings')
-        @include('_partials.menus.airline-groups')
 
 
-        @include('_partials.menus.my-bookings')
         @include('_partials.menus.settings')
 
 

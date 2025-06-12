@@ -63,7 +63,7 @@ function ajaxErrors ( xHR, exception ) {
                     customClass   : { confirmButton: "btn btn-primary" },
                     buttonsStyling: !1
                 } );
-    
+
     $ ( 'button[type="submit"]' ).html ( 'Submit' );
     $ ( 'button[type="submit"]' ).prop ( 'disabled', false );
 }
@@ -95,7 +95,7 @@ function init_datatable ( path ) {
                                            search           : '',
                                            searchPlaceholder: 'Search..'
                                        },
-                                       
+
                                        buttons: [
                                            {
                                                extend   : 'collection',
@@ -258,21 +258,21 @@ function toggleSingleTransactions ( voucher, route ) {
         if ( voucher === 'cpv' || voucher === 'bpv' ) {
             $ ( '#transaction-type-credit' ).prop ( 'checked', true );
             $ ( '#transaction-type-debit' ).prop ( 'disabled', true );
-            
+
             $ ( '#transaction-type-2-debit' ).prop ( 'checked', true );
             $ ( '#transaction-type-2-credit' ).prop ( 'disabled', true );
         }
         else if ( voucher === 'crv' || voucher === 'brv' ) {
             $ ( '#transaction-type-debit' ).prop ( 'checked', true );
             $ ( '#transaction-type-credit' ).prop ( 'disabled', true );
-            
+
             $ ( '#transaction-type-2-credit' ).prop ( 'checked', true );
             $ ( '#transaction-type-2-debit' ).prop ( 'disabled', true );
         }
         else {
             reset_transactions ();
         }
-        
+
         if ( voucher === 'cpv' || voucher === 'crv' ) {
             load_account_head_transaction_dropdown ( 'cash', route );
             $ ( "#payment-mode" ).val ( 'cash' ).trigger ( 'change' );
@@ -313,14 +313,14 @@ function load_account_head_transaction_dropdown ( type = '', route ) {
 
 function toggleMultipleTransactions ( voucher, route ) {
     if ( voucher.length > 0 ) {
-        
+
         let accountHeadID = $ ( '#first-account-head' ).val ();
-        
+
         if ( voucher === 'cpv' || voucher === 'bpv' ) {
             reset_other_transactions ();
             $ ( '#transaction-type-credit' ).prop ( 'checked', true );
             $ ( '#transaction-type-debit' ).prop ( 'disabled', true );
-            
+
             $ ( '.other-transactions-debit' ).prop ( 'checked', true );
             $ ( '.other-transactions-credit' ).prop ( 'disabled', true );
         }
@@ -328,7 +328,7 @@ function toggleMultipleTransactions ( voucher, route ) {
             reset_other_transactions ();
             $ ( '#transaction-type-debit' ).prop ( 'checked', true );
             $ ( '#transaction-type-credit' ).prop ( 'disabled', true );
-            
+
             $ ( '.other-transactions-credit' ).prop ( 'checked', true );
             $ ( '.other-transactions-debit' ).prop ( 'disabled', true );
         }
@@ -361,7 +361,7 @@ function reset_other_transactions () {
     $ ( '#transaction-type-debit' ).prop ( 'disabled', false );
     $ ( '#transaction-type-credit' ).prop ( 'checked', false );
     $ ( '#transaction-type-credit' ).prop ( 'disabled', false );
-    
+
     $ ( '.other-transactions-debit' ).prop ( 'checked', false );
     $ ( '.other-transactions-debit' ).prop ( 'disabled', false );
     $ ( '.other-transactions-credit' ).prop ( 'checked', false );
@@ -391,11 +391,11 @@ jQuery ( '#payment-mode' ).on ( 'change', function () {
 } )
 
 function addMoreTransactions ( route = '' ) {
-    
+
     let rows    = $ ( '#rows' ).val ();
     let nextRow = parseInt ( rows ) + 1;
     $ ( '#rows' ).val ( nextRow );
-    
+
     ajaxSetup ();
     jQuery.ajax ( {
                       type   : 'GET',
@@ -406,13 +406,13 @@ function addMoreTransactions ( route = '' ) {
                       success: function ( response ) {
                           $ ( '#add-more-transactions' ).append ( response );
                           $ ( ".chosen-select-" + nextRow ).chosen ();
-                          
+
                           let value = '';
                           if ( $ ( '#transaction-type-debit' ).is ( ':checked' ) )
                               value = 'debit';
                           else if ( $ ( '#transaction-type-credit' ).is ( ':checked' ) )
                               value = 'credit';
-                          
+
                           toggleMultipleTransactions ( $ ( '#voucher' ).val (), route );
                           toggleJVTransactionsAddMore ( value );
                       },
@@ -431,35 +431,35 @@ $ ( document ).on ( 'change', '.initial-amount', function () {
 $ ( document ).on ( 'change', '.other-amounts', function () {
     let iSum              = 0;
     let first_transaction = $ ( '.first-transaction' ).val ();
-    
+
     $ ( '.other-amounts' ).each ( function () {
         if ( jQuery ( this ).val () !== '' && $ ( this ).val () >= 0 )
             iSum = iSum + parseFloat ( $ ( this ).val () );
     } );
     $ ( '.other-transactions' ).val ( iSum );
-    
+
     if ( parseFloat ( first_transaction ) - parseFloat ( iSum ) === 0 )
         $ ( '#multiple-transactions-btn' ).prop ( 'disabled', false );
     else
         $ ( '#multiple-transactions-btn' ).prop ( 'disabled', true );
-    
+
 } );
 
 function sumOtherAmounts () {
     let iSum              = 0;
     let first_transaction = $ ( '.initial-amount' ).val ();
-    
+
     $ ( '.other-amounts' ).each ( function () {
         if ( jQuery ( this ).val () !== '' && $ ( this ).val () >= 0 )
             iSum = iSum + parseFloat ( $ ( this ).val () );
     } );
     $ ( '.other-transactions' ).val ( iSum );
-    
+
     if ( parseFloat ( first_transaction ) - parseFloat ( iSum ) < 1 )
         $ ( '#multiple-transactions-btn' ).prop ( 'disabled', false );
     else
         $ ( '#multiple-transactions-btn' ).prop ( 'disabled', true );
-    
+
     if ( parseFloat ( first_transaction ) - parseFloat ( iSum ) < 1 )
         console.log ( parseFloat ( first_transaction ) - parseFloat ( iSum ) );
 }
@@ -470,18 +470,18 @@ function setTransactionPrice ( price ) {
 
 function toggleJVTransactions ( value, searchVoucher = '' ) {
     let voucher = $ ( '#voucher' ).val ();
-    
+
     if ( searchVoucher.length > 0 )
         voucher = searchVoucher;
-    
+
     if ( voucher.length > 0 && voucher === 'jv' ) {
         if ( value === 'credit' ) {
             $ ( '#transaction-type-2-debit' ).prop ( 'checked', true );
             $ ( '#transaction-type-2-credit' ).prop ( 'disabled', true );
-            
+
             $ ( '#transaction-type-2-debit' ).prop ( 'disabled', false );
             $ ( '#transaction-type-2-credit' ).prop ( 'checked', false );
-            
+
             $ ( '.other-transactions-credit' ).prop ( 'disabled', false );
             $ ( '.other-transactions-debit' ).prop ( 'disabled', false );
             $ ( '.other-transactions-debit' ).prop ( 'checked', true );
@@ -490,10 +490,10 @@ function toggleJVTransactions ( value, searchVoucher = '' ) {
         else if ( value === 'debit' ) {
             $ ( '#transaction-type-2-credit' ).prop ( 'checked', true );
             $ ( '#transaction-type-2-debit' ).prop ( 'disabled', true );
-            
+
             $ ( '#transaction-type-2-credit' ).prop ( 'disabled', false );
             $ ( '#transaction-type-2-debit' ).prop ( 'checked', false );
-            
+
             $ ( '.other-transactions-credit' ).prop ( 'disabled', false );
             $ ( '.other-transactions-debit' ).prop ( 'disabled', false );
             $ ( '.other-transactions-debit' ).prop ( 'disabled', true );
@@ -504,7 +504,7 @@ function toggleJVTransactions ( value, searchVoucher = '' ) {
 
 function toggleJVTransactionsAddMore ( value ) {
     let voucher = $ ( '#voucher' ).val ();
-    
+
     if ( voucher.length > 0 && voucher === 'jv' ) {
         if ( value === 'credit' ) {
             $ ( '.other-transactions-credit' ).prop ( 'disabled', false );
@@ -547,22 +547,22 @@ function loadCustomerOrVendorDropdown ( account_head_id, route ) {
 function downloadExcel ( title ) {
     // Get the HTML table
     let table = document.getElementById ( "excel-table" );
-    
+
     // Convert the table to a sheet object
     let sheet = XLSX.utils.table_to_sheet ( table );
-    
+
     // Create a workbook object
     let workbook = XLSX.utils.book_new ();
-    
+
     // Add the sheet to the workbook
     XLSX.utils.book_append_sheet ( workbook, sheet, "Sheet1" );
-    
+
     // Convert the workbook to a binary string
     let wbout = XLSX.write ( workbook, { bookType: "xlsx", type: "binary" } );
-    
+
     // Create a Blob object from the binary string
     let blob = new Blob ( [ s2ab ( wbout ) ], { type: "application/octet-stream" } );
-    
+
     // Create a download link and click it
     let url    = window.URL.createObjectURL ( blob );
     let a      = document.createElement ( "a" );
@@ -581,7 +581,7 @@ function s2ab ( s ) {
 
 function resourceDropZone () {
     const previewTemplate = '<div class="dz-preview dz-file-preview"><div class="dz-details"> <div class="dz-thumbnail"> <img data-dz-thumbnail> <span class="dz-nopreview">No preview</span> <div class="dz-success-mark"></div> <div class="dz-error-mark"></div> <div class="dz-error-message"><span data-dz-errormessage></span></div> <div class="progress"> <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress></div> </div> </div> <div class="dz-filename" data-dz-name></div> <div class="dz-size" data-dz-size></div> </div> </div>';
-    
+
     const resourceDropzone = document.querySelector ( '#resource-dropzone' );
     let $toasterContainer  = $ ( '#toast-container' );
     if ( resourceDropzone ) {
@@ -693,18 +693,18 @@ $ ( document ).on ( 'change', '#reminder', function () {
     let reminder     = $ ( this ).val ();
     let reminderDate = $ ( '.reminder-date' );
     let reminderVia  = $ ( '.reminder-via' );
-    
+
     if ( reminder === '1' ) {
         reminderDate.removeClass ( 'd-none' );
         reminderVia.removeClass ( 'd-none' );
-        
+
         reminderDate.prop ( 'required', true );
         reminderVia.prop ( 'required', true );
     }
     else {
         reminderDate.addClass ( 'd-none' );
         reminderVia.addClass ( 'd-none' );
-        
+
         reminderDate.prop ( 'required', false );
         reminderVia.prop ( 'required', false );
     }
@@ -712,12 +712,12 @@ $ ( document ).on ( 'change', '#reminder', function () {
 
 function store_tasks ( e, route ) {
     e.preventDefault ();
-    
+
     if ( route.length > 0 ) {
         ajaxSetup ();
         let formElement = document.getElementById ( 'ajaxForm' ); // Get the form element
         let formData    = new FormData ( formElement );
-        
+
         jQuery.ajax ( {
                           type       : 'POST',
                           url        : route,
@@ -741,12 +741,12 @@ function store_tasks ( e, route ) {
 
 function update_task ( e, route ) {
     e.preventDefault ();
-    
+
     if ( route.length > 0 ) {
         ajaxSetup ();
         let formElement = document.getElementById ( 'ajaxForm' ); // Get the form element
         let formData    = new FormData ( formElement );
-        
+
         jQuery.ajax ( {
                           type       : 'POST',
                           url        : route,
@@ -790,12 +790,12 @@ function load_create_meeting_popup ( route ) {
 
 function store_meetings ( e, route ) {
     e.preventDefault ();
-    
+
     if ( route.length > 0 ) {
         ajaxSetup ();
         let formElement = document.getElementById ( 'ajaxForm' ); // Get the form element
         let formData    = new FormData ( formElement );
-        
+
         jQuery.ajax ( {
                           type       : 'POST',
                           url        : route,
@@ -819,12 +819,12 @@ function store_meetings ( e, route ) {
 
 function update_meetings ( e, route ) {
     e.preventDefault ();
-    
+
     if ( route.length > 0 ) {
         ajaxSetup ();
         let formElement = document.getElementById ( 'ajaxForm' ); // Get the form element
         let formData    = new FormData ( formElement );
-        
+
         jQuery.ajax ( {
                           type       : 'POST',
                           url        : route,
@@ -891,12 +891,12 @@ function load_create_call_popup ( route ) {
 
 function store_calls ( e, route ) {
     e.preventDefault ();
-    
+
     if ( route.length > 0 ) {
         ajaxSetup ();
         let formElement = document.getElementById ( 'ajaxForm' ); // Get the form element
         let formData    = new FormData ( formElement );
-        
+
         jQuery.ajax ( {
                           type       : 'POST',
                           url        : route,
@@ -943,12 +943,12 @@ function load_edit_call_popup ( route ) {
 
 function update_calls ( e, route ) {
     e.preventDefault ();
-    
+
     if ( route.length > 0 ) {
         ajaxSetup ();
         let formElement = document.getElementById ( 'ajaxForm' ); // Get the form element
         let formData    = new FormData ( formElement );
-        
+
         jQuery.ajax ( {
                           type       : 'POST',
                           url        : route,
@@ -972,7 +972,7 @@ function update_calls ( e, route ) {
 function load_open_activities ( route ) {
     if ( route.length > 0 ) {
         ajaxSetup ();
-        
+
         jQuery.ajax ( {
                           type   : 'GET',
                           url    : route,
@@ -989,7 +989,7 @@ function load_open_activities ( route ) {
 function load_closed_activities ( route ) {
     if ( route.length > 0 ) {
         ajaxSetup ();
-        
+
         jQuery.ajax ( {
                           type   : 'GET',
                           url    : route,
@@ -1006,7 +1006,7 @@ function load_closed_activities ( route ) {
 function load_notes ( route ) {
     if ( route.length > 0 ) {
         ajaxSetup ();
-        
+
         jQuery.ajax ( {
                           type   : 'GET',
                           url    : route,
@@ -1043,12 +1043,12 @@ function load_create_notes_popup ( route ) {
 
 function store_notes ( e, route ) {
     e.preventDefault ();
-    
+
     if ( route.length > 0 ) {
         ajaxSetup ();
         let formElement = document.getElementById ( 'ajaxForm' ); // Get the form element
         let formData    = new FormData ( formElement );
-        
+
         jQuery.ajax ( {
                           type       : 'POST',
                           url        : route,
@@ -1093,12 +1093,12 @@ function load_edit_notes_popup ( route ) {
 
 function update_contact_note ( e, route ) {
     e.preventDefault ();
-    
+
     if ( route.length > 0 ) {
         ajaxSetup ();
         let formElement = document.getElementById ( 'ajaxForm' ); // Get the form element
         let formData    = new FormData ( formElement );
-        
+
         jQuery.ajax ( {
                           type       : 'POST',
                           url        : route,
@@ -1122,7 +1122,7 @@ function update_contact_note ( e, route ) {
 function load_cities_by_country ( country_id, route ) {
     if ( parseInt ( country_id ) > 0 && route.length > 0 ) {
         ajaxSetup ();
-        
+
         jQuery.ajax ( {
                           type   : 'GET',
                           url    : route,
@@ -1144,7 +1144,7 @@ function load_cities_by_country ( country_id, route ) {
 function loadDealsPopup ( route ) {
     if ( route.length > 0 ) {
         ajaxSetup ();
-        
+
         jQuery.ajax ( {
                           type   : 'GET',
                           url    : route,
@@ -1163,7 +1163,7 @@ function loadDealsPopup ( route ) {
 function get_deals_by_project ( project_id, route, contact_id = 0 ) {
     if ( route.length > 0 ) {
         ajaxSetup ();
-        
+
         jQuery.ajax ( {
                           type   : 'GET',
                           url    : route,
@@ -1186,7 +1186,7 @@ function get_deals_by_project ( project_id, route, contact_id = 0 ) {
 function load_deals ( route ) {
     if ( route.length > 0 ) {
         ajaxSetup ();
-        
+
         jQuery.ajax ( {
                           type   : 'GET',
                           url    : route,
@@ -1224,7 +1224,7 @@ function load_add_more_deals_popup ( route ) {
 
 function load_add_event_popup ( date, route ) {
     ajaxSetup ();
-    
+
     $.ajax ( {
                  type   : 'GET',
                  url    : route,
@@ -1247,7 +1247,7 @@ function load_add_event_popup ( date, route ) {
 
 function load_edit_event_popup ( route ) {
     ajaxSetup ();
-    
+
     $.ajax ( {
                  type   : 'GET',
                  url    : route,
@@ -1267,7 +1267,7 @@ function load_edit_event_popup ( route ) {
 
 function update_event_date_on_drag_drop ( event_id, start_date, end_date ) {
     ajaxSetup ();
-    
+
     $.ajax ( {
                  type   : 'POST',
                  url    : '/update-event-date-on-drag',
@@ -1293,7 +1293,7 @@ $ ( '#check-all' ).on ( 'click', function () {
 
 $ ( "#search-privileges" ).on ( "keyup", function () {
     let value = this.value.toLowerCase ().trim ();
-    
+
     $ ( "table tr" ).each ( function ( index ) {
         if ( !index ) return;
         $ ( this ).find ( "td" ).each ( function () {
@@ -1307,7 +1307,7 @@ $ ( "#search-privileges" ).on ( "keyup", function () {
 
 function loadBulkFlightDetailsPopup ( route ) {
     ajaxSetup ();
-    
+
     $.ajax ( {
                  type   : 'GET',
                  url    : route,
@@ -1331,7 +1331,7 @@ function loadBulkFlightDetailsPopup ( route ) {
 
 function addMoreRequisitionQuota ( route ) {
     ajaxSetup ();
-    
+
     $.ajax ( {
                  type   : 'GET',
                  url    : route,
@@ -1347,7 +1347,7 @@ function addMoreRequisitionQuota ( route ) {
 
 function loadCompanyRequisitions ( company_id, route ) {
     ajaxSetup ();
-    
+
     $.ajax ( {
                  type   : 'GET',
                  url    : route,
@@ -1415,7 +1415,7 @@ let restrictCount = 0;
 
 function restrictDemand ( quota, row ) {
     let used = $ ( '.used-' + row ).val ();
-    
+
     if ( parseFloat ( quota ) < parseFloat ( used ) ) {
         $ ( '.quota-' + row ).css ( 'border', '1px solid #FF0000' );
         $ ( '.data-submit' ).prop ( 'disabled', true );
@@ -1425,7 +1425,7 @@ function restrictDemand ( quota, row ) {
         $ ( '.quota-' + row ).css ( 'border', '1px solid #dbdade' );
         restrictCount > 0 ? restrictCount-- : 0;
     }
-    
+
     if ( parseInt ( restrictCount ) < 1 )
         $ ( '.data-submit' ).prop ( 'disabled', false );
 }
@@ -1478,17 +1478,17 @@ function calculateAge ( dob ) {
     let age                 = currentDate.getFullYear () - birthDate.getFullYear ();
     let hasBirthdayOccurred = ( currentDate.getMonth () > birthDate.getMonth () ) ||
                               ( currentDate.getMonth () === birthDate.getMonth () && currentDate.getDate () >= birthDate.getDate () );
-    
+
     if ( !hasBirthdayOccurred ) {
         age--;
     }
-    
+
     $ ( '#age' ).val ( parseInt ( age ) );
 }
 
 function loadBulkVisaDetailsPopup ( route ) {
     ajaxSetup ();
-    
+
     $.ajax ( {
                  type   : 'GET',
                  url    : route,

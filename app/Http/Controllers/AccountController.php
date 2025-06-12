@@ -120,8 +120,8 @@
         }
 
         public function destroy ( Account $account ): RedirectResponse {
-            // $this -> authorize ( 'delete', $account );
-            dd($account);
+            $this -> authorize ( 'delete', $account );
+
             $account -> delete ();
             return redirect () -> back () -> with ( 'success', 'Account head has been deleted.' );
         }
