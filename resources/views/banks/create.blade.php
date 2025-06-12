@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="bank_code">Bank Code</label>
+                        <label class="col-sm-2 col-form-label" for="bank_code">Branch Code</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="bank_code" name="bank_code" value="{{ old('bank_code') }}" />
                         </div>

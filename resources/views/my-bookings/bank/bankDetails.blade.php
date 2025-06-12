@@ -48,7 +48,7 @@
                                 <div class="row">
                                     @if($bank->bank_code)
                                     <div class="col-md-6 mb-2">
-                                        <div class="text-muted small">Bank Code</div>
+                                        <div class="text-muted small">Branch Code</div>
                                         <div>{{ $bank->bank_code }}</div>
                                     </div>
                                     @endif

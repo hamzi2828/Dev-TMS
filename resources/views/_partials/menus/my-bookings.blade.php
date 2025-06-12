@@ -42,11 +42,7 @@
         </li>
         @endcan
 
-        <li class="menu-item {{ request()->routeIs('myBookings.allBanks') ? 'active' : '' }}">
-            <a href="{{ route('myBookings.allBanks') }}" class="menu-link">
-                <div data-i18n="All Banks">All Banks</div>
-            </a>
-        </li>
+
         <li class="menu-item {{ request()->routeIs('myBookings.bankDetails') ? 'active' : '' }}">
             <a href="{{ route('myBookings.bankDetails') }}" class="menu-link">
                 <div data-i18n="Bank Details">Bank Details</div>

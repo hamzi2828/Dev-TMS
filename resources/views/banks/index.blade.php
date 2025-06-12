@@ -14,7 +14,7 @@
                             <th>Sr. No.</th>
                             <th>Bank Name</th>
                             <th>Bank Logo</th>
-                            <th>Bank Code</th>
+                            <th>Branch Code</th>
                             <th>Bank Branch</th>
                             <th>Account Title</th>
                             <th>Account Number</th>
@@ -51,21 +51,26 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center" style="min-width: 100px">
-                                        <a href="{{ route('banks.edit', ['bank' => $bank->id]) }}"
-                                           class="btn btn-primary btn-sm"
-                                           title="Edit">
-                                            Edit
-                                        </a>
-                                        <form action="{{ route('banks.destroy', ['bank' => $bank->id]) }}"
-                                              method="post" class="ms-2"
-                                              onsubmit="return confirm('Are you sure?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                    title="Delete">
-                                                Delete
-                                            </button>
-                                        </form>
+                                        <a href="{{ route ('banks.edit', ['bank' => $bank -> id]) }}"
+                                            class="text-body" data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            data-bs-custom-class="tooltip-primary"
+                                            title="Edit">
+                                             <i class="ti ti-edit ti-sm me-2"></i>
+                                         </a>
+                                         <form method="post" id="delete-record-form-{{ $bank -> id }}"
+                                            action="{{ route ('banks.destroy', ['bank' => $bank -> id]) }}">
+                                          @method('DELETE')
+                                          @csrf
+                                          <button type="button" data-bs-toggle="tooltip"
+                                                  data-bs-placement="top"
+                                                  data-bs-custom-class="tooltip-danger"
+                                                  title="Delete"
+                                                  class="text-body delete-record bg-transparent border-0 p-0"
+                                                  onclick="delete_confirmation({{ $bank -> id }})">
+                                              <i class="ti ti-trash ti-sm mx-2"></i>
+                                          </button>
+                                      </form>
                                     </div>
                                 </td>
 
