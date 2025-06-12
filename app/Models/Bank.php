@@ -11,7 +11,16 @@
     class Bank extends Model {
         use HasFactory, SoftDeletes;
         
-        protected $guarded = [];
+        protected $fillable = [
+            'user_id',
+            'bank_name',
+            'file',
+            'bank_code',
+            'bank_branch',
+            'account_title',
+            'account_number',
+            'iban'
+        ];
         
         public function createdAt (): string {
             return ( new GeneralService() ) -> date_formatter ( $this -> created_at );

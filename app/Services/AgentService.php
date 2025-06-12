@@ -45,8 +45,8 @@
             $agent -> address = $request -> input ( 'address' );
             $agent -> credit_limit = $request -> input ( 'credit_limit' );
 
-            if ( $request -> has ( 'file' ) )
-                $agent -> file = $this -> upload_file ( 'file', '/agents' );
+            if ( $request -> hasFile ( 'logo' ) )
+                $agent -> file = $this -> upload_file ( 'logo', '/agents' );
 
             $agent -> update ();
             ( new LogService() ) -> log ( 'agent-updated', $agent );

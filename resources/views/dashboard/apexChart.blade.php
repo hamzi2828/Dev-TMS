@@ -64,6 +64,9 @@
         },
     };
 
-    let pyramidChart = new ApexCharts ( document.querySelector ( "#status-statistics" ), pyramidOptions );
-    pyramidChart.render ();
+    const statusStatisticsEl = document.querySelector("#status-statistics");
+    if (statusStatisticsEl) {
+        let pyramidChart = new ApexCharts(statusStatisticsEl, pyramidOptions);
+        pyramidChart.render();
+    }
 </script>

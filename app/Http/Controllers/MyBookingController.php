@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bank;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+
 use Illuminate\Http\Request;
 use App\Models\MyBooking;
 use App\Models\AirlineGroup;
@@ -897,5 +902,136 @@ class MyBookingController extends Controller
         $data['ledgers'] = (new GeneralLedgerService())->build_ledgers_table($account_heads_list);
         return view('my-bookings.my-ledger', $data);
     }
+    public function allBanks(Request $request): View {
+        $data['title'] = 'Bank Details';
+        $data['banks'] = Bank::all();
+        return view('my-bookings.bank.index', $data);
+    }
+
+    public function createBank(): View {
+        $data['title'] = 'Add Bank Details';
+        return view('my-bookings.bank.create', $data);
+    }
+
+    public function storeBank(Request $request): RedirectResponse {
+        $request->validate([
+            'bank_name' => 'required|string|max:255',
+            'bank_code' => 'required|string|max:255',
+            'bank_branch' => 'required|string|max:255',
+            'account_title' => 'required|string|max:255',
+            'account_number' => 'required|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $bankData = [
+                'user_id' => auth()->id(),
+                'bank_name' => $request->bank_name,
+                'bank_code' => $request->bank_code,
+                'bank_branch' => $request->bank_branch,
+                'account_title' => $request->account_title,
+                'account_number' => $request->account_number,
+                'iban' => $request->iban,
+            ];
+
+            if ($request->hasFile('logo')) {
+                $path = 'uploads/banks/';
+                $dir = public_path($path);
+                $file = $request->file('logo');
+
+                if (!File::isDirectory($dir)) {
+                    File::makeDirectory($dir, 0755, true, true);
+                }
+
+                $fileName = time() . '-' . $file->getClientOriginalName();
+                $file->move($dir, $fileName);
+                $bankData['file'] = asset($path . $fileName);
+            }
+
+            Bank::create($bankData);
+
+            DB::commit();
+            return redirect()->route('myBookings.bankDetails')->with('success', 'Bank details have been added successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function editBank(Bank $bank): View {
+
+        $data['title'] = 'Edit Bank Details';
+        $data['bank'] = $bank;
+        return view('my-bookings.bank.edit', $data);
+    }
+
+    public function updateBank(Request $request, Bank $bank): RedirectResponse {
+
+        $request->validate([
+            'bank_name' => 'required|string|max:255',
+            'account_title' => 'required|string|max:255',
+            'account_number' => 'required|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $bank->bank_name = $request->bank_name;
+            $bank->bank_code = $request->bank_code;
+            $bank->bank_branch = $request->bank_branch;
+            $bank->account_title = $request->account_title;
+            $bank->account_number = $request->account_number;
+            $bank->iban = $request->iban;
+
+            if ($request->hasFile('logo')) {
+                $path = 'uploads/banks/';
+                $dir = public_path($path);
+                $file = $request->file('logo');
+
+                if (!File::isDirectory($dir)) {
+                    File::makeDirectory($dir, 0755, true, true);
+                }
+
+                $fileName = time() . '-' . $file->getClientOriginalName();
+                $file->move($dir, $fileName);
+                $bank->file = asset($path . $fileName);
+            }
+
+            $bank->save();
+
+            DB::commit();
+            return redirect()->route('myBookings.bankDetails')->with('success', 'Bank details have been updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
+        }
+    }
+
+    public function destroyBank(Bank $bank): RedirectResponse {
+
+        try {
+            DB::beginTransaction();
+            $bank->delete();
+            DB::commit();
+
+            return redirect()->route('myBookings.bankDetails')->with('success', 'Bank details have been deleted successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function bankDetails(Request $request): View {
+        $data['title'] = 'Bank Details';
+        $data['banks'] = Bank::all();
+        return view('my-bookings.bank.bankDetails', $data);
+    }
+
 }
 

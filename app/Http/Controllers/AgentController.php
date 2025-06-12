@@ -31,7 +31,7 @@
             $this -> authorize ( 'create', Agent::class );
             try {
                 DB ::beginTransaction ();
-                
+
                 // First create the agent
                 $agent = ( new AgentService() ) -> save ( $request );
 

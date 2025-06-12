@@ -3,7 +3,7 @@
     <div class="container-xxl">
         <div class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column">
             <div>
-                © {{ date ('Y') }} All rights reserved.
+                COPYRIGHT © {{ date ('Y') }} Sirius Technologies, All Rights Reserved
             </div>
         </div>
     </div>

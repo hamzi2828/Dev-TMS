@@ -52,7 +52,7 @@
             return view ( 'airlines.update', $data );
         }
 
-        public function update ( $request, Airline $airline ): RedirectResponse {
+        public function update ( AirlineFormRequest $request, Airline $airline ): RedirectResponse {
             $this -> authorize ( 'edit', $airline );
             try {
                 DB ::beginTransaction ();

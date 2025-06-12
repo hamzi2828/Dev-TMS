@@ -56,8 +56,8 @@
                 </a>
               </div>
               <!-- /Logo -->
-              <h3 class="mb-1">Welcome to {{ config('app.name') }}! 👋</h3>
-              <p class="mb-4">Please sign-in to your account and start the adventure</p>
+              <h3 class="mb-1">Travel Management System<br>🛫 🛬 🏨 🚘 🏝️ ⛰️ 🕋</h3>
+              <p class="mb-4">Please sign-in to your account</p>
 
 
               @include('_partials.errors.validation-errors')
@@ -112,18 +112,22 @@
 
           <!-- Registration Success Modal -->
     @if(session('Register'))
+
     <div class="modal fade show" id="registrationSuccessModal" tabindex="-1" style="display: block;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content d-flex align-items-center justify-content-center">
-                <div class="modal-header">
-                    <h5 class="modal-title text-success" style="font-size: 1.5rem;">Registration Successful!</h5>
+            <div class="modal-content">
+                <div class="modal-header justify-content-center border-bottom-0">
+                    <h5 class="modal-title text-success fw-bold" style="font-size: 1.75rem;">Registration Successful!</h5>
                 </div>
-                <div class="modal-body">
-                    <p>{{ session('Register') }}</p>
-                    <p>0300-0000000</p>
+                <div class="modal-body text-center px-4 pt-0">
+                    <div class="mb-4">
+                        <i class="bx bx-check-circle text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <p class="mb-3"><strong>{{ session('Register') }}</strong></p>
+                    <p class="fw-bold mb-3" style="font-size: 1.25rem;">0300-0000000</p>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="window.location.reload()">OK</button>
+                <div class="modal-footer justify-content-center border-top-0">
+                    <button type="button" class="btn btn-primary px-4" onclick="window.location.reload()">OK</button>
                 </div>
             </div>
         </div>

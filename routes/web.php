@@ -74,6 +74,13 @@
         Route::get('/confirm-Bookings', [MyBookingController::class, 'confirmBookings'])->name('myBookings.confirmBooking');
         Route::get('/cancel-Bookings', [MyBookingController::class, 'cancelBookings'])->name('myBookings.canceleBooking');
         Route::get('/myLedger', [MyBookingController::class, 'myLedger'])->name('myBookings.myLedger');
+        Route::get('/bankDetails', [MyBookingController::class, 'bankDetails'])->name('myBookings.bankDetails');
+        Route::get('/allBanks', [MyBookingController::class, 'allBanks'])->name('myBookings.allBanks');
+        Route::get('/bankDetails/create', [MyBookingController::class, 'createBank'])->name('myBookings.createBank');
+        Route::post('/bankDetails', [MyBookingController::class, 'storeBank'])->name('myBookings.storeBank');
+        Route::get('/bankDetails/{bank}', [MyBookingController::class, 'editBank'])->name('myBookings.editBank');
+        Route::put('/bankDetails/{bank}', [MyBookingController::class, 'updateBank'])->name('myBookings.updateBank');
+        Route::delete('/bankDetails/{bank}', [MyBookingController::class, 'destroyBank'])->name('myBookings.destroyBank');
 
 
 
